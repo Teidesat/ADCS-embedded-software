@@ -1,0 +1,72 @@
+//main-yaw-from-starting-position.cpp
+
+#include <Wire.h>
+#include <Adafruit_LSM9DS1.h>
+#include <Adafruit_Sensor.h>  // not used in this demo but required!
+#include <math.h>
+
+Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
+
+float tiltZYawGyroDeg = 0;
+float tiltZyawDeg = 0;
+float gyroZerror = -0.01;
+
+float radsToDegrees = 180.0 / M_PI;
+
+unsigned long int millisOld;
+unsigned int milisecondsToSeconds = 1000.0;
+
+void setupSensor() {
+  lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
+  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
+  lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+}
+
+void setup() {
+  Serial.begin(9600);
+  while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
+  Serial.println("LSM9DS1 data read demo");
+  
+  // Try to initialise and warn if we couldn't detect the chip
+  if(!lsm.begin()) {
+    Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
+    while (1);
+  }
+
+  // helper to just set the default scaling we want, see above!
+  setupSensor();
+  delay(1000);
+  millisOld = millis();
+}
+
+void loop() {
+  lsm.read();
+
+  sensors_event_t accelerometers, magnetometers, gyroscopes, temperature;
+  lsm.getEvent(&accelerometers, &magnetometers, &gyroscopes, &temperature);
+
+  // angle from accelerometers
+  //float tiltZyawAccelRad = atan2(accelerometers.acceleration.y, accelerometers.acceleration.x);
+  //float tiltZyawAccelDeg = tiltZyawAccelRad;
+
+  // angle from both accelerometers and gyroscope
+  unsigned long int millisCurrent = millis();
+  float deltaTime = (millisCurrent - millisOld) / milisecondsToSeconds;
+  if(millisOld < millisCurrent) {
+    //String millisStr = String(millisOld) + " " + String(millisCurrent);
+    //Serial.println(millisStr);
+    millisOld = millisCurrent;
+  }
+  
+  float tiltZyawGyroDeg = ((gyroscopes.gyro.z + gyroZerror) * radsToDegrees) / 4;
+  tiltZyawDeg += tiltZyawGyroDeg;// * deltaTime;//(gyroscopes.gyro.z * 0.95 + tiltZyawAccelDeg * 0.05);
+
+  // caclculate heading using magnetometer
+  //float heading = 90.0 - atan(magnetometers.magnetic.x / magnetometers.magnetic.y) * 180.0 * M_PI;
+
+  // print all data
+  String rawAccelerometersStr = String(accelerometers.acceleration.x) + ',' + String(accelerometers.acceleration.y);
+  Serial.println(tiltZyawDeg);
+
+  delay(250);
+}
