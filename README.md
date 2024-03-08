@@ -76,8 +76,6 @@ Library implementing different algorithm. Using the `Madgwick algorithm` as it i
 
 ### adafruit-fork
 
-Forked library as it is the one linked by adafruit in one of their tutorial pages
-
 Adafruit sensor fusion algorithm tutorial referencing fork library:  
 [https://learn.adafruit.com/ahrs-for-adafruits-9-dof-10-dof-breakout/sensor-fusion-algorithms]()
 
@@ -87,8 +85,6 @@ Base repository:
 Fork repository:  
 [https://github.com/PaulStoffregen/MadgwickAHRS]() (madgwick algorithm)  
 [https://github.com/PaulStoffregen/MahonyAHRS]() (mahony algorithm)
-
-### sebastian
 
 ### tris
 
