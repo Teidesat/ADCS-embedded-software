@@ -19,6 +19,4 @@ typedef struct {
 
 sensorDat scaleSens(float acc[3],float gyr[3],float mag[3]);
 
-void calibSens(sensorDat &sens);
-
 #endif

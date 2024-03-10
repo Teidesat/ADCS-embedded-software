@@ -1,15 +1,14 @@
-#include <string>
+// main-adafruit-fork.txt
 
-#include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
-#include "adafruit/MadgwickAHRS.h"
+#include "adafruitFork/MadgwickAHRS.h"
 
-#define RATE 9
+int RATE = 9;
 
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 Madgwick attitude;
 
-unsigned long microsPerReading, microsPrevious;
+unsigned long int microsPerReading, microsPrevious;
 
 void setupSensor() {
   lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
@@ -48,7 +47,6 @@ float convertRawAcceleration(int aRaw) {
   // since we are using 2G range
   // -2g maps to a raw value of -32768
   // +2g maps to a raw value of 32767
-  
   float a = (aRaw * 2.0) / 32768.0;
   return a;
 }
@@ -57,7 +55,6 @@ float convertRawGyro(int gRaw) {
   // since we are using 250 degrees/seconds range
   // -250 maps to a raw value of -32768
   // +250 maps to a raw value of 32767
-  
   float g = (gRaw * 250.0) / 32768.0;
   return g;
 }
@@ -94,6 +91,4 @@ void loop() {
 
     microsPrevious = microsPrevious + microsPerReading;
   }
-
-  delay(150);
 }

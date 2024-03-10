@@ -1,25 +1,46 @@
-//main-yaw-from-starting-position.cpp
+//main-deltatime.txt
 
-#include <Wire.h>
-#include <Adafruit_LSM9DS1.h>
-#include <Adafruit_Sensor.h>  // not used in this demo but required!
 #include <math.h>
+#include <Adafruit_LSM9DS1.h>
 
+// imu object
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 
+// starting tilt from gyeoscopes
+float tiltXrollGyroDeg = 0;
+float tiltYpitchGyroDeg = 0;
 float tiltZYawGyroDeg = 0;
+
+// starting tilt from accelerometers and gyeoscopes fusion
+float tiltXrollDeg = 0;
+float tiltYpitchDeg = 0;
 float tiltZyawDeg = 0;
-float gyroZerror = -0.01;
 
-float radsToDegrees = 180.0 / M_PI;
+// conversion from radians to degrees
+float conversionRadiansToDegrees = (180.0 / M_PI);
 
-unsigned long int millisOld;
-unsigned int milisecondsToSeconds = 1000.0;
+// delta time
+float deltaTime;
+unsigned long int microsOld;
+float microsecondsToSeconds = 1000000.0;
 
+// weighted values for trusting each sensor
+float sensorTrustPercentage = 0.9;
+float sensorTrustRest = 1 - sensorTrustPercentage;
+
+// set up sensors sensitivity
 void setupSensor() {
+  // 1.) Set the accelerometer range
   lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
+  
+  // 2.) Set the magnetometer sensitivity
   lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
+
+  // 3.) Setup the gyroscope
   lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+
+  // get delta time
+  microsOld = millis();
 }
 
 void setup() {
@@ -32,41 +53,46 @@ void setup() {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
+  Serial.println("Found LSM9DS1 9DOF");
 
   // helper to just set the default scaling we want, see above!
   setupSensor();
-  delay(1000);
-  millisOld = millis();
 }
 
 void loop() {
-  lsm.read();
-
+  // Get a new sensor event (obtain data from sensors)
+  lsm.read();  // ask it to read in the data
   sensors_event_t accelerometers, magnetometers, gyroscopes, temperature;
   lsm.getEvent(&accelerometers, &magnetometers, &gyroscopes, &temperature);
 
-  // angle from accelerometers
-  //float tiltZyawAccelRad = atan2(accelerometers.acceleration.y, accelerometers.acceleration.x);
-  //float tiltZyawAccelDeg = tiltZyawAccelRad;
+  // calculate tilt on x,y,z axis with accelerometers
+  float tiltXrollAccelRad = atan2(accelerometers.acceleration.x, accelerometers.acceleration.z);
+  float tiltXrollAccelDeg = tiltXrollAccelRad * conversionRadiansToDegrees;
+  float tiltYpitchAccelRad = atan2(accelerometers.acceleration.y, accelerometers.acceleration.z);
+  float tiltYpitchAccelDeg = tiltYpitchAccelRad * conversionRadiansToDegrees;
+  float tiltZyawAccelRad = atan2(accelerometers.acceleration.y, accelerometers.acceleration.x);
+  float tiltZyawAccelDeg = tiltZyawAccelRad * conversionRadiansToDegrees;
 
-  // angle from both accelerometers and gyroscope
-  unsigned long int millisCurrent = millis();
-  float deltaTime = (millisCurrent - millisOld) / milisecondsToSeconds;
-  if(millisOld < millisCurrent) {
-    //String millisStr = String(millisOld) + " " + String(millisCurrent);
-    //Serial.println(millisStr);
-    millisOld = millisCurrent;
-  }
-  
-  float tiltZyawGyroDeg = ((gyroscopes.gyro.z + gyroZerror) * radsToDegrees) / 4;
-  tiltZyawDeg += tiltZyawGyroDeg;// * deltaTime;//(gyroscopes.gyro.z * 0.95 + tiltZyawAccelDeg * 0.05);
+  // get time interval between each loop
+  deltaTime = (micros() - microsOld) / microsecondsToSeconds;
+  microsOld = micros();
 
-  // caclculate heading using magnetometer
-  //float heading = 90.0 - atan(magnetometers.magnetic.x / magnetometers.magnetic.y) * 180.0 * M_PI;
+  // gyro increment 
+  float gyroXDeltaIncrement = gyroscopes.gyro.x * deltaTime;
+  float gyroYDeltaIncrement = gyroscopes.gyro.y * deltaTime;
+  float gyroZDeltaIncrement = gyroscopes.gyro.z * deltaTime;
 
-  // print all data
-  String rawAccelerometersStr = String(accelerometers.acceleration.x) + ',' + String(accelerometers.acceleration.y);
-  Serial.println(tiltZyawDeg);
+  // calculate tilt on x,y,z axis combining accelerometers and gyroscopes 
+  // - for gyroscopes (current tilt  = current tilt + tilt detected)
+  // - gyroscopes are trusted more than accelerometers (accelerometers have short term errors and gyroscopes have long term errors)
+  tiltXrollDeg = (tiltXrollDeg + gyroXDeltaIncrement) * sensorTrustPercentage + tiltXrollAccelDeg * sensorTrustRest;
+  tiltYpitchDeg = (tiltYpitchDeg + gyroYDeltaIncrement) * sensorTrustPercentage + tiltYpitchAccelDeg * sensorTrustRest;
+  tiltZyawDeg = (tiltZyawDeg + gyroZDeltaIncrement) * sensorTrustPercentage + tiltZyawAccelDeg * sensorTrustRest;
 
-  delay(250);
+  // caclculate yaw/heading using magnetometer instead of gyros and accelerometers
+  float heading = 90.0 - atan(magnetometers.magnetic.x / magnetometers.magnetic.y) * conversionRadiansToDegrees;
+
+  // print combined accelerometers and gyroscopes data and heading with magnetometer
+  String dataStr = String(tiltXrollDeg) + ', ' + String(tiltYpitchDeg) + ', ' + String(heading);
+  Serial.println(dataStr);
 }

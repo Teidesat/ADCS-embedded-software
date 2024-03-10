@@ -1,6 +1,9 @@
+//main-reefwing.txt
+
 #include <SPI.h>
 #include <ReefwingAHRS.h>
 
+//  reefwingAHRS library has own implementation of lsm9ds1 object
 LSM9DS1 imu;
 EulerAngles angles;
 
@@ -8,11 +11,16 @@ void setup() {
   Serial.begin(9600);
   imu.begin();  //  Initialise the LSM9DS1 IMU
   imu.start();  //  Start processing sensor data
+
+  // choose algorithm to use (madgwick is better than mahony)
   imu.setFusionAlgorithm(SensorFusion::MADGWICK);
 }
 
 void loop() {
-  //Serial.print("works");
-  angles = imu.update();  //  Check for new IMU data and update angles
-  Serial.print(String(angles.heading) + "\n");
+  // call algoritm and update sensors
+  angles = imu.update();
+
+  // print pith, roll and heading
+  String dataStr = String(angles.roll) + ',' + String(angles.pitch) + ',' + String(angles.heading);
+  Serial.println(dataStr);
 }
