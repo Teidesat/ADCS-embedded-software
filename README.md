@@ -1,4 +1,4 @@
-# IMU attitude calculation
+# IMU Attitude Determination
 
 Research of a possible algorithm for the orientation of the `TEIDESAT-1` satellite.
 
@@ -17,7 +17,7 @@ datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()
 
 ### Circuit configuration
 
-Using an `Arduino ESP-12E` as the computer board. For the comunication between the Arduino and the IMU, the `I2C` protocol is used, but both components should allow for the use of the `SPI` protocol as well.
+Using an `ESP-12E` microcontroller as the board computer. For the comunication between the microcontroller and the IMU, the `I2C` protocol is used, but both components should allow for the use of the `SPI` protocol as well.
 
 ![circuit image](./img/circuit_image.jpg)
 
@@ -32,12 +32,16 @@ Pin Conections (SPI protocol):
 
 ### Software configuration
 
-Used the `platform.io` plugin for VSCode to create the project and upload the attitude calculation program into the arduino board. Libraries requerided are already integrated in the project in the `.pio/libdeps/psp12e` directory:
-- Adafruit BusIO
-- Adafruit LIS3MDL
-- Adafruit Unified Sensor
+Used the `PlatformIO` plugin for VSCode to create the project and upload the attitude calculation program into the arduino board (configuration of the ESP-12E already set up in the project). Libraries requerided are already integrated in the project in the `.pio/libdeps/psp12e` directory (They can also be found in the `PlatformIO Registry`):
+
+Main dependencies:
 - Adafruit LSM9DS1 Library
 - ReefwingAHRS
+
+Sub-dependencies (required by the main dependencies):
+- Adafruit BusIO
+- LIS3MDL
+- LSM9DS1 Library
 
 All the implementations are located in the `src/` directory. 
 
@@ -62,7 +66,6 @@ Sinple script containing the basic configuration and how to read the data from t
 
 ```cpp
 // dependencies
-#include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
 
 // LSM9DS1 object
@@ -129,17 +132,27 @@ To upload the one of the implementations into the arduino board, change the name
 
 UPSat ADCS software modified to be used with arduino instead of Raspberry
 
+File where the algorithm is implemented: `main-upsat.txt`
+
 ADCS software folder in their repository:  
 [https://gitlab.com/librespacefoundation/upsat/upsat-adcs-software/-/tree/master/sensor-fusion-test?ref_type=heads]()
 
-### Reefwing
+### ReefwingAHRS
 
-Library implementing different algorithm. Using the `Madgwick algorithm` as it is better than the `Mahony algorithm`. 
+Library implementating different algorithms for the calculation of the orientation with an easy to setup interface. Using the `Madgwick algorithm` as it is better than the `Mahony algorithm`.  
+
+File where the algorithm is implemented: `main-reefwing.txt`
+
+Reefwing Library repository (also avalible in the )
 [https://github.com/Reefwing-Software/Reefwing-AHRS]() 
 
 ### Adafruit-fork
 
-Adafruit sensor fusion algorithm tutorial referencing fork library:  
+Adafruit`s fork library for the implementation of the main orientation algoritms (madgick and mahony).
+
+File where the algorithm is implemented: `main-adafruit-fork.txt`
+
+Adafruit references a fork of their library in one of their tutorial pages:  
 [https://learn.adafruit.com/ahrs-for-adafruits-9-dof-10-dof-breakout/sensor-fusion-algorithms]()
 
 Base repository:  
@@ -153,9 +166,13 @@ Fork repository:
 
 Implementation based but not following exactly all the steps on the tutorial. Test the output of every sensor and simple sensor fusion. This implementation is not reliable for use in any kind of vehichle but just an aproximation on how the sensors works.
 
+File where the algorithm is implemented: `main-trigonometry.txt`
+
 tutorial serie for sensor fusion using trigonometry:  
 [https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
 
 ### Deltatime
 
-Using the trigonometry implementation as base to test if it is required to compensate the value returned by the gyroscopes. The value returned by this sensor is in degrees per second (dps) but a loop takes less than that to execute. The solution is to apply the rotation done in the time it took to complete a loop, use the time interval also know as deltatime (degrees = dps * deltatime). **After executing, the deltatime does not change the result obtained in the trigonometry implementation**
+Using the trigonometry implementation as base to test if it is required to compensate the value returned by the gyroscopes. The value returned by this sensor is in degrees per second (dps) but a loop takes less than that to execute. The solution is to apply the rotation done in the time it took to complete a loop, use the time interval also know as deltatime (degrees = dps * deltatime). **After executing, the deltatime does not change the result obtained in the trigonometry implementation. This deltaTime may be already calculated in the LSM9DS1 library**
+
+File where the algorithm is implemented: `main-deltatime.txt`

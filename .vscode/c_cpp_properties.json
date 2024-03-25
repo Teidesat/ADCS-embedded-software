@@ -8,12 +8,12 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/src",
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/ReefwingAHRS/src",
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit LSM9DS1 Library",
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit LIS3MDL",
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit Unified Sensor",
-                "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit BusIO",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/src",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/ReefwingAHRS/src",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit LSM9DS1 Library",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit LIS3MDL",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit Unified Sensor",
+                "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit BusIO",
                 "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/libraries/SPI",
                 "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/libraries/Wire",
                 "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/tools/sdk/include",
@@ -61,12 +61,12 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/src",
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/ReefwingAHRS/src",
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit LSM9DS1 Library",
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit LIS3MDL",
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit Unified Sensor",
-                    "E:/proyectos/Teidesat/adcs/IMU-attitude-calculation/.pio/libdeps/esp12e/Adafruit BusIO",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/src",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/ReefwingAHRS/src",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit LSM9DS1 Library",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit LIS3MDL",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit Unified Sensor",
+                    "E:/proyectos/teidesat/adcs/IMU-attitude-determination/.pio/libdeps/esp12e/Adafruit BusIO",
                     "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/libraries/SPI",
                     "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/libraries/Wire",
                     "C:/Users/aramp/.platformio/packages/framework-arduinoespressif8266/tools/sdk/include",
@@ -113,7 +113,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60113",
+                "PLATFORMIO=60114",
                 "ESP8266",
                 "ARDUINO_ARCH_ESP8266",
                 "ARDUINO_ESP8266_ESP12",
