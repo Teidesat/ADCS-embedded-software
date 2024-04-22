@@ -23,7 +23,6 @@ void setupSensor() {
 void setup() {
   Serial.begin(9600);
   while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
-  Serial.println("LSM9DS1 upsat library");
   
   // Try to initialise and warn if we couldn't detect the chip
   if(!lsm.begin()) {
@@ -47,11 +46,19 @@ void loop() {
   float gyrosRawXYX[3] = {gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z};
   float magsRawXYZ[3] = {magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z};
 
+  // raw sensor data
+  String rawAccelerometersStr = String(accelerometers.acceleration.x) + ",  " + String(accelerometers.acceleration.y) + ",  " + String(accelerometers.acceleration.z);
+  String rawGyroscopesStr = String(gyroscopes.gyro.x) + ",  " + String(gyroscopes.gyro.y) + ",  " + String(gyroscopes.gyro.z);
+  String rawMagnetometersStr = String(magnetometers.magnetic.x) + ",  " + String(magnetometers.magnetic.y) + ",  " + String(magnetometers.magnetic.z);
+  String rawDataStr = rawAccelerometersStr + ",  " + rawGyroscopesStr + ",  " + rawMagnetometersStr;
+
+
   // calculate attitude using upsat algorithm
   sensorDat sensorData = scaleSens(accelsRawXYZ, gyrosRawXYX, magsRawXYZ);
   WahbaRotM(sensorData.Acc, sensorData.Gyr, sensorData.Mag, &WStruct);
   
   // print pith, roll and yaw
-  String dataStr = String(WStruct.Euler[0]*conversionRadiansToDegrees) + ', ' + String(WStruct.Euler[1]*conversionRadiansToDegrees) + ' ' + String(WStruct.Euler[2]*conversionRadiansToDegrees);
-  Serial.println(dataStr);  
+  String attitudeDataStr = String(WStruct.Euler[0] * conversionRadiansToDegrees) + ", " + String(WStruct.Euler[1] * conversionRadiansToDegrees) + ",  " + String(WStruct.Euler[2] * conversionRadiansToDegrees);
+  String dataStr = rawDataStr + ", " + attitudeDataStr;
+  Serial.println(dataStr);
 } 

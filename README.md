@@ -17,7 +17,7 @@ datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()
 
 ### Circuit configuration
 
-Using an `ESP-12E` microcontroller as the board computer. For the comunication between the microcontroller and the IMU, the `I2C` protocol is used, but both components should allow for the use of the `SPI` protocol as well.
+Using an `Espressif ESP8266 esp-12E` microcontroller as the board computer. For the comunication between the microcontroller and the IMU, the `I2C` protocol is used, but the LSM9DS1 allowS for the use of the `SPI` protocol as well.
 
 ![circuit image](./img/circuit_image.jpg)
 

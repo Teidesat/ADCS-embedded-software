@@ -67,8 +67,8 @@ void loop() {
 
   // raw sensor data
   String rawAccelerometersStr = String(accelerometers.acceleration.x) + ',' + String(accelerometers.acceleration.y) + ',' + String(accelerometers.acceleration.z);
-  String rawMagnetometersStr = String(magnetometers.magnetic.x) + ',' + String(magnetometers.magnetic.y) + ',' + String(magnetometers.magnetic.z);
   String rawGyroscopesStr = String(gyroscopes.gyro.x) + ',' + String(gyroscopes.gyro.y) + ',' + String(gyroscopes.gyro.z);
+  String rawMagnetometersStr = String(magnetometers.magnetic.x) + ',' + String(magnetometers.magnetic.y) + ',' + String(magnetometers.magnetic.z);
   String rawDataStr = rawAccelerometersStr + ',' + rawGyroscopesStr + ',' + rawMagnetometersStr;
   
   // calculate tilt on x,y,z axis with accelerometers
