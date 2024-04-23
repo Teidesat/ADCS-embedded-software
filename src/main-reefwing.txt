@@ -7,6 +7,8 @@
 LSM9DS1 imu;
 EulerAngles angles;
 
+char separator = ',';
+
 void setup() {
   Serial.begin(9600);
   imu.begin();  //  Initialise the LSM9DS1 IMU
@@ -20,7 +22,18 @@ void loop() {
   // call algoritm and update sensors
   angles = imu.update();
 
+  int16_t rawAccels[3];
+  int16_t rawGyros[3];
+  int16_t rawMags[3];
+  imu.readAccelData(rawAccels);
+  imu.readGyroData(rawGyros);
+  imu.readMagData(rawMags);
+  String rawAccelerometersStr = String(rawAccels[0]) + separator + String(rawAccels[1]) + separator + String(rawAccels[2]);
+  String rawGyroscopesStr = String(rawGyros[0]) + separator + String(rawGyros[1]) + separator + String(rawGyros[2]);
+  String rawMagnetometersStr = String(rawMags[0]) + separator + String(rawMags[1]) + separator + String(rawMags[2]);
+  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
+  
   // print pith, roll and heading
-  String dataStr = String(angles.roll) + ',' + String(angles.pitch) + ',' + String(angles.heading);
-  Serial.println(dataStr);
+  String attitudeDataStr = String(angles.roll) + separator + String(angles.pitch) + separator + String(angles.heading);
+  Serial.println(rawDataStr + separator + attitudeDataStr);
 }

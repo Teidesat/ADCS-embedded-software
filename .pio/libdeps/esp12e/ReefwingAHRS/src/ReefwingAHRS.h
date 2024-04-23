@@ -166,6 +166,10 @@ class LSM9DS1 {
     void loadGyroBias(float gxB, float gyB, float gzB);
     void loadMagBias(float mxB, float myB, float mzB);
 
+    void readAccelData(int16_t* destination);
+    void readGyroData(int16_t* destination);
+    void readMagData(int16_t* destination);
+
     Quaternion getQuaternion();
     EulerAngles update();
     SelfTestResults selfTest();
@@ -177,9 +181,9 @@ class LSM9DS1 {
   private:
     uint8_t whoAmIGyro();
     uint8_t whoAmIMag();
-    void readAccelData(int16_t* destination);
-    void readGyroData(int16_t* destination);
-    void readMagData(int16_t* destination);
+    //void readAccelData(int16_t* destination);
+    //void readGyroData(int16_t* destination);
+    //void readMagData(int16_t* destination);
     void writeByte(uint8_t address, uint8_t subAddress, uint8_t data);
     uint8_t readByte(uint8_t address, uint8_t subAddress);
     void readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t* dest);

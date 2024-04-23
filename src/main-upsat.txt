@@ -4,10 +4,11 @@
 #include "upsat/WahbaRotM.hpp"
 
 // constants
-float conversionRadiansToDegrees = 180.0/M_PI;
+float conversionRadiansToDegrees = 180.0 / M_PI;
 float loopFreq = 100;
 float loopPeriod = 1 / loopFreq;
 
+char separator = ',';
 // LSM9DS1 object and upsat algorithm structs
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 sensorDat sensorData;
@@ -29,7 +30,7 @@ void setup() {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
-  Serial.println("Found LSM9DS1 9DOF");
+  //Serial.println("Found LSM9DS1 9DOF");
 
   // set up sensors and upsat algorithm main struct
   setupSensor();
@@ -47,10 +48,10 @@ void loop() {
   float magsRawXYZ[3] = {magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z};
 
   // raw sensor data
-  String rawAccelerometersStr = String(accelerometers.acceleration.x) + ",  " + String(accelerometers.acceleration.y) + ",  " + String(accelerometers.acceleration.z);
-  String rawGyroscopesStr = String(gyroscopes.gyro.x) + ",  " + String(gyroscopes.gyro.y) + ",  " + String(gyroscopes.gyro.z);
-  String rawMagnetometersStr = String(magnetometers.magnetic.x) + ",  " + String(magnetometers.magnetic.y) + ",  " + String(magnetometers.magnetic.z);
-  String rawDataStr = rawAccelerometersStr + ",  " + rawGyroscopesStr + ",  " + rawMagnetometersStr;
+  String rawAccelerometersStr = String(accelerometers.acceleration.x) + separator + String(accelerometers.acceleration.y) + separator + String(accelerometers.acceleration.z);
+  String rawGyroscopesStr = String(gyroscopes.gyro.x) + separator + String(gyroscopes.gyro.y) + separator + String(gyroscopes.gyro.z);
+  String rawMagnetometersStr = String(magnetometers.magnetic.x) + separator + String(magnetometers.magnetic.y) + separator + String(magnetometers.magnetic.z);
+  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
 
 
   // calculate attitude using upsat algorithm
@@ -58,7 +59,7 @@ void loop() {
   WahbaRotM(sensorData.Acc, sensorData.Gyr, sensorData.Mag, &WStruct);
   
   // print pith, roll and yaw
-  String attitudeDataStr = String(WStruct.Euler[0] * conversionRadiansToDegrees) + ", " + String(WStruct.Euler[1] * conversionRadiansToDegrees) + ",  " + String(WStruct.Euler[2] * conversionRadiansToDegrees);
-  String dataStr = rawDataStr + ", " + attitudeDataStr;
+  String attitudeDataStr = String(WStruct.Euler[0] * conversionRadiansToDegrees) + separator + String(WStruct.Euler[1] * conversionRadiansToDegrees) + separator + String(WStruct.Euler[2] * conversionRadiansToDegrees);
+  String dataStr = rawDataStr + separator + attitudeDataStr;
   Serial.println(dataStr);
 } 
