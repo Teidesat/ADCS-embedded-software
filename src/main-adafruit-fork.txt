@@ -10,38 +10,31 @@ Madgwick attitude;
 
 unsigned long int microsPerReading, microsPrevious;
 
+char separator = ',';
+
 void setupSensor() {
   lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
   lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
   lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
 }
 
-
-
 void setup() {
   Serial.begin(9600);
   while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
-  Serial.println("LSM9DS1 data read demo");
-
-  Serial.println(__cplusplus);
   
   // Try to initialise and warn if we couldn't detect the chip
   if(!lsm.begin()) {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
-  Serial.println("Found LSM9DS1 9DOF");
 
   // helper to just set the default scaling we want, see above!
   setupSensor();
 
   attitude.begin(RATE);
-
   microsPerReading = 1000000 / RATE;
   microsPrevious = micros();
 }
-
-
 
 float convertRawAcceleration(int aRaw) {
   // since we are using 2G range
@@ -58,8 +51,6 @@ float convertRawGyro(int gRaw) {
   float g = (gRaw * 250.0) / 32768.0;
   return g;
 }
-
-
 
 void loop() {
   sensors_event_t accelerometers, magnetometers, gyroscopes, temperature;
@@ -79,6 +70,12 @@ void loop() {
     float gy = convertRawGyro(gyrosRawXYX[1]);
     float gz = convertRawGyro(gyrosRawXYX[2]);
 
+    // raw sensor data
+    String rawAccelerometersStr = String(accelerometers.acceleration.x) + separator + String(accelerometers.acceleration.y) + separator + String(accelerometers.acceleration.z);
+    String rawGyroscopesStr = String(gyroscopes.gyro.x) + separator + String(gyroscopes.gyro.y) + separator + String(gyroscopes.gyro.z);
+    String rawMagnetometersStr = String(magnetometers.magnetic.x) + separator + String(magnetometers.magnetic.y) + separator + String(magnetometers.magnetic.z);
+    String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
+  
     //attitude.update(gyrosRawXYX[0], gyrosRawXYX[1], gyrosRawXYX[2], accelsRawXYZ[0], accelsRawXYZ[1], accelsRawXYZ[2], magsRawXYZ[0], magsRawXYZ[1], magsRawXYZ[2]);
     //String result = String(attitude.getPitch()) + ' ' + String(attitude.getRoll()) + ' ' + String(attitude.getYaw());
     attitude.updateIMU(gx, gy, gz, ax, ay, az);
@@ -86,8 +83,9 @@ void loop() {
     float roll = attitude.getRoll();
     float pitch = attitude.getPitch();
     float heading = attitude.getYaw();
-    String result = String(pitch) + ' ' + String(roll) + ' ' + String(heading);
-    Serial.println(result);
+    String attitudeDataStr = String(pitch) + separator + String(roll) + separator + String(heading);
+    String dataStr = rawDataStr + separator + attitudeDataStr;
+    Serial.println(dataStr);
 
     microsPrevious = microsPrevious + microsPerReading;
   }

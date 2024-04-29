@@ -17,8 +17,8 @@ WahbaRotMStruct WStruct;
 // set up sensors range/sensitivity
 void setupSensor() {
   lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
-  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
   lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
 }
 
 void setup() {
