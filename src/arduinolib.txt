@@ -1,0 +1,61 @@
+// arduinolib.txt
+#include "arduino-library/arduino-library-madgwick.hpp"
+#include <Adafruit_LSM9DS1.h>
+
+// constants
+float conversionRadiansToDegrees = 180.0 / M_PI;
+float loopFreq = 100;
+float loopPeriod = 1 / loopFreq;
+
+char separator = ',';
+// LSM9DS1 object and upsat algorithm structs
+Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
+ArduinoLibMadgwick arduinoLibMadgwick;
+
+// set up sensors range/sensitivity
+void setupSensor() {
+  lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
+  lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
+}
+
+void setup() {
+  Serial.begin(9600);
+  while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
+  
+  // Try to initialise and warn if we couldn't detect the chip
+  if(!lsm.begin()) {
+    Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
+    while (1);
+  }
+  //Serial.println("Found LSM9DS1 9DOF");
+
+  // set up sensors and upsat algorithm main struct
+  setupSensor();
+}
+
+void loop() {
+  // get data from sensors
+  sensors_event_t accelerometers, magnetometers, gyroscopes, temperature;
+  lsm.getEvent(&accelerometers, &magnetometers, &gyroscopes, &temperature);
+
+  // create vectors with data
+  float accelsRawXYZ[3] = {accelerometers.acceleration.x, accelerometers.acceleration.y, accelerometers.acceleration.z};
+  float gyrosRawXYX[3] = {gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z};
+  float magsRawXYZ[3] = {magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z};
+
+  // raw sensor data
+  String rawAccelerometersStr = String(accelerometers.acceleration.x) + separator + String(accelerometers.acceleration.y) + separator + String(accelerometers.acceleration.z);
+  String rawGyroscopesStr = String(gyroscopes.gyro.x) + separator + String(gyroscopes.gyro.y) + separator + String(gyroscopes.gyro.z);
+  String rawMagnetometersStr = String(magnetometers.magnetic.x) + separator + String(magnetometers.magnetic.y) + separator + String(magnetometers.magnetic.z);
+  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
+
+
+  // calculate attitude using madgwick algorithm
+  arduinoLibMadgwick.update(gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z, accelerometers.acceleration.x, accelerometers.acceleration.y, accelerometers.acceleration.z, magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z);
+  
+  // print pith, roll and yaw
+  String attitudeDataStr = String(arduinoLibMadgwick.getPitch()) + separator + String(arduinoLibMadgwick.getRoll()) + separator + String(arduinoLibMadgwick.getYaw());
+  String dataStr = rawDataStr + separator + attitudeDataStr;
+  Serial.println(attitudeDataStr);
+} 

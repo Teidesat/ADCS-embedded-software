@@ -46,7 +46,7 @@ typedef union {
 
 /**
  * @brief 3x3 matrix in row-major order.
- * See http://en.wikipedia.org/wiki/Row-major_order
+ * See http://wikipedia.org/wiki/Row-major_order
  */
 typedef union {
     float array[3][3];

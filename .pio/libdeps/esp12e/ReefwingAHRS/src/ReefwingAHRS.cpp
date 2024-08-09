@@ -249,7 +249,7 @@ Quaternion::Quaternion(float w, float x, float y, float z) {
 Quaternion::Quaternion(float yaw, float pitch, float roll) {
   //  Converts Euler Angles,  yaw (Z), pitch (Y), and roll (X) in radians
   //  to a quaternion.
-  //  ref: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+  //  ref: https://wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 
   float cy = cos(yaw * 0.5);
   float sy = sin(yaw * 0.5);
@@ -271,7 +271,7 @@ void Quaternion::reset() {
 
 EulerAngles Quaternion::toEulerAngles(float declination) {
   //  Converts a quaternion to Euler Angles
-  //  ref: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+  //  ref: https://wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 
   EulerAngles angles;
 

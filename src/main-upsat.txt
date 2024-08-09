@@ -1,7 +1,10 @@
 //main-upsat.txt
 
 #include <Adafruit_LSM9DS1.h>
+#include "noise-filters/noise-filters.hpp"
 #include "upsat/WahbaRotM.hpp"
+
+
 
 // constants
 float conversionRadiansToDegrees = 180.0 / M_PI;
@@ -9,10 +12,14 @@ float loopFreq = 100;
 float loopPeriod = 1 / loopFreq;
 
 char separator = ',';
-// LSM9DS1 object and upsat algorithm structs
+
+const int bufferSize = 20;
+
+// LSM9DS1 object, noise filters and upsat algorithm structs
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
+NoiseFilters noiseFiltersAccX, noiseFiltersAccY, noiseFiltersAccZ, noiseFiltersGyroX, noiseFiltersGyroY, noiseFiltersGyroZ, noiseFiltersMagX, noiseFiltersMagY, noiseFiltersMagZ;
 sensorDat sensorData;
-WahbaRotMStruct WStruct;
+WahbaRotMStruct WStructRaw, WStructAverage;
 
 // set up sensors range/sensitivity
 void setupSensor() {
@@ -30,11 +37,23 @@ void setup() {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
-  //Serial.println("Found LSM9DS1 9DOF");
 
+  //Serial.println("Found LSM9DS1 9DOF");
+  noiseFiltersAccX.setBufferSize(bufferSize);
+  noiseFiltersAccY.setBufferSize(bufferSize);
+  noiseFiltersAccZ.setBufferSize(bufferSize);
+
+  noiseFiltersGyroX.setBufferSize(bufferSize);
+  noiseFiltersGyroY.setBufferSize(bufferSize);
+  noiseFiltersGyroZ.setBufferSize(bufferSize);
+
+  noiseFiltersMagX.setBufferSize(bufferSize);
+  noiseFiltersMagY.setBufferSize(bufferSize);
+  noiseFiltersMagZ.setBufferSize(bufferSize);
   // set up sensors and upsat algorithm main struct
   setupSensor();
-  initWahbaStruct(&WStruct, loopPeriod);
+  initWahbaStruct(&WStructRaw, loopPeriod);
+  initWahbaStruct(&WStructAverage, loopPeriod);
 }
 
 void loop() {
@@ -42,24 +61,41 @@ void loop() {
   sensors_event_t accelerometers, magnetometers, gyroscopes, temperature;
   lsm.getEvent(&accelerometers, &magnetometers, &gyroscopes, &temperature);
 
-  // create vectors with data
+  // raw sensor data
   float accelsRawXYZ[3] = {accelerometers.acceleration.x, accelerometers.acceleration.y, accelerometers.acceleration.z};
   float gyrosRawXYX[3] = {gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z};
   float magsRawXYZ[3] = {magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z};
-
-  // raw sensor data
+  float temp = temperature.temperature;
+  
   String rawAccelerometersStr = String(accelerometers.acceleration.x) + separator + String(accelerometers.acceleration.y) + separator + String(accelerometers.acceleration.z);
   String rawGyroscopesStr = String(gyroscopes.gyro.x) + separator + String(gyroscopes.gyro.y) + separator + String(gyroscopes.gyro.z);
   String rawMagnetometersStr = String(magnetometers.magnetic.x) + separator + String(magnetometers.magnetic.y) + separator + String(magnetometers.magnetic.z);
   String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
 
-
-  // calculate attitude using upsat algorithm
-  sensorDat sensorData = scaleSens(accelsRawXYZ, gyrosRawXYX, magsRawXYZ);
-  WahbaRotM(sensorData.Acc, sensorData.Gyr, sensorData.Mag, &WStruct);
+  // average sensor data
+  float accelAverageXYZ[3] = {noiseFiltersAccX.updateMovingAverage(accelerometers.acceleration.x), noiseFiltersAccY.updateMovingAverage(accelerometers.acceleration.y), noiseFiltersAccZ.updateMovingAverage(accelerometers.acceleration.z)};
+  float gyrosAverageXYZ[3] = {noiseFiltersGyroX.updateMovingAverage(gyroscopes.gyro.x), noiseFiltersGyroY.updateMovingAverage(gyroscopes.gyro.y), noiseFiltersGyroZ.updateMovingAverage(gyroscopes.gyro.z)};
+  float magsAverageXYZ[3] = {noiseFiltersMagZ.updateMovingAverage(magnetometers.magnetic.x), noiseFiltersMagY.updateMovingAverage(magnetometers.magnetic.y), noiseFiltersMagZ.updateMovingAverage(magnetometers.magnetic.z)};
   
-  // print pith, roll and yaw
-  String attitudeDataStr = String(WStruct.Euler[0] * conversionRadiansToDegrees) + separator + String(WStruct.Euler[1] * conversionRadiansToDegrees) + separator + String(WStruct.Euler[2] * conversionRadiansToDegrees);
-  String dataStr = rawDataStr + separator + attitudeDataStr;
-  Serial.println(dataStr);
+  String averageAccStr = String(accelAverageXYZ[0]) + separator + String(accelAverageXYZ[1]) + separator + String(accelAverageXYZ[2]);
+  String averageGyroStr = String(gyrosAverageXYZ[0]) + separator + String(gyrosAverageXYZ[1]) + separator + String(gyrosAverageXYZ[2]);
+  String averageMagStr = String(magsAverageXYZ[0]) + separator + String(magsAverageXYZ[1]) + separator + String(magsAverageXYZ[2]);
+  String averageDataStr = averageAccStr + separator + averageGyroStr + separator + averageMagStr;
+
+  //Serial.println(rawAccelerometersStr + separator + averageAccStr + separator + String(noiseFiltersAccZ.getStandardDeviation()) );
+  
+  // calculate attitude using upsat algorithm
+  
+  // raw pitch, roll and yaw
+  sensorDat sensorRawData = scaleSens(accelsRawXYZ, gyrosRawXYX, magsRawXYZ);
+  WahbaRotM(sensorRawData.Acc, sensorRawData.Gyr, sensorRawData.Mag, &WStructRaw);
+  String rawAttitudeDataStr = String(WStructRaw.Euler[0] * conversionRadiansToDegrees) + separator + String(WStructRaw.Euler[1] * conversionRadiansToDegrees) + separator + String(WStructRaw.Euler[2] * conversionRadiansToDegrees);
+
+  // average pith, roll and yaw
+  sensorDat sensorAverageData = scaleSens(accelAverageXYZ, gyrosAverageXYZ, magsAverageXYZ);
+  WahbaRotM(sensorAverageData.Acc, sensorAverageData.Gyr, sensorAverageData.Mag, &WStructAverage);
+  String averageAttitudeDataStr = String(WStructAverage.Euler[0] * conversionRadiansToDegrees) + separator + String(WStructAverage.Euler[1] * conversionRadiansToDegrees) + separator + String(WStructAverage.Euler[2] * conversionRadiansToDegrees);
+  
+  //String dataStr = rawDataStr + separator + rawAttitudeDataStr;
+  Serial.println(rawAttitudeDataStr + separator + averageAttitudeDataStr);
 } 

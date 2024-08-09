@@ -48,14 +48,14 @@ void setupSensor() {
 void setup() {
   Serial.begin(9600);
   while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
-  Serial.println("LSM9DS1 data read demo");
+  // Serial.println("LSM9DS1 data read demo");
   
   // Try to initialise and warn if we couldn't detect the chip
   if(!lsm.begin()) {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
-  Serial.println("Found LSM9DS1 9DOF");
+  // Serial.println("Found LSM9DS1 9DOF");
 
   // helper to just set the default scaling we want, see above!
   setupSensor();
@@ -71,7 +71,7 @@ void loop() {
   String rawAccelerometersStr = String(accelerometers.acceleration.x) + separator + String(accelerometers.acceleration.y) + separator + String(accelerometers.acceleration.z);
   String rawGyroscopesStr = String(gyroscopes.gyro.x) + separator + String(gyroscopes.gyro.y) + separator + String(gyroscopes.gyro.z);
   String rawMagnetometersStr = String(magnetometers.magnetic.x) + separator + String(magnetometers.magnetic.y) + separator + String(magnetometers.magnetic.z);
-  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
+  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr + separator + String(temperature.temperature);
   
   // calculate tilt on x,y,z axis with accelerometers
   float tiltXrollAccelRad = atan2(accelerometers.acceleration.x, accelerometers.acceleration.z);

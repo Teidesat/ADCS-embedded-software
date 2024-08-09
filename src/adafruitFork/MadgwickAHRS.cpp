@@ -226,7 +226,7 @@ void Madgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float
 
 //-------------------------------------------------------------------------------------------
 // Fast inverse square-root
-// See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
+// See: http://wikipedia.org/wiki/Fast_inverse_square_root
 
 float Madgwick::invSqrt(float x) {
 	float halfx = 0.5f * x;

@@ -28,7 +28,7 @@ sensorDat scaleSens(float acc[3],float gyr[3],float mag[3]) {
 
 
 	for(int i=0;i<3;i++){
-		//vec[i]=((float)sens.AccRaw[i])*0.122/1e3;
+		vec[i]=((float)sens.AccRaw[i])*0.122/1e3;
 		//sens.Gyr[i]=((float)sens.GyrRaw[i])*4.0*(17.5/1e3)*(M_PI);//8.75/1e3;
 		sens.Gyr[i] = sens.GyrRaw[i];
 	}
