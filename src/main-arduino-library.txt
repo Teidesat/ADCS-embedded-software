@@ -1,14 +1,11 @@
-// main-xio.txt
-#include "xio-technologies/xio-madgwickAHRS.hpp"
+// arduino-library.txt
+#include "algorithms/arduino-library/arduino-library-madgwick.hpp"
 #include <Adafruit_LSM9DS1.h>
-
-// constants
-float conversionRadiansToDegrees = 180.0 / M_PI;
 
 char separator = ',';
 // LSM9DS1 object and upsat algorithm structs
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
-XioMadgwick xioMadgwick;
+ArduinoLibMadgwick arduinoLibMadgwick;
 
 // set up sensors range/sensitivity
 void setupSensor() {
@@ -26,7 +23,6 @@ void setup() {
     Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
     while (1);
   }
-  //Serial.println("Found LSM9DS1 9DOF");
 
   // set up sensors and upsat algorithm main struct
   setupSensor();
@@ -49,13 +45,11 @@ void loop() {
   String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
 
 
-  // calculate attitude using xioMadgwick algorithm
-  xioMadgwick.madgwickAHRSupdate(gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z, accelerometers.acceleration.x, accelerometers.acceleration.y, accelerometers.acceleration.z, magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z);
+  // calculate attitude using madgwick algorithm
+  arduinoLibMadgwick.update(gyroscopes.gyro.x, gyroscopes.gyro.y, gyroscopes.gyro.z, accelerometers.acceleration.x, accelerometers.acceleration.y, accelerometers.acceleration.z, magnetometers.magnetic.x, magnetometers.magnetic.y, magnetometers.magnetic.z);
   
   // print pith, roll and yaw
-  String attitudeDataStr = String(xioMadgwick.pitch * conversionRadiansToDegrees) + separator + String(xioMadgwick.roll * conversionRadiansToDegrees) + separator + String(xioMadgwick.yaw * conversionRadiansToDegrees);
-  String attitudeDataStrQuaternion = String(xioMadgwick.q0) + separator + String(xioMadgwick.q1) + separator + String(xioMadgwick.q2)  + separator + String(xioMadgwick.q3);
+  String attitudeDataStr = String(arduinoLibMadgwick.getPitch()) + separator + String(arduinoLibMadgwick.getRoll()) + separator + String(arduinoLibMadgwick.getYaw());
   String dataStr = rawDataStr + separator + attitudeDataStr;
-  Serial.println(attitudeDataStrQuaternion + separator + attitudeDataStr + separator + rawDataStr);
-
+  Serial.println(attitudeDataStr);
 } 

@@ -170,9 +170,3 @@ File where the algorithm is implemented: `main-trigonometry.txt`
 
 tutorial serie for sensor fusion using trigonometry:  
 [https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
-
-### Deltatime
-
-Using the trigonometry implementation as base to test if it is required to compensate the value returned by the gyroscopes. The value returned by this sensor is in degrees per second (dps) but a loop takes less than that to execute. The solution is to apply the rotation done in the time it took to complete a loop, use the time interval also know as deltatime (degrees = dps * deltatime). **After executing, the deltatime does not change the result obtained in the trigonometry implementation. This deltaTime may be already calculated in the LSM9DS1 library**
-
-File where the algorithm is implemented: `main-deltatime.txt`
