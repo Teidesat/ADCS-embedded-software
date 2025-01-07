@@ -1,4 +1,4 @@
-#include "noise-filters.hpp"
+#include "noise_filters.hpp"
 
 void NoiseFilters::push_input(float newInput) {
     if(inputBuffer.size() >= bufferMaxSize) {inputBuffer.pop_back();}

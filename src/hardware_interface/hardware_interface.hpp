@@ -1,3 +1,6 @@
+#ifndef HARDWARE_INTERFACE_H
+#define HARDWARE_INTERFACE_H
+
 
 #include <Adafruit_LSM9DS1.h>
 
@@ -7,17 +10,17 @@
 const unsigned short int DATA_RATE = 9600;
 
 // IMU object
-Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
+extern Adafruit_LSM9DS1 lsm;
 
 
 
 // structures for the retrival of the sensors readings
 
-typedef struct SensorData {
+struct SensorData {
     float x, y, z;
 };
 
-typedef struct IMUdata {
+struct IMUdata {
     SensorData accelerometers;
     SensorData gyroscopes;
     SensorData magnetometers;
@@ -30,8 +33,7 @@ typedef struct IMUdata {
  * y (roll)
  * z (yaw / heading)
  */
-
-typedef struct Attitude {
+struct Attitude {
     float pitch, roll, yaw;
 };
 
@@ -55,14 +57,26 @@ IMUdata readSensors();
 
 
 
-// Serial port output
+// standard attitude format
 
-const float RADIANS_TO_DEGRESS_CONVERSION_RATIO = 180.0 / M_PI;
+Attitude fillAttitudeValues(float pitch, float roll, float yaw);
 
+Attitude convertAttitudeRadiansToDegrees(const Attitude& attitudeReadingInRadians);
+
+
+
+
+
+
+// Serial plot
 const char  STRING_SEPARATOR = ',';
 
-String formatSensorValues(SensorData& sensorReading);
+String formatSensorValues(const SensorData& sensorReading);
 
-String formatIMUvalues(IMUdata& imuReading);
+String formatIMUvalues(const IMUdata& imuReading);
 
-String formatAttitudeValues(Attitude& attitudeReading);
+String formatPitchandRoll(const Attitude& attitudeReading);
+
+String formatAttitudeValues(const Attitude& attitudeReading);
+
+#endif

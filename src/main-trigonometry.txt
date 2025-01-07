@@ -1,0 +1,21 @@
+//main-trigonometry.txt
+
+#include "hardware_interface/hardware_interface.hpp"
+#include "algorithms/trigonometry/trigonometry.hpp"
+
+
+void setup() {
+  setupHardware();
+}
+
+void loop() {
+  IMUdata imuRawValues = readSensors();
+  String rawDataStr = formatIMUvalues(imuRawValues);
+  
+  Orientation currentOrientation = calculateAttitude(imuRawValues.accelerometers.x, imuRawValues.accelerometers.y, imuRawValues.accelerometers.z, imuRawValues.magnetometers.x, imuRawValues.magnetometers.y, imuRawValues.magnetometers.z);
+  Attitude currentAttitude = fillAttitudeValues(currentOrientation.pitch, currentOrientation.roll, currentOrientation.yaw);
+
+  currentAttitude = convertAttitudeRadiansToDegrees(currentAttitude);
+  String attitudeStr = formatAttitudeValues(currentAttitude);
+  Serial.println(attitudeStr);
+}

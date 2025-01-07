@@ -1,3 +1,7 @@
-#include "../hardware_interface/hardware_interface.hpp"
+#include "math.h"
 
-Attitude calculateAttitude(float ax, float ay, float az, float mx, float my, float mz);
+struct Orientation {
+  float pitch, roll, yaw;
+};
+
+Orientation calculateAttitude(float ax, float ay, float az, float mx, float my, float mz);
