@@ -1,8 +1,8 @@
 //main-upsat.txt
 
-#include "hardware_interface/hardware_interface.hpp"
-#include "noise_filters/noise_filters.hpp"
-#include "algorithms/upsat/WahbaRotM.hpp"
+#include "../lib/hardware_interface/hardware_interface.hpp"
+#include "../lib/noise_filters/noise_filters.hpp"
+#include "../lib/algorithms/upsat/WahbaRotM.hpp"
 
 
 
@@ -71,4 +71,4 @@ void loop() {
   //WahbaRotM(sensorAverageData.Acc, sensorAverageData.Gyr, sensorAverageData.Mag, &WStructAverage);
   
   Serial.println(pitchAndRollRawDegreesStr);
-} 
+}

@@ -43,21 +43,25 @@ Sub-dependencies (required by the main dependencies):
 - LIS3MDL
 - LSM9DS1 Library
 
-All the implementations are located in the `src/` directory. 
+All the implementations are located in the `lib/algorithms` directory. 
 
 ```
-src/
-├── adafruit/
-|    └── ...
-├── sebastian/
-|    └── ...
-├── upsat/
-|    └── ...
-├── main-adafruit-fork.txt
-├── main-deltatime.txt
-├── main-reefwing.txt
-├── main-tris.txt
-└── main-upsat.txt
+├── lib/
+|    ├── algortims
+|    |    ├── adafruit/
+|    |    |    └── ...
+|    |    ├── sebastian/
+|    |    |    └── ...
+|    |    └── upsat/
+|    |         └── ...
+|    ├ ...
+|    ...
+├── src/
+|    ├── main-adafruit-fork.txt
+|    ├── main-deltatime.txt
+|    ├── main-reefwing.txt
+|    ├── main-tris.txt
+|    └── main-upsat.txt
 ```
 
 ### LSM9DS1 Library

@@ -82,8 +82,8 @@ Attitude fillAttitudeValues(float pitch, float roll, float yaw) {
 
 Attitude convertAttitudeRadiansToDegrees(const Attitude& attitudeReadingInRadians) {
   const float RADIANS_TO_DEGRESS_CONVERSION_RATIO = 180.0 / M_PI;
-  
   Attitude attitudeReadingInDegrees;
+  
   attitudeReadingInDegrees.pitch = attitudeReadingInRadians.pitch * RADIANS_TO_DEGRESS_CONVERSION_RATIO;
   attitudeReadingInDegrees.roll = attitudeReadingInRadians.roll * RADIANS_TO_DEGRESS_CONVERSION_RATIO;
   attitudeReadingInDegrees.yaw = attitudeReadingInRadians.yaw * RADIANS_TO_DEGRESS_CONVERSION_RATIO;

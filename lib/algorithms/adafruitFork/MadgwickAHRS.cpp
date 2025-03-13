@@ -20,7 +20,6 @@
 // Header files
 
 #include "MadgwickAHRS.hpp"
-#include <math.h>
 
 //-------------------------------------------------------------------------------------------
 // Definitions

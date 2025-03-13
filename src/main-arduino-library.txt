@@ -1,7 +1,7 @@
 // arduino-library.txt
 
-#include "hardware_interface/hardware_interface.hpp"
-#include "algorithms/arduino_library/arduino_library_madgwick.hpp"
+#include "../lib/hardware_interface/hardware_interface.hpp"
+#include "../lib/algorithms/arduino_library/arduino_library_madgwick.hpp"
 
 
 // LSM9DS1 object and upsat algorithm structs

@@ -17,7 +17,6 @@
 
 #include "xio-madgwickAHRS.hpp"
 #include <math.h>
-#include <Adafruit_LSM9DS1.h>
 
 //---------------------------------------------------------------------------------------------------
 // Definitions

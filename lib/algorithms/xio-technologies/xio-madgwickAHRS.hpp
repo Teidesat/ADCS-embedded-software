@@ -17,7 +17,6 @@
 #define MadgwickAHRS_h
 
 #include <cmath>
-#include <Adafruit_LSM9DS1.h>
 
 //---------------------------------------------------------------------------------------------------
 // Function declarations
@@ -25,11 +24,12 @@
 class XioMadgwick {
     private:
         float invSqrt(float x);
-        void quaternionToEuler();
+        
     public:
         float pitch;
         float roll;
         float yaw;
+        void quaternionToEuler();
         float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
         void madgwickAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
         void madgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az);
