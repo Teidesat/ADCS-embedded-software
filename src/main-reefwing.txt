@@ -1,35 +1,33 @@
 //main-reefwing.txt
 
-#include <SPI.h>
-#include <ReefwingAHRS.h>
+#include "../lib/hardware_interface/hardware_interface.hpp"
+#include "../lib/algorithms/ReefwingAHRS/ReefwingAHRS.h"
 
 //  reefwingAHRS library has own implementation of lsm9ds1 object
-LSM9DS1 imu;
-EulerAngles angles;
+ReefwingAHRS imu;
 
-char separator = ',';
 
 void setup() {
-  Serial.begin(9600);
-  imu.begin();  //  Initialise the LSM9DS1 IMU
-  imu.start();  //  Start processing sensor data
-
-  // choose algorithm to use (madgwick is better than mahony)
-  imu.setFusionAlgorithm(SensorFusion::MADGWICK);
+  setupHardware();
+  imu.begin(); // using madgwick
 }
 
 void loop() {
-  // call algoritm and update sensors
-  angles = imu.update();
+  IMUdata imuRawValues = readSensors();
+  IMUSensors imusensordata;
+  imusensordata.ax = imuRawValues.accelerometers.x;
+  imusensordata.ay = imuRawValues.accelerometers.y;
+  imusensordata.az = imuRawValues.accelerometers.z;
+  imusensordata.gx = imuRawValues.gyroscopes.x;
+  imusensordata.gy = imuRawValues.gyroscopes.y;
+  imusensordata.gz = imuRawValues.gyroscopes.z;
+  imusensordata.mx = imuRawValues.magnetometers.x;
+  imusensordata.my = imuRawValues.magnetometers.y;
+  imusensordata.mz = imuRawValues.magnetometers.z;
 
-  // get raw data from sensors
-  SensorData imuData = imu.filterFormat();
-  String rawAccelerometersStr = String(imuData.ax) + separator + String(imuData.ay) + separator + String(imuData.az);
-  String rawGyroscopesStr = String(imuData.gx) + separator + String(imuData.gy) + separator + String(imuData.gz);
-  String rawMagnetometersStr = String(imuData.mx) + separator + String(imuData.my) + separator + String(imuData.mz);
-  String rawDataStr = rawAccelerometersStr + separator + rawGyroscopesStr + separator + rawMagnetometersStr;
-  
-  // print pith, roll and heading
-  String attitudeDataStr = String(angles.roll) + separator + String(angles.pitch) + separator + String(angles.heading);
-  Serial.println(rawDataStr + separator + attitudeDataStr);
+  imu.setData(imusensordata);
+  imu.update();
+
+  String attitude = String(imu.angles.pitch) + ',' + String(imu.angles.roll);
+  Serial.println(attitude);
 }

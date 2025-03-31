@@ -1,5 +1,4 @@
 // main-adafruit-fork.txt
-//works
 
 #include "../lib/hardware_interface/hardware_interface.hpp"
 #include "../lib/algorithms/adafruitFork/MadgwickAHRS.hpp"

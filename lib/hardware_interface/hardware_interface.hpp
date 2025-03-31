@@ -16,15 +16,17 @@ extern Adafruit_LSM9DS1 lsm;
 
 // structures for the retrival of the sensors readings
 
-struct SensorData {
-    float x, y, z;
+class SensorData {
+    public:
+        float x, y, z;
 };
 
-struct IMUdata {
-    SensorData accelerometers;
-    SensorData gyroscopes;
-    SensorData magnetometers;
-    float temperature;
+class IMUdata {
+    public:
+        SensorData accelerometers;
+        SensorData gyroscopes;
+        SensorData magnetometers;
+        float temperature;
 };
 
 /**
@@ -33,8 +35,9 @@ struct IMUdata {
  * y (roll)
  * z (yaw / heading)
  */
-struct Attitude {
-    float pitch, roll, yaw;
+class Attitude {
+    public:
+        float pitch, roll, yaw;
 };
 
 
@@ -53,19 +56,11 @@ IMUdata readSensors();
 
 
 
-
-
-
-
 // standard attitude format
 
 Attitude fillAttitudeValues(float pitch, float roll, float yaw);
 
 Attitude convertAttitudeRadiansToDegrees(const Attitude& attitudeReadingInRadians);
-
-
-
-
 
 
 // Serial plot
@@ -78,5 +73,6 @@ String formatIMUvalues(const IMUdata& imuReading);
 String formatPitchandRoll(const Attitude& attitudeReading);
 
 String formatAttitudeValues(const Attitude& attitudeReading);
+
 
 #endif
