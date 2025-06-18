@@ -1,7 +1,7 @@
 //main-trigonometry.txt
 
-#include "../..lib/hardware_interface/hardware_interface.hpp"
-#include "../..lib/algorithms/trigonometry/trigonometry.hpp"
+#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
+#include "../..lib/trigonometry/trigonometry.hpp"
 
 
 void setup() {

@@ -1,8 +1,8 @@
 //main-upsat.txt
 
-#include "../lib/hardware_interface/hardware_interface.hpp"
-#include "../lib/noise_filters/noise_filters.hpp"
-#include "../lib/algorithms/upsat/WahbaRotM.hpp"
+#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
+#include "../lib/noiseFilters/noiseFilters.hpp"
+#include "../lib/IMUalgorithms/upsat/WahbaRotM.hpp"
 
 
 

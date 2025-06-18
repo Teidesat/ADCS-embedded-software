@@ -19,7 +19,7 @@ datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()
 
 Using an `Espressif ESP8266 esp-12E` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
 
-![circuit image](./img/circuit_image.jpg)
+![circuit image](./img/imu-attached-to-arduino-circuit.jpg)
 
 Pin Conections (SPI protocol):
 
@@ -138,7 +138,7 @@ UPSat ADCS software modified to be used with arduino instead of Raspberry
 
 File where the algorithm is implemented: `main-upsat.txt`
 
-ADCS software folder in their repository:  
+ADCS software folder in their repository
 [https://gitlab.com/librespacefoundation/upsat/upsat-adcs-software/-/tree/master/sensor-fusion-test?ref_type=heads]()
 
 ### ReefwingAHRS
@@ -147,7 +147,7 @@ Library implementating different algorithms for the calculation of the orientati
 
 File where the algorithm is implemented: `main-reefwing.txt`
 
-Reefwing Library repository (also avalible in the )
+Reefwing Library repository
 [https://github.com/Reefwing-Software/Reefwing-AHRS]() 
 
 ### Adafruit-fork
@@ -159,10 +159,10 @@ File where the algorithm is implemented: `main-adafruit-fork.txt`
 Adafruit references a fork of their library in one of their tutorial pages:  
 [https://learn.adafruit.com/ahrs-for-adafruits-9-dof-10-dof-breakout/sensor-fusion-algorithms]()
 
-Base repository:  
+Base repository 
 [https://github.com/adafruit/Adafruit_AHRS/tree/master]()
 
-Fork repository:  
+Fork repository
 [https://github.com/PaulStoffregen/MadgwickAHRS]() (madgwick algorithm)  
 [https://github.com/PaulStoffregen/MahonyAHRS]() (mahony algorithm)
 
@@ -174,3 +174,11 @@ File where the algorithm is implemented: `main-trigonometry.txt`
 
 tutorial serie for sensor fusion using trigonometry:  
 [https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
+
+
+## GNSS
+
+###
+
+Guide to connect NEO-6M GPS to arduino
+[https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()

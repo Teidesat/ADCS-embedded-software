@@ -1,0 +1,6 @@
+EXPORTS
+    Dummy_clampValue_I7hUGLxzwzCtYNL1l8d9FB_WdwhHmpTVusrriR92SoFHC @1
+    create_Dummy_xrgc9vAJPrZCXaIfa3WgLH_WdwhHmpTVusrriR92SoFHC @2
+    delete_Dummy_pqEQxFG0Czv16zpByNcvkB_WdwhHmpTVusrriR92SoFHC @3
+    get_checksum_source_info @4
+    get_dll_checksum_WdwhHmpTVusrriR92SoFHC @5

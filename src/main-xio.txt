@@ -1,7 +1,7 @@
 // main-xio.txt
 
-#include "../lib/hardware_interface/hardware_interface.hpp"
-#include "../lib/algorithms/xio-technologies/xio-madgwickAHRS.hpp"
+#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
+#include "../lib/IMUalgorithms/xio-technologies/xio-madgwickAHRS.hpp"
 
 
 XioMadgwick xioMadgwick;

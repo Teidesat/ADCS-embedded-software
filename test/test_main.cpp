@@ -1,6 +1,6 @@
 // main-adafruit-fork-test.txt
 
-#include "../lib/algorithms/adafruitFork/MadgwickAHRS.hpp"
+#include "../lib/IMUalgorithms/algorithms/adafruitFork/MadgwickAHRS.hpp"
 
 #include <string>
 #include <fstream>

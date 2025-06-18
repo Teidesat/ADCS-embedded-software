@@ -1,3 +1,6 @@
+#ifndef NOISE_FILTERS_H
+#define NOISE_FILTERS_H
+
 #include <vector>
 #include <math.h>
 
@@ -17,3 +20,5 @@ class NoiseFilters {
         float getStandardDeviation();
         float updateMovingAverage(float newInput);
 };
+
+#endif
