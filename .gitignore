@@ -1,3 +1,12 @@
+# General
 .vscode/
 .pio/
 build/
+
+# Matlab
+matlab/dlprj/
+matlab/*.tlc
+matlab/*.mexw64
+matlab/rtwmakecfg.m
+matlab/SFB*.mat
+

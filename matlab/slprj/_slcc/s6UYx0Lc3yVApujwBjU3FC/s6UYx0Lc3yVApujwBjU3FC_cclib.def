@@ -1,0 +1,17 @@
+EXPORTS
+    Dummy_clampValue_I7hUGLxzwzCtYNL1l8d9FB_s6UYx0Lc3yVApujwBjU3FC @1
+    Madgwick_begin_5hefsv1PkcfqCnqHlbedH_s6UYx0Lc3yVApujwBjU3FC @2
+    Madgwick_getPitchRadians_TczdJ4yb6u7okbbEY2mloH_s6UYx0Lc3yVApujwBjU3FC @3
+    Madgwick_getPitch_eaZIURE7KUm4zVrp3dBN0_s6UYx0Lc3yVApujwBjU3FC @4
+    Madgwick_getRollRadians_veFTimhBCfBjDBcFum0y8F_s6UYx0Lc3yVApujwBjU3FC @5
+    Madgwick_getRoll_Itx6rYbxxHc1WUWScsHePE_s6UYx0Lc3yVApujwBjU3FC @6
+    Madgwick_getYawRadians_pXdw5zXGSbOLV2QYAQaTRD_s6UYx0Lc3yVApujwBjU3FC @7
+    Madgwick_getYaw_E1o2XYGDmbB7AXFRAzGydC_s6UYx0Lc3yVApujwBjU3FC @8
+    Madgwick_updateIMU_84m9f6Jvgg3zgdY0Rduqk_s6UYx0Lc3yVApujwBjU3FC @9
+    Madgwick_update_aEcii5Q18gu7qh1DRdzdHG_s6UYx0Lc3yVApujwBjU3FC @10
+    create_Dummy_xrgc9vAJPrZCXaIfa3WgLH_s6UYx0Lc3yVApujwBjU3FC @11
+    create_Madgwick_EwszyzmVtkIoKvtkUpeTKB_s6UYx0Lc3yVApujwBjU3FC @12
+    delete_Dummy_pqEQxFG0Czv16zpByNcvkB_s6UYx0Lc3yVApujwBjU3FC @13
+    delete_Madgwick_wOkZIq6Nok4MO1oVlRuObC_s6UYx0Lc3yVApujwBjU3FC @14
+    get_checksum_source_info @15
+    get_dll_checksum_s6UYx0Lc3yVApujwBjU3FC @16

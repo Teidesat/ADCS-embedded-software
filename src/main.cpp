@@ -15,7 +15,7 @@ void setup() {
 }
 
 void loop() {  
-    // get data from sensors
+  // get data from sensors
   ins.update();
   
   attitude.updateIMU(ins.imu.gyroscopes.x, ins.imu.gyroscopes.y, ins.imu.gyroscopes.z, ins.imu.accelerometers.x, ins.imu.gyroscopes.y, ins.imu.accelerometers.z);

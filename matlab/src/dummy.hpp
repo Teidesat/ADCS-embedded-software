@@ -6,15 +6,16 @@ class Dummy {
         float minValue, maxValue;
 
     public:
-    Dummy(float newMinValue = 0, float newMaxValue = 0) {
-        minValue = newMinValue;
-        maxValue = newMaxValue;
-    }
-    float clampValue(float valueToClamp) {
-        if(valueToClamp < minValue) {return minValue;}
-        else if(valueToClamp > maxValue) {return maxValue;}
-        else {return valueToClamp;}
-    }
+        Dummy(float newMinValue = 0, float newMaxValue = 1.5)  {
+            minValue = newMinValue;
+            maxValue = newMaxValue;
+        }
+        
+        float clampValue(float valueToClamp) {
+            if(valueToClamp < minValue) {return minValue;}
+            else if(valueToClamp > maxValue) {return maxValue;}
+            else {return valueToClamp;}
+        }
 };
 
 #endif

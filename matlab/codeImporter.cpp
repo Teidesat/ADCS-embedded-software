@@ -26,7 +26,7 @@
  * | See matlabroot/simulink/src/sfuntmpl_doc.c for a more detailed template |
  *  -------------------------------------------------------------------------
  *
- * Created: Wed Jun 11 19:53:01 2025
+ * Created: Sun Jun 22 22:28:54 2025
  */
 
 #define S_FUNCTION_LEVEL               2
@@ -34,7 +34,7 @@
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 /* %%%-SFUNWIZ_defines_Changes_BEGIN --- EDIT HERE TO _END */
-#define NUM_INPUTS                     1
+#define NUM_INPUTS                     2
 
 /* Input Port  0 */
 #define IN_PORT_0_NAME                 u0
@@ -55,6 +55,26 @@
 #define IN_0_FRACTIONLENGTH            9
 #define IN_0_BIAS                      0
 #define IN_0_SLOPE                     0.125
+
+/* Input Port  1 */
+#define IN_PORT_1_NAME                 u1
+#define INPUT_1_DIMS_ND                {1,1}
+#define INPUT_1_NUM_ELEMS              1
+#define INPUT_1_WIDTH                  1
+#define INPUT_DIMS_1_COL               1
+#define INPUT_1_DTYPE                  real_T
+#define INPUT_1_COMPLEX                COMPLEX_NO
+#define INPUT_1_UNIT                   ""
+#define IN_1_BUS_BASED                 0
+#define IN_1_BUS_NAME
+#define IN_1_DIMS                      1-D
+#define INPUT_1_FEEDTHROUGH            1
+#define IN_1_ISSIGNED                  0
+#define IN_1_WORDLENGTH                8
+#define IN_1_FIXPOINTSCALING           1
+#define IN_1_FRACTIONLENGTH            9
+#define IN_1_BIAS                      0
+#define IN_1_SLOPE                     0.125
 #define NUM_OUTPUTS                    1
 
 /* Output Port  0 */
@@ -95,6 +115,7 @@
 #include "simstruc.h"
 
 extern void codeImporter_Outputs_wrapper(const real_T *u0,
+  const real_T *u1,
   real_T *y0);
 
 /*====================*
@@ -125,6 +146,13 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortDirectFeedThrough(S, 0, INPUT_0_FEEDTHROUGH);
   ssSetInputPortRequiredContiguous(S, 0, 1);/*direct input signal access*/
 
+  /* Input Port 1 */
+  ssSetInputPortWidth(S, 1, INPUT_1_NUM_ELEMS);
+  ssSetInputPortDataType(S, 1, SS_DOUBLE);
+  ssSetInputPortComplexSignal(S, 1, INPUT_1_COMPLEX);
+  ssSetInputPortDirectFeedThrough(S, 1, INPUT_1_FEEDTHROUGH);
+  ssSetInputPortRequiredContiguous(S, 1, 1);/*direct input signal access*/
+
   /*
    * Configure the Units for Input Ports
    */
@@ -139,6 +167,15 @@ static void mdlInitializeSizes(SimStruct *S)
     } else {
       ssSetLocalErrorStatus(S,
                             "Invalid Unit provided for input port u0 of S-Function codeImporter");
+      return;
+    }
+
+    ssRegisterUnitFromExpr(S, INPUT_1_UNIT, &inUnitIdReg);
+    if (inUnitIdReg != INVALID_UNIT_ID) {
+      ssSetInputPortUnit(S, 1, inUnitIdReg);
+    } else {
+      ssSetLocalErrorStatus(S,
+                            "Invalid Unit provided for input port u1 of S-Function codeImporter");
       return;
     }
 
@@ -270,8 +307,9 @@ static void mdlStart(SimStruct *S)
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
   const real_T *u0 = (real_T *) ssGetInputPortRealSignal(S, 0);
+  const real_T *u1 = (real_T *) ssGetInputPortRealSignal(S, 1);
   real_T *y0 = (real_T *) ssGetOutputPortRealSignal(S, 0);
-  codeImporter_Outputs_wrapper(u0, y0);
+  codeImporter_Outputs_wrapper(u0, u1, y0);
 }
 
 /* Function: mdlTerminate =====================================================

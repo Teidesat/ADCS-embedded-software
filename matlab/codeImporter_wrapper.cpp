@@ -19,6 +19,7 @@
 #include "src/dummy.hpp"
 /* %%%-SFUNWIZ_wrapper_includes_Changes_END --- EDIT HERE TO _BEGIN */
 #define u_width 1
+#define u_1_width 1
 #define y_width 1
 
 /*
@@ -34,11 +35,12 @@
  *
  */
 void codeImporter_Outputs_wrapper(const real_T *u0,
+			const real_T *u1,
 			real_T *y0)
 {
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_BEGIN --- EDIT HERE TO _END */
-float tmp = u0[0] / 2 + 1;
-    Dummy d(-1, 1);
+float tmp = u1[0] / 2 + 1;
+    Dummy d(-1, u0[0]);
     y0[0] = d.clampValue(tmp);
     /* This sample sets the output equal to the input
         y0[0] = u0[0]; 

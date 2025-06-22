@@ -1,5 +1,5 @@
 %% File : codeImporter.tlc
-%% Created : Wed Jun 11 19:53:01 2025
+%% Created : Sun Jun 22 22:28:54 2025
 %%
 %% Description: 
 %%   Simulink Coder wrapper functions interface generated for 
@@ -43,6 +43,7 @@
     #define SFB_EXTERN_C extern
     #endif
     SFB_EXTERN_C void codeImporter_Outputs_wrapper_accel(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0);
     #undef SFB_EXTERN_C
     #endif
@@ -62,11 +63,14 @@
 
     extern void codeImporter_Start_wrapper(void);
     extern void codeImporter_Outputs_wrapper(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0);
     extern void codeImporter_Terminate_wrapper(void);
     void codeImporter_Outputs_wrapper_accel(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0){
     codeImporter_Outputs_wrapper(u0,
+			u1,
 			y0);
     }
 
@@ -94,6 +98,7 @@
     #define SFB_EXTERN_C extern
     #endif
     SFB_EXTERN_C void codeImporter_Outputs_wrapper_cgen(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0);
     #undef SFB_EXTERN_C
     #endif
@@ -111,10 +116,13 @@
     #include "%<hFileName>.h"
 
 	extern void codeImporter_Outputs_wrapper(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0);
 	 void codeImporter_Outputs_wrapper_cgen(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0) {
 	codeImporter_Outputs_wrapper(u0,
+			u1,
 			y0);
 	}
     %closefile cFile
@@ -132,6 +140,7 @@
     SFB_EXTERN_C void codeImporter_Start_wrapper(void);
 
     SFB_EXTERN_C void codeImporter_Outputs_wrapper(const %<doubleType> *u0,
+			const %<doubleType> *u1,
 			%<doubleType> *y0);
 
     SFB_EXTERN_C void codeImporter_Terminate_wrapper(void);
@@ -153,12 +162,13 @@
 %function Outputs(block, system) Output
   %%
   %assign pu0 = LibBlockInputSignalAddr(0, "", "", 0)
+  %assign pu1 = LibBlockInputSignalAddr(1, "", "", 0)
   %assign py0 = LibBlockOutputSignalAddr(0, "", "", 0)
   
   %if IsModelReferenceSimTarget() || CodeFormat == "S-Function" || ::isRAccel
-    codeImporter_Outputs_wrapper_accel(%<pu0>, %<py0>);
+    codeImporter_Outputs_wrapper_accel(%<pu0>, %<pu1>, %<py0>);
   %else
-    codeImporter_Outputs_wrapper_cgen(%<pu0>, %<py0>);
+    codeImporter_Outputs_wrapper_cgen(%<pu0>, %<pu1>, %<py0>);
   %endif
 
   %%
