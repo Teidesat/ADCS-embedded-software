@@ -127,6 +127,10 @@ void loop() {
 ```
 
 
+## AHRS simulation in MATLAB
+
+
+
 
 ## Attitude Algorithm implementations
 
@@ -180,5 +184,5 @@ tutorial serie for sensor fusion using trigonometry:
 
 ###
 
-Guide to connect NEO-6M GPS to arduino
+Guide to connect NEO-6M GPS to arduino  
 [https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()

@@ -6,12 +6,12 @@
 
 INS ins;
 
-int RATE = 9;
+const int RATE = 9;
 Madgwick attitude;
 
 void setup() {
-    ins.setup();
-    attitude.begin(RATE);
+  ins.setup();
+  attitude.begin(RATE);
 }
 
 void loop() {  

@@ -5,8 +5,12 @@ build/
 
 # Matlab
 matlab/dlprj/
+matlab/slprj/
+matlab/
 matlab/*.tlc
 matlab/*.mexw64
 matlab/rtwmakecfg.m
 matlab/SFB*.mat
+matlab/*_wrapper.cpp
+matlab/*.slxc
 
