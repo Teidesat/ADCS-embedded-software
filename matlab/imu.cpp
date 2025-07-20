@@ -26,7 +26,7 @@
  * | See matlabroot/simulink/src/sfuntmpl_doc.c for a more detailed template |
  *  -------------------------------------------------------------------------
  *
- * Created: Mon Jul 14 12:26:14 2025
+ * Created: Tue Jul 15 22:20:30 2025
  */
 
 #define S_FUNCTION_LEVEL               2
@@ -34,7 +34,7 @@
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 /* %%%-SFUNWIZ_defines_Changes_BEGIN --- EDIT HERE TO _END */
-#define NUM_INPUTS                     3
+#define NUM_INPUTS                     6
 
 /* Input Port  0 */
 #define IN_PORT_0_NAME                 accelearationX
@@ -95,6 +95,66 @@
 #define IN_2_FRACTIONLENGTH            9
 #define IN_2_BIAS                      0
 #define IN_2_SLOPE                     0.125
+
+/* Input Port  3 */
+#define IN_PORT_3_NAME                 gyroscopeX
+#define INPUT_3_DIMS_ND                {1,1}
+#define INPUT_3_NUM_ELEMS              1
+#define INPUT_3_WIDTH                  1
+#define INPUT_DIMS_3_COL               1
+#define INPUT_3_DTYPE                  real_T
+#define INPUT_3_COMPLEX                COMPLEX_NO
+#define INPUT_3_UNIT                   ""
+#define IN_3_BUS_BASED                 0
+#define IN_3_BUS_NAME
+#define IN_3_DIMS                      1-D
+#define INPUT_3_FEEDTHROUGH            1
+#define IN_3_ISSIGNED                  0
+#define IN_3_WORDLENGTH                8
+#define IN_3_FIXPOINTSCALING           1
+#define IN_3_FRACTIONLENGTH            9
+#define IN_3_BIAS                      0
+#define IN_3_SLOPE                     0.125
+
+/* Input Port  4 */
+#define IN_PORT_4_NAME                 gyroscopeY
+#define INPUT_4_DIMS_ND                {1,1}
+#define INPUT_4_NUM_ELEMS              1
+#define INPUT_4_WIDTH                  1
+#define INPUT_DIMS_4_COL               1
+#define INPUT_4_DTYPE                  real_T
+#define INPUT_4_COMPLEX                COMPLEX_NO
+#define INPUT_4_UNIT                   ""
+#define IN_4_BUS_BASED                 0
+#define IN_4_BUS_NAME
+#define IN_4_DIMS                      1-D
+#define INPUT_4_FEEDTHROUGH            1
+#define IN_4_ISSIGNED                  0
+#define IN_4_WORDLENGTH                8
+#define IN_4_FIXPOINTSCALING           1
+#define IN_4_FRACTIONLENGTH            9
+#define IN_4_BIAS                      0
+#define IN_4_SLOPE                     0.125
+
+/* Input Port  5 */
+#define IN_PORT_5_NAME                 gyroscopeZ
+#define INPUT_5_DIMS_ND                {1,1}
+#define INPUT_5_NUM_ELEMS              1
+#define INPUT_5_WIDTH                  1
+#define INPUT_DIMS_5_COL               1
+#define INPUT_5_DTYPE                  real_T
+#define INPUT_5_COMPLEX                COMPLEX_NO
+#define INPUT_5_UNIT                   ""
+#define IN_5_BUS_BASED                 0
+#define IN_5_BUS_NAME
+#define IN_5_DIMS                      1-D
+#define INPUT_5_FEEDTHROUGH            1
+#define IN_5_ISSIGNED                  0
+#define IN_5_WORDLENGTH                8
+#define IN_5_FIXPOINTSCALING           1
+#define IN_5_FRACTIONLENGTH            9
+#define IN_5_BIAS                      0
+#define IN_5_SLOPE                     0.125
 #define NUM_OUTPUTS                    3
 
 /* Output Port  0 */
@@ -176,6 +236,9 @@ extern void imu_Start_wrapper(void);
 extern void imu_Outputs_wrapper(const real_T *accelearationX,
   const real_T *accelearationY,
   const real_T *accelearationZ,
+  const real_T *gyroscopeX,
+  const real_T *gyroscopeY,
+  const real_T *gyroscopeZ,
   real_T *pitch,
   real_T *roll,
   real_T *yaw);
@@ -222,6 +285,27 @@ static void mdlInitializeSizes(SimStruct *S)
   ssSetInputPortDirectFeedThrough(S, 2, INPUT_2_FEEDTHROUGH);
   ssSetInputPortRequiredContiguous(S, 2, 1);/*direct input signal access*/
 
+  /* Input Port 3 */
+  ssSetInputPortWidth(S, 3, INPUT_3_NUM_ELEMS);
+  ssSetInputPortDataType(S, 3, SS_DOUBLE);
+  ssSetInputPortComplexSignal(S, 3, INPUT_3_COMPLEX);
+  ssSetInputPortDirectFeedThrough(S, 3, INPUT_3_FEEDTHROUGH);
+  ssSetInputPortRequiredContiguous(S, 3, 1);/*direct input signal access*/
+
+  /* Input Port 4 */
+  ssSetInputPortWidth(S, 4, INPUT_4_NUM_ELEMS);
+  ssSetInputPortDataType(S, 4, SS_DOUBLE);
+  ssSetInputPortComplexSignal(S, 4, INPUT_4_COMPLEX);
+  ssSetInputPortDirectFeedThrough(S, 4, INPUT_4_FEEDTHROUGH);
+  ssSetInputPortRequiredContiguous(S, 4, 1);/*direct input signal access*/
+
+  /* Input Port 5 */
+  ssSetInputPortWidth(S, 5, INPUT_5_NUM_ELEMS);
+  ssSetInputPortDataType(S, 5, SS_DOUBLE);
+  ssSetInputPortComplexSignal(S, 5, INPUT_5_COMPLEX);
+  ssSetInputPortDirectFeedThrough(S, 5, INPUT_5_FEEDTHROUGH);
+  ssSetInputPortRequiredContiguous(S, 5, 1);/*direct input signal access*/
+
   /*
    * Configure the Units for Input Ports
    */
@@ -254,6 +338,33 @@ static void mdlInitializeSizes(SimStruct *S)
     } else {
       ssSetLocalErrorStatus(S,
                             "Invalid Unit provided for input port accelearationZ of S-Function imu");
+      return;
+    }
+
+    ssRegisterUnitFromExpr(S, INPUT_3_UNIT, &inUnitIdReg);
+    if (inUnitIdReg != INVALID_UNIT_ID) {
+      ssSetInputPortUnit(S, 3, inUnitIdReg);
+    } else {
+      ssSetLocalErrorStatus(S,
+                            "Invalid Unit provided for input port gyroscopeX of S-Function imu");
+      return;
+    }
+
+    ssRegisterUnitFromExpr(S, INPUT_4_UNIT, &inUnitIdReg);
+    if (inUnitIdReg != INVALID_UNIT_ID) {
+      ssSetInputPortUnit(S, 4, inUnitIdReg);
+    } else {
+      ssSetLocalErrorStatus(S,
+                            "Invalid Unit provided for input port gyroscopeY of S-Function imu");
+      return;
+    }
+
+    ssRegisterUnitFromExpr(S, INPUT_5_UNIT, &inUnitIdReg);
+    if (inUnitIdReg != INVALID_UNIT_ID) {
+      ssSetInputPortUnit(S, 5, inUnitIdReg);
+    } else {
+      ssSetLocalErrorStatus(S,
+                            "Invalid Unit provided for input port gyroscopeZ of S-Function imu");
       return;
     }
 
@@ -416,11 +527,14 @@ static void mdlOutputs(SimStruct *S, int_T tid)
   const real_T *accelearationX = (real_T *) ssGetInputPortRealSignal(S, 0);
   const real_T *accelearationY = (real_T *) ssGetInputPortRealSignal(S, 1);
   const real_T *accelearationZ = (real_T *) ssGetInputPortRealSignal(S, 2);
+  const real_T *gyroscopeX = (real_T *) ssGetInputPortRealSignal(S, 3);
+  const real_T *gyroscopeY = (real_T *) ssGetInputPortRealSignal(S, 4);
+  const real_T *gyroscopeZ = (real_T *) ssGetInputPortRealSignal(S, 5);
   real_T *pitch = (real_T *) ssGetOutputPortRealSignal(S, 0);
   real_T *roll = (real_T *) ssGetOutputPortRealSignal(S, 1);
   real_T *yaw = (real_T *) ssGetOutputPortRealSignal(S, 2);
-  imu_Outputs_wrapper(accelearationX, accelearationY, accelearationZ, pitch,
-                      roll, yaw);
+  imu_Outputs_wrapper(accelearationX, accelearationY, accelearationZ, gyroscopeX,
+                      gyroscopeY, gyroscopeZ, pitch, roll, yaw);
 }
 
 /* Function: mdlTerminate =====================================================

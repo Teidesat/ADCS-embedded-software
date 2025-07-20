@@ -1,8 +1,7 @@
 // arduino-library.txt
 
-#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
-#include "../lib/arduino_library/arduino_library_madgwick.hpp"
-
+#include "../lib/hardware/INS/INS.hpp"
+#include "../lib/IMUalgorithms/arduino_library/arduino_library.hpp"
 
 // LSM9DS1 object and upsat algorithm structs
 ArduinoLibMadgwick arduinoLibMadgwick;

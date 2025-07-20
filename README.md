@@ -1,11 +1,12 @@
 # IMU Attitude Determination
 
-Research of a possible algorithm for the orientation of the `TEIDESAT-1` satellite.
+Research algorithm for the orientation of the `TEIDESAT-1` satellite.
 
 
-## Hardware
 
-### Inertial Measurement Unit (IMU)
+# Hardware
+
+## IMU (Inertial Measurement Unit)
 
 The IMU `Adafruit LSM9DS1 9-DOF` is used. It containing multiple sensors for taking different measurements:  
 - Acceleration (m/s^2): 3 accelerometers (XYZ axis)
@@ -15,11 +16,22 @@ The IMU `Adafruit LSM9DS1 9-DOF` is used. It containing multiple sensors for tak
 
 datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()  
 
-### Circuit configuration
+## GNSS
+
+The Neo `6M` is use for tests purposes
+
+Guide to connect NEO-6M GPS to arduino  
+[https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()
+
+## Sun Sensor
+
+Due to the high cost of sun sensors, light sensors will be used for the prototype. The `VEML7700` model will be used.
+
+## Circuit configuration
 
 Using an `Espressif ESP8266 esp-12E` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
 
-![circuit image](./img/imu-attached-to-arduino-circuit.jpg)
+![circuit image](./docs/img/imu-attached-to-arduino-circuit.jpg)
 
 Pin Conections (SPI protocol):
 
@@ -30,113 +42,49 @@ Pin Conections (SPI protocol):
 |    D1     |   SCL   |
 |    D2     |   SDA   |
 
-### Software configuration
+## Software configuration
 
 Used the `PlatformIO` plugin for VSCode to create the project and upload the attitude calculation program into the arduino board (configuration of the ESP-12E already set up in the project). Libraries requerided are already integrated in the project in the `.pio/libdeps/psp12e` directory (They can also be found in the `PlatformIO Registry`):
 
-Main dependencies:
-- Adafruit LSM9DS1 Library
-- ReefwingAHRS
-
-Sub-dependencies (required by the main dependencies):
-- Adafruit BusIO
-- LIS3MDL
-- LSM9DS1 Library
+Main dependencies (look `platformio.ini` file for more information):
+- adafruit/Adafruit LSM9DS1 Library@^2.2.1
+- mikalhart/TinyGPSPlus@^1.1.0
+- plerup/EspSoftwareSerial@^8.2.0
 
 All the implementations are located in the `lib/algorithms` directory. 
 
-```
-├── lib/
-|    ├── algortims
-|    |    ├── adafruit/
-|    |    |    └── ...
-|    |    ├── sebastian/
-|    |    |    └── ...
-|    |    └── upsat/
-|    |         └── ...
-|    ├ ...
-|    ...
-├── src/
-|    ├── main-adafruit-fork.txt
-|    ├── main-deltatime.txt
-|    ├── main-reefwing.txt
-|    ├── main-tris.txt
-|    └── main-upsat.txt
-```
-
-### LSM9DS1 Library
-
-Sinple script containing the basic configuration and how to read the data from the different sensors
-
-```cpp
-// dependencies
-#include <Adafruit_LSM9DS1.h>
-
-// LSM9DS1 object
-Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
-
-void setup() {
-  Serial.begin(9600);
-  while(!Serial) {delay(1);} // will pause Zero, Leonardo, etc until serial console opens
-  
-  // Try to initialise and warn if we couldn't detect the chip
-  if(!lsm.begin()) {
-    Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
-    while (1);
-  }
-
-  // 1.) Set the accelerometer range
-  lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);
-  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_4G);
-  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_8G);
-  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_16G);
-  
-  // 2.) Set the magnetometer sensitivity
-  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
-  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_8GAUSS);
-  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_12GAUSS);
-  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_16GAUSS);
-
-  // 3.) Setup the gyroscope
-  lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
-  //lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_500DPS);
-  //lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_2000DPS);
-}
-
-void loop() {
-  // Get a new sensor event (obtain data from sensors)
-  lsm.read();  // ask it to read in the data
-  sensors_event_t accelerometers, magnetometers, gyroscopes, temperatureSensor;
-  lsm.getEvent(&accelerometers, &magnetometers, &gyroscopes, &temperatureSensor);
-
-  // raw sensor data
-  float accelerationX = accelerometers.acceleration.x;
-  float accelerationY = accelerometers.acceleration.y;
-  float accelerationZ = accelerometers.acceleration.z;
-  
-  float rotationRateX = gyroscopes.gyro.x;
-  float rotationRateY = gyroscopes.gyro.y;
-  float rotationRateZ = gyroscopes.gyro.z;
-
-  float magneticFluxX = magnetometers.magnetic.x;
-  float magneticFluxY = magnetometers.magnetic.y;
-  float magneticFluxZ = magnetometers.magnetic.z;
-
-  float temperature = temperatureSensor.temperature;
-}
+```py
+├── docs                      # Documentation about the project
+├── jupyter                   # Jupyter notebook analysing GMAT orbital simulations
+├── matlab                    # Simulation of the IMU algorithms 
+├── lib                       # INS orientation source code                   
+|    ├── hardware                   # Hardware abstraction to make it easier to connect with the algortihms (all sensors are attached and setup in INS.hpp)
+|    ├── IMUlgortims                # IMU orientation algoritms
+|    ├── sunSensorAlgorithms        # Sun Sensor orientation algoritms
+|    └── utils                      # Utilities common to the algorithms
+├── src                       # Multiple main programs, one for each algorithm. Hardware sensor data is read and used to feed the algorithm
+└── test
 ```
 
 
-## AHRS simulation in MATLAB
+
+# GMAT orbital simulations data analysis in Jupyter notebook
+
+Analysis of the data retrieve from orbital simulations in GMAT at different altitudes.
 
 
 
+# INS simulation in MATLAB
 
-## Attitude Algorithm implementations
+Simulation of the AHRS algorithm.
+
+
+
+# Attitude Algorithm implementations
 
 To upload the one of the implementations into the arduino board, change the name of the sketches in the `src/` directory from `main-IMPLEMENTATION-NAME.txt` to `main.cpp`. Every other implementation should end in `.txt` as only one main file should exist.
 
-### Upsat
+## Upsat
 
 UPSat ADCS software modified to be used with arduino instead of Raspberry
 
@@ -145,7 +93,7 @@ File where the algorithm is implemented: `main-upsat.txt`
 ADCS software folder in their repository
 [https://gitlab.com/librespacefoundation/upsat/upsat-adcs-software/-/tree/master/sensor-fusion-test?ref_type=heads]()
 
-### ReefwingAHRS
+## ReefwingAHRS
 
 Library implementating different algorithms for the calculation of the orientation with an easy to setup interface. Using the `Madgwick algorithm` as it is better than the `Mahony algorithm`.  
 
@@ -154,7 +102,7 @@ File where the algorithm is implemented: `main-reefwing.txt`
 Reefwing Library repository
 [https://github.com/Reefwing-Software/Reefwing-AHRS]() 
 
-### Adafruit-fork
+## Adafruit-fork
 
 Adafruit`s fork library for the implementation of the main orientation algoritms (madgick and mahony).
 
@@ -170,7 +118,7 @@ Fork repository
 [https://github.com/PaulStoffregen/MadgwickAHRS]() (madgwick algorithm)  
 [https://github.com/PaulStoffregen/MahonyAHRS]() (mahony algorithm)
 
-### Trigonometry 
+## Trigonometry 
 
 Implementation based but not following exactly all the steps on the tutorial. Test the output of every sensor and simple sensor fusion. This implementation is not reliable for use in any kind of vehichle but just an aproximation on how the sensors works.
 
@@ -178,11 +126,3 @@ File where the algorithm is implemented: `main-trigonometry.txt`
 
 tutorial serie for sensor fusion using trigonometry:  
 [https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
-
-
-## GNSS
-
-###
-
-Guide to connect NEO-6M GPS to arduino  
-[https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()

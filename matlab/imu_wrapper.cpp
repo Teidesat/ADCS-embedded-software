@@ -21,6 +21,9 @@
 #define u_width 1
 #define u_1_width 1
 #define u_2_width 1
+#define u_3_width 1
+#define u_4_width 1
+#define u_5_width 1
 #define y_width 1
 #define y_1_width 1
 #define y_2_width 1
@@ -51,15 +54,18 @@ attitude.begin(RATE);
 void imu_Outputs_wrapper(const real_T *accelearationX,
 			const real_T *accelearationY,
 			const real_T *accelearationZ,
+			const real_T *gyroscopeX,
+			const real_T *gyroscopeY,
+			const real_T *gyroscopeZ,
 			real_T *pitch,
 			real_T *roll,
 			real_T *yaw)
 {
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_BEGIN --- EDIT HERE TO _END */
-attitude.updateIMU(0,0,0, accelearationX[0], accelearationY[0], accelearationZ[0]);
-  pitch[0] = attitude.getPitch();
-  roll[0] = attitude.getRoll();
-  yaw[0] = attitude.getYaw();
+attitude.updateIMU(gyroscopeX[0], gyroscopeY[0], gyroscopeZ[0], accelearationX[0], accelearationY[0], accelearationZ[0]);
+    pitch[0] = attitude.getPitch();
+    roll[0] = attitude.getRoll();
+    yaw[0] = attitude.getYaw();
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_END --- EDIT HERE TO _BEGIN */
 }
 

@@ -1,4 +1,4 @@
-orbitalDataPath = '../data/GMAT_300_60_accel_matlab.csv';
+orbitalDataPath = 'data/GMAT_300_60_accel_matlab.csv';
 
 try
     orbitalDatatable = readtable(orbitalDataPath);

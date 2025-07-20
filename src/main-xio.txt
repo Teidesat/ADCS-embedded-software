@@ -1,6 +1,6 @@
 // main-xio.txt
 
-#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
+#include "../lib/hardware/INS/INS.hpp"
 #include "../lib/IMUalgorithms/xio-technologies/xio-madgwickAHRS.hpp"
 
 

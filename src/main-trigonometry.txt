@@ -1,8 +1,7 @@
 //main-trigonometry.txt
 
-#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
-#include "../..lib/trigonometry/trigonometry.hpp"
-
+#include "../lib/hardware/INS/INS.hpp"
+#include "../lib/IMUalgorithms/trigonometry/trigonometry.hpp"
 
 void setup() {
   setupHardware();

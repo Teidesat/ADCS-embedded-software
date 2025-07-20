@@ -1,7 +1,7 @@
 //main-upsat.txt
 
-#include "../lib/hardware/hardwareSetup/hardwareSetup.hpp"
-#include "../lib/noiseFilters/noiseFilters.hpp"
+#include "../lib/hardware/INS/INS.hpp"
+#include "../lib/utils/noiseFilters.hpp"
 #include "../lib/IMUalgorithms/upsat/WahbaRotM.hpp"
 
 
