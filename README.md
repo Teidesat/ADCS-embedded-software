@@ -1,12 +1,12 @@
-# IMU Attitude Determination
+# ADCS Embedded Software
 
-Research algorithm for the orientation of the `TEIDESAT-1` satellite.
+Research algorithm for the orientation of the `TEIDESAT-1` satellite
 
 
 
 # Hardware
 
-## IMU (Inertial Measurement Unit)
+## IMU
 
 The IMU `Adafruit LSM9DS1 9-DOF` is used. It containing multiple sensors for taking different measurements:  
 - Acceleration (m/s^2): 3 accelerometers (XYZ axis)
@@ -18,9 +18,9 @@ datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()
 
 ## GNSS
 
-The Neo `6M` is use for tests purposes
+The `NEO 6M` GNSS module is use for testing purposes and is not the final 
 
-Guide to connect NEO-6M GPS to arduino  
+Guide to connect NEO 6M GPS to arduino  
 [https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()
 
 ## Sun Sensor
@@ -31,7 +31,7 @@ Due to the high cost of sun sensors, light sensors will be used for the prototyp
 
 Using an `Espressif ESP8266 esp-12E` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
 
-![circuit image](./docs/img/imu-attached-to-arduino-circuit.jpg)
+![circuit image](./img/imu-attached-to-arduino-circuit.jpg)
 
 Pin Conections (SPI protocol):
 
@@ -54,9 +54,7 @@ Main dependencies (look `platformio.ini` file for more information):
 All the implementations are located in the `lib/algorithms` directory. 
 
 ```py
-├── docs                      # Documentation about the project
-├── jupyter                   # Jupyter notebook analysing GMAT orbital simulations
-├── matlab                    # Simulation of the IMU algorithms 
+├── img                       # Documentation about the project
 ├── lib                       # INS orientation source code                   
 |    ├── hardware                   # Hardware abstraction to make it easier to connect with the algortihms (all sensors are attached and setup in INS.hpp)
 |    ├── IMUlgortims                # IMU orientation algoritms
@@ -65,19 +63,6 @@ All the implementations are located in the `lib/algorithms` directory.
 ├── src                       # Multiple main programs, one for each algorithm. Hardware sensor data is read and used to feed the algorithm
 └── test
 ```
-
-
-
-# GMAT orbital simulations data analysis in Jupyter notebook
-
-Analysis of the data retrieve from orbital simulations in GMAT at different altitudes.
-
-
-
-# INS simulation in MATLAB
-
-Simulation of the AHRS algorithm.
-
 
 
 # Attitude Algorithm implementations
