@@ -1,35 +1,38 @@
-#include "LSM9DS1.hpp"
+#include "AdafruitLSM9DS1.hpp"
 
 #include <sstream>
 #include <iomanip>
 #include <cmath>
 
-void LSM9DS1::setup() {
+void AdafruitLSM9DS1::begin(const int& SDAPin, const int& SCLPin) {
+    // Set pins for the I2C connection
+    Wire.begin(SDAPin, SCLPin);
+
     // Try to initialise and warn if we couldn't detect the chip
-    if(!AdafruitLSM9DS1.begin()) {
-      Serial.println("Unable to initialize the LSM9DS1");
-      while (1);
+    if(!LSM9DS1.begin()) {
+        Serial.println("Unable to initialize the LSM9DS1");
+        while (1);
     }
 
     // set sensors range / sensitivity
-    AdafruitLSM9DS1.setupAccel(AdafruitLSM9DS1.LSM9DS1_ACCELRANGE_2G);
-    //AdafruitLSM9DS1.setupAccel(AdafruitLSM9DS1.LSM9DS1_ACCELRANGE_4G);
-    //AdafruitLSM9DS1.setupAccel(AdafruitLSM9DS1.LSM9DS1_ACCELRANGE_8G);
-    //AdafruitLSM9DS1.setupAccel(AdafruitLSM9DS1.LSM9DS1_ACCELRANGE_16G);
+    LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_2G);
+    //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_4G);
+    //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_8G);
+    //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_16G);
   
-    AdafruitLSM9DS1.setupGyro(AdafruitLSM9DS1.LSM9DS1_GYROSCALE_245DPS);
-    //AdafruitLSM9DS1.setupGyro(AdafruitLSM9DS1.LSM9DS1_GYROSCALE_500DPS);
-    //AdafruitLSM9DS1.setupGyro(AdafruitLSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
+    LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_245DPS);
+    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_500DPS);
+    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
 
-    AdafruitLSM9DS1.setupMag(AdafruitLSM9DS1.LSM9DS1_MAGGAIN_4GAUSS);
-    //AdafruitLSM9DS1.setupMag(AdafruitLSM9DS1.LSM9DS1_MAGGAIN_8GAUSS);
-    //AdafruitLSM9DS1.setupMag(AdafruitLSM9DS1.LSM9DS1_MAGGAIN_12GAUSS);
-    //AdafruitLSM9DS1.setupMag(AdafruitLSM9DS1.LSM9DS1_MAGGAIN_16GAUSS);
+    LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_4GAUSS);
+    //LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_8GAUSS);
+    //LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_12GAUSS);
+    //LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_16GAUSS);
 }
 
-void LSM9DS1::update() {
+void AdafruitLSM9DS1::update() {
     sensors_event_t accelerometers_event_t, magnetometers_event_t, gyroscopes_event_t, temperature_event_t;
-    AdafruitLSM9DS1.getEvent(&accelerometers_event_t, &magnetometers_event_t, &gyroscopes_event_t, &temperature_event_t);
+    LSM9DS1.getEvent(&accelerometers_event_t, &magnetometers_event_t, &gyroscopes_event_t, &temperature_event_t);
 
     temperature = temperature_event_t.temperature;
   
@@ -46,9 +49,9 @@ void LSM9DS1::update() {
     magnetometers.z = magnetometers_event_t.magnetic.z;
 }
 
-float LSM9DS1::getTemperature() {return temperature;}
+float AdafruitLSM9DS1::getTemperature() {return temperature;}
 
-String LSM9DS1::floatToFormattedString(float number) {
+String AdafruitLSM9DS1::floatToFormattedString(float number) {
     char sign = (number < 0) ? '-' : ' ';
     number = std::abs(number);
 
@@ -76,7 +79,7 @@ String LSM9DS1::floatToFormattedString(float number) {
     return String(spacesToAdd, ' ') + raw_output;
 }
 
-String LSM9DS1::singleSensorToString(const SensorData& sensorData) {
+String AdafruitLSM9DS1::singleSensorToString(const SensorData& sensorData) {
     String xStr = floatToFormattedString(sensorData.x);
     String yStr = floatToFormattedString(sensorData.y);
     String zStr = floatToFormattedString(sensorData.z);
@@ -84,16 +87,16 @@ String LSM9DS1::singleSensorToString(const SensorData& sensorData) {
     return xStr + STRING_SEPARATOR + yStr + STRING_SEPARATOR + zStr;
 }
 
-String LSM9DS1::accelerometersToString() {return singleSensorToString(accelerometers);}
-String LSM9DS1::gyroscopesToString() {return singleSensorToString(gyroscopes);}
-String LSM9DS1::magnetometersToString() {return singleSensorToString(magnetometers);}
-String LSM9DS1::temperatureToString() {return String(temperature);}
+String AdafruitLSM9DS1::accelerometersToString() {return singleSensorToString(accelerometers);}
+String AdafruitLSM9DS1::gyroscopesToString() {return singleSensorToString(gyroscopes);}
+String AdafruitLSM9DS1::magnetometersToString() {return singleSensorToString(magnetometers);}
+String AdafruitLSM9DS1::temperatureToString() {return String(temperature);}
 
-String LSM9DS1::allSensorsToString() {
+String AdafruitLSM9DS1::allSensorsToString() {
     return accelerometersToString() + STRING_SEPARATOR + gyroscopesToString() + STRING_SEPARATOR + magnetometersToString() + STRING_SEPARATOR + temperatureToString();
 }
 
-String LSM9DS1::attitudeToString() {
+String AdafruitLSM9DS1::attitudeToString() {
     String pitchStr = floatToFormattedString(attitude.pitch);
     String rollStr = floatToFormattedString(attitude.roll);
     String yawhStr = floatToFormattedString(attitude.yaw);

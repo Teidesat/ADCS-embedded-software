@@ -1,20 +1,15 @@
-#ifndef HARDWARE_SETUP
-#define HARDWARE_SETUP
+#pragma once
 
-#include "../Microcontroller/ESP12.hpp"
-#include "../IMU/LSM9DS1.hpp"
-#include "../GNSS/NEO6M.hpp"
-
-void setupHardware();
+#include "../microcontroller/EspressifESP32WROOM32.hpp"
+#include "../IMU/AdafruitLSM9DS1.hpp"
+#include "../GNSS/UbloxNEO6M.hpp"
 
 class INS {
     public:
-        ESP12 microcontroller;
-        LSM9DS1 imu;
-        TinyGPSPlus gnss;
+        EspressifESP32WROOM32 microcontroller;
+        AdafruitLSM9DS1 imu;
+        UbloxNEO6M gnss;
 
-        void setup();
+        void begin();
         void update();
 };
-
-#endif

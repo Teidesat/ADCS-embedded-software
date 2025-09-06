@@ -1,8 +1,9 @@
-#ifndef LSM9DS1_H
-#define LSM9DS1_H
+#pragma once
 
+//#include <string>
+
+#include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
-
 
 // structures for the retrival of the sensors readings
 class SensorData {
@@ -15,10 +16,10 @@ class Attitude {
         float pitch, roll, yaw;
 };
 
-class LSM9DS1 {
+class AdafruitLSM9DS1 {
     private:
         const char STRING_SEPARATOR = ',';
-        Adafruit_LSM9DS1 AdafruitLSM9DS1;
+        Adafruit_LSM9DS1 LSM9DS1;
 
         String floatToFormattedString(float number);
         String singleSensorToString(const SensorData& sensorData);
@@ -30,7 +31,7 @@ class LSM9DS1 {
         SensorData magnetometers;
         Attitude attitude;
 
-        void setup();
+        void begin(const int& SDAPin, const int& SCLPin);
         void update();
         float getTemperature();
         
@@ -41,5 +42,3 @@ class LSM9DS1 {
         String allSensorsToString();
         String attitudeToString();
 };
-
-#endif
