@@ -111,3 +111,16 @@ File where the algorithm is implemented: `main-trigonometry.txt`
 
 tutorial serie for sensor fusion using trigonometry:  
 [https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
+
+
+
+$GPGSA,A,1,,,,,,,,,,,,,25.5,25.5,25.5*02
+$BDGSA,A,1,,,,,,,,,,,,,25.5,25.5,25.5*13
+$GPGSV,1,1,00*79
+$BDGSV,1,1,00*68
+$GNRMC,,V,,,,,,,,,,M*4E
+$GNVTG,,,,,,,,,M*2D
+$GNZDA,,,,,,*56
+$GPTXT,01,01,01,ANTENNA OPEN*25
+$GNGGA,,,,,,0,00,25.5,,,,,,*64
+$GNGLL,,,,,,V,M*79

@@ -1,4 +1,4 @@
-// main-xio.txt
+// xio
 
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/IMUalgorithms/xio-technologies/xio-madgwickAHRS.hpp"

@@ -1,4 +1,4 @@
-// arduino-library.txt
+// arduino-library
 
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/IMUalgorithms/arduino_library/arduino_library.hpp"

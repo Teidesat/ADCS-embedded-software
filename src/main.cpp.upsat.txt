@@ -1,4 +1,4 @@
-//main-upsat.txt
+// upsat
 
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/utils/noiseFilters.hpp"

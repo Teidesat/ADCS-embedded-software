@@ -13,17 +13,34 @@ void UbloxNEO6M::begin(const int& RXPin, const int& TXPin) {
 void UbloxNEO6M::update() {
     lastNMEAmessage = "";
     while (Serial2.available() > 0) {
-        char character = Serial2.read();
-        lastNMEAmessage += character;
+        //lastNMEAmessage.push_back(Serial2.read());
 
-        if (character == '\n') {
-            // A complete message is received, now you can use it
-            Serial.println(lastNMEAmessage.c_str());
-            Serial.println("---------------------------------");
-            NMEAparser.encode(Serial2.read());
-            // Reset the string for the next message
-            lastNMEAmessage = "";
-        }
+        //if(lastNMEAmessage.back() == '\n') {
+        //    Serial.println(lastNMEAmessage.c_str());
+        //    lastNMEAmessage = "";
+        //}
+        char a = Serial2.read();
+        Serial.write(a);
     }
+}
+
+void UbloxNEO6M::shortInfo() {
+    const byte getVersionCommand[] = { 
+      0xB5, 0x62, 
+      0x0A, 0x04, 
+      0x00, 0x00, 
+      0x0E, 0x34
+    };
+
+    int getVersionCommandSize = sizeof(getVersionCommand);
+    for(size_t i = 0; i < getVersionCommandSize; i++) {
+        Serial2.write(getVersionCommand[i]);
+    }
+
+    delay(150); 
     
+    long startTime = millis();
+    while ((millis() - startTime) < 500) { 
+        if(Serial2.available()) {Serial.write(Serial2.read());}
+    }
 }

@@ -18,4 +18,5 @@ class UbloxNEO6M {
         TinyGPSPlus NMEAparser;
         void begin(const int& RXPin, const int& TXPin);
         void update();
+        void shortInfo();
 };

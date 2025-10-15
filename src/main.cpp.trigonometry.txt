@@ -1,4 +1,4 @@
-//main-trigonometry.txt
+// trigonometry
 
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/IMUalgorithms/trigonometry/trigonometry.hpp"
