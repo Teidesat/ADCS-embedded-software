@@ -1,0 +1,28 @@
+// acubesat
+
+#include "../lib/hardware/INS/INS.hpp"
+#include "../lib/IMUalgorithms/acubesat/acubesat.hpp"
+
+unsigned long lastUpdate;
+
+INS ins;
+Acubesat acubesatAlgorithm;
+
+void setup() {
+  lastUpdate = micros();
+
+  ins.begin();
+  acubesatAlgorithm.setupForOnlyGyro();
+  //ins.gnss.shortInfo();
+}
+
+void loop() {
+  unsigned long now = micros();
+  float deltaTime = (now - lastUpdate) / 1e6f;  // convert µs → seconds
+    
+  ins.update();
+  acubesatAlgorithm.predict(ins.imu.gyroscopes.x, ins.imu.gyroscopes.y, ins.imu.gyroscopes.z, deltaTime);
+  //Serial.println(ins.gnss.getLastNMEAmessage().c_str());
+  Serial.println(acubesatAlgorithm.pitch);
+  lastUpdate = now;
+}
