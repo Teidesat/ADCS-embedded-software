@@ -15,8 +15,9 @@ class UbloxNEO6M {
 
     public:
         UbloxNEO6M();
-        std::string getLastNMEAmessage();
         TinyGPSPlus NMEAparser;
         void begin(const int& RXPin, const int& TXPin);
         void update();
+        void printNMEAmessages();
+        std::string getLastNMEAmessage();
 };

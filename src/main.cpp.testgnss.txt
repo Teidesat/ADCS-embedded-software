@@ -1,0 +1,18 @@
+// testgnss
+#include "../lib/hardware/INS/INS.hpp"
+
+INS ins;
+
+void setup() {
+  // Serial2 UART (GNSS)
+  const int RX_PIN = 16;
+  const int TX_PIN = 17;
+  // start sensors (microcontroller is mandatory to start)
+  ins.microcontroller.begin();
+  ins.gnss.begin(RX_PIN, TX_PIN);
+
+}
+
+void loop() {
+  ins.gnss.printNMEAmessages();
+}

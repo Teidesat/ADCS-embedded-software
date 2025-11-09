@@ -1,4 +1,4 @@
-// testsensors
+// testallsensors
 #include "../lib/hardware/INS/INS.hpp"
 
 INS ins;
