@@ -13,16 +13,16 @@ void setup() {
 
   ins.begin();
   acubesatAlgorithm.setupForOnlyGyro();
-  //ins.gnss.shortInfo();
 }
 
 void loop() {
   unsigned long now = micros();
   float deltaTime = (now - lastUpdate) / 1e6f;  // convert µs → seconds
-    
+
   ins.update();
-  acubesatAlgorithm.predict(ins.imu.gyroscopes.x, ins.imu.gyroscopes.y, ins.imu.gyroscopes.z, deltaTime);
+  acubesatAlgorithm.predict(ins.imu.gyroscopes.x, ins.imu.gyroscopes.y, ins.imu.gyroscopes.z, 0.01);
   //Serial.println(ins.gnss.getLastNMEAmessage().c_str());
-  Serial.println(acubesatAlgorithm.pitch);
+  Serial.println(String(acubesatAlgorithm.pitch) + " " + String(acubesatAlgorithm.roll) + " " + String(acubesatAlgorithm.yaw));
+  //Serial.println(String(ins.imu.gyroscopes.x) + " " + String(ins.imu.gyroscopes.y) + " " + String(ins.imu.gyroscopes.z));
   lastUpdate = now;
 }

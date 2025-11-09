@@ -29,8 +29,15 @@ Eigen::Quaternionf Acubesat::quaternionExponent(const Eigen::Vector3f& angularVe
     const float theta = angularVelocity.norm();
 
     Eigen::Quaternionf quaternionExponent;
-    quaternionExponent.w() = static_cast<float>(cos(theta / 2.0)); // NOLINT
-    quaternionExponent.vec() = sin(theta / 2.0) * angularVelocity.normalized(); // NOLINT
+    quaternionExponent.w() = cosf(theta * 0.5f);
+
+    // Use sin(theta/2)/theta scaling to avoid dividing by zero / producing NaN
+    if(theta > 1e-8f) {
+        float scale = sinf(theta * 0.5f) / theta;
+        quaternionExponent.vec() = angularVelocity * scale;
+    }
+    // small-angle approximation: sin(theta/2)/theta -> 1/2 as theta -> 0
+    else {quaternionExponent.vec() = angularVelocity * 0.5f;} 
 
     return quaternionExponent;
 }

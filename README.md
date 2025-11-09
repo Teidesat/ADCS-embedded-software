@@ -25,7 +25,7 @@ Guide to connect NEO 6M GPS to arduino
 
 ## Sun Sensor
 
-Due to the high cost of sun sensors, light sensors will be used for the prototype. The `VEML7700` model will be used.
+Due to the high cost of sun sensors, light sensors will be used for the prototype. The `VEML7700` model is the one used in this case.
 
 ## Circuit configuration
 
@@ -55,7 +55,7 @@ All the implementations are located in the `lib/algorithms` directory.
 
 ```py
 ├── img                       # Documentation about the project
-├── lib                       # INS orientation source code                   
+├── lib                       # INS (Inertial Navigation System) orientation source code                   
 |    ├── hardware                   # Hardware abstraction to make it easier to connect with the algortihms (all sensors are attached and setup in INS.hpp)
 |    ├── IMUlgortims                # IMU orientation algoritms
 |    ├── sunSensorAlgorithms        # Sun Sensor orientation algoritms

@@ -5,6 +5,8 @@
 #include "../IMU/AdafruitLSM9DS1.hpp"
 #include "../GNSS/UbloxNEO6M.hpp"
 
+#include <string>
+
 class INS {
     public:
         EspressifESP32WROOM32 microcontroller;
@@ -14,4 +16,6 @@ class INS {
 
         void begin();
         void update();
+
+        std::string allSensorsToString();
 };

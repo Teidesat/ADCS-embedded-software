@@ -15,6 +15,11 @@ void INS::begin() {
 }
 
 void INS::update() {
+    sunSensor.update();
     imu.update();
     gnss.update();
+}
+
+std::string INS::allSensorsToString() {
+    return "\nSun Sensor:\n" + sunSensor.sensorDataToString() + "\nIMU:\n" + imu.allSensorsToString() + "\nGNSS:\n" + gnss.getLastNMEAmessage();
 }

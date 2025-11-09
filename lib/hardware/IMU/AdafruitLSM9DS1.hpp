@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <string>
+#include <string>
 
 #include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
@@ -11,34 +11,26 @@ class SensorData {
         float x, y, z;
 };
 
-class Attitude {
-    public:
-        float pitch, roll, yaw;
-};
-
 class AdafruitLSM9DS1 {
     private:
-        const char STRING_SEPARATOR = ',';
         Adafruit_LSM9DS1 LSM9DS1;
 
-        String floatToFormattedString(float number);
-        String singleSensorToString(const SensorData& sensorData);
+        std::string axisSensorToString(const SensorData& sensorData);
     
     public:
         float temperature;
         SensorData accelerometers;
         SensorData gyroscopes;
         SensorData magnetometers;
-        Attitude attitude;
 
-        void begin(const int& SDAPin, const int& SCLPin);
+
+        void begin(const int& SDAPin, const int& SCLPin, int AccelerometersRange = 0, int GyroscopesScale = 0, int MagnetometersGain = 0);
         void update();
         float getTemperature();
         
-        String accelerometersToString();
-        String gyroscopesToString();
-        String magnetometersToString();
-        String temperatureToString();
-        String allSensorsToString();
-        String attitudeToString();
+        std::string accelerometersToString();
+        std::string gyroscopesToString();
+        std::string magnetometersToString();
+        std::string temperatureToString();
+        std::string allSensorsToString();
 };

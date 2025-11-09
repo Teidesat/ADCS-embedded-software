@@ -1,0 +1,14 @@
+// teidesat
+#include "../lib/hardware/INS/INS.hpp"
+#include "../lib/IMUalgorithms/teidesat/teidesat.hpp"
+
+INS ins;
+
+void setup() {
+  ins.begin(); // set all sensors up
+}
+
+void loop() {
+  ins.update();
+  Serial.println(ins.allSensorsToString().c_str());
+}
