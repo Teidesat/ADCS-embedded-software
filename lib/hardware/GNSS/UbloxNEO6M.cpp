@@ -1,7 +1,8 @@
 #include "UbloxNEO6M.hpp"
 
 UbloxNEO6M::UbloxNEO6M(): 
-    Serial2(2)
+    Serial2(2),
+    NMMEAmessagesHistoryMaxSize(2)
 {}
 
 void UbloxNEO6M::begin(const int& RXPin, const int& TXPin) {

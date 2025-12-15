@@ -1,35 +1,18 @@
-// testallsensors
+// teidesat
+
 #include "../lib/hardware/INS/INS.hpp"
+#include "../lib/IMUalgorithms/teidesat/teidesat.hpp"
 
 INS ins;
+Teidesat teidesatAlgorithm;
 
 void setup() {
-  // set all sensors up
-  ins.begin(); 
-
-  // set sensors separetly
-  // I2C (IMU and sun sensor)
-  //const int SDA_PIN = 26;
-  //const int SCL_PIN = 27;
-  // Serial2 UART (GNSS)
-  //const int RX_PIN = 16;
-  //const int TX_PIN = 17;
-  // start sensors (microcontroller is mandatory to start)
-  //ins.microcontroller.begin();
-  //ins.sunSensor.begin(SDA_PIN, SCL_PIN);
-  //ins.imu.begin(SDA_PIN, SCL_PIN);
-  //ins.gnss.begin(RX_PIN, TX_PIN);
-
+    ins.begin(); // set all sensors up
 }
 
 void loop() {
-  ins.update();
-
-  // show information of all sensors
-  Serial.println(ins.allSensorsToString().c_str());
-
-  // show information the different sensors separately
-  //Serial.println(ins.sunSensor.sensorDataToString().c_str());
-  //Serial.println(ins.imu.allSensorsToString().c_str());
-  //Serial.println(ins.gnss.getLastNMEAmessage().c_str());
+    ins.update();
+    teidesatAlgorithm.update(ins.imu.accelerometers, ins.imu.gyroscopes, ins.sunSensor.lux, ins.microcontroller.getDeltaTime());
+    
+    Serial.println(teidesatAlgorithm.attitudeToString().c_str());
 }

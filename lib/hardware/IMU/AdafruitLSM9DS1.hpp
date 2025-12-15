@@ -2,14 +2,10 @@
 
 #include <string>
 
+#include "../../utils/rotationMath.hpp"
+
 #include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
-
-// structures for the retrival of the sensors readings
-class SensorData {
-    public:
-        float x, y, z;
-};
 
 class AdafruitLSM9DS1 {
     private:
@@ -19,14 +15,12 @@ class AdafruitLSM9DS1 {
     
     public:
         float temperature;
-        SensorData accelerometers;
-        SensorData gyroscopes;
-        SensorData magnetometers;
-
+        SensorData accelerometers; // meters/seconds^2
+        SensorData gyroscopes; // radians/second
+        SensorData magnetometers; // gauss
 
         void begin(const int& SDAPin, const int& SCLPin, int AccelerometersRange = 0, int GyroscopesScale = 0, int MagnetometersGain = 0);
         void update();
-        float getTemperature();
         
         std::string accelerometersToString();
         std::string gyroscopesToString();

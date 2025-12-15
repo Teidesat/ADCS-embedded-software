@@ -2,20 +2,21 @@
 
 #include "../../utils/rotationMath.hpp"
 
+#include  <ArduinoEigenDense.h>
+
 #include <string>
 
 class Teidesat {
-    public:
-        EulerAngles attitude;
-        void calculateOrientation(float accelerationX, float accelerationY, float accelerationZ,
-                                  float angularVelocityX, float angularVelocityY, float angularVelocityZ,
-                                  float magneticFieldX, float magneticFieldY, float magneticFieldZ,
-                                  int SunSensorData = 0, int GPSPosition = 0, int temperature = 0);
-        Teidesat(float accelerationXBias = 0, float accelerationYBias = 0, float accelerationZBias = 0,
-                 float angularVelocityXBias = 0, float angularVelocityYBias = 0, float angularVelocityZBias = 0,
-                 float magneticFieldXBias = 0, float magneticFieldYBias = 0, float magneticFieldZBias = 0,
-                 int SunSensorDataBias = 0, int GPSPositionBias = 0, int temperatureBias = 0);
     private:
+        Eigen::Quaternionf attitudeQuaternion;
+
+        float calculateGyroscopesTrust(const float& luminosity);
+        Eigen::Quaternionf calculateAcclelerometersAttitude(const SensorData& linearAcclerations);
+        Eigen::Quaternionf calculateGyroscopesAttitude(const SensorData& angularVelocities, const float& deltaTime);
+        Eigen::Quaternionf blendQuaternionsWeighted(const Eigen::Quaternionf& Q_Primary, const Eigen::Quaternionf& Q_Absolute, const float& luminosity);
+
+    public: 
+        void update(const SensorData& accelerations, const SensorData& angularVelocities, const float& luminosity, const float& deltaTime);
+        EulerAngles getAttitude();
         std::string attitudeToString();
-        std::string positionToString();
 };

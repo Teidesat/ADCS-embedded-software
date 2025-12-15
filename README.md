@@ -18,7 +18,7 @@ datasheet: [https://www.st.com/resource/en/datasheet/lsm9ds1.pdf]()
 
 ## GNSS
 
-The `NEO 6M` GNSS module is use for testing purposes and is not the final 
+The `U-BLOX NEO 6M` GNSS module is use for testing purposes and is not the final 
 
 Guide to connect NEO 6M GPS to arduino  
 [https://randomnerdtutorials.com/guide-to-neo-6m-gps-module-with-arduino]()
@@ -29,9 +29,9 @@ Due to the high cost of sun sensors, light sensors will be used for the prototyp
 
 ## Circuit configuration
 
-Using an `Espressif ESP8266 esp-12E` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
+Using an `Espressif ESP32 WROOM 32` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
 
-![circuit image](./img/imu-attached-to-arduino-circuit.jpg)
+![circuit image](./img/adcs-dummy-circuit.jpg)
 
 Pin Conections (SPI protocol):
 

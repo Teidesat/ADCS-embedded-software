@@ -15,11 +15,12 @@ void INS::begin() {
 }
 
 void INS::update() {
+    microcontroller.update();
     sunSensor.update();
     imu.update();
-    gnss.update();
+    //gnss.update();
 }
 
 std::string INS::allSensorsToString() {
-    return "\nSun Sensor:\n" + sunSensor.sensorDataToString() + "\nIMU:\n" + imu.allSensorsToString() + "\nGNSS:\n" + gnss.getLastNMEAmessage();
+    return "microcontroller\n" + std::to_string(microcontroller.getDeltaTime()) + "\nSun Sensor\n" + sunSensor.sensorDataToString() + "\nIMU\n" + imu.allSensorsToString() + "\nGNSS\n" + gnss.getLastNMEAmessage();
 }

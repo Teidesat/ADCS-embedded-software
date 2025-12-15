@@ -18,9 +18,9 @@ void AdafruitLSM9DS1::begin(const int& SDAPin, const int& SCLPin, int Accelerome
     //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_8G);
     //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_16G);
   
-    LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_245DPS);
+    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_245DPS);
     //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_500DPS);
-    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
+    LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
 
     LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_4GAUSS);
     //LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_8GAUSS);
@@ -48,9 +48,6 @@ void AdafruitLSM9DS1::update() {
 }
 
 std::string AdafruitLSM9DS1::axisSensorToString(const SensorData& sensorData) {
-    //std::string xStr = floatToFormattedString(sensorData.x);
-    //std::string yStr = floatToFormattedString(sensorData.y);
-    //std::string zStr = floatToFormattedString(sensorData.z);
     std::string xStr = std::to_string(sensorData.x);
     std::string yStr = std::to_string(sensorData.y);
     std::string zStr = std::to_string(sensorData.z);
