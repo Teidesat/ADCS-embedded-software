@@ -1,10 +1,10 @@
 #include "AdafruitLSM9DS1.hpp"
 
-#include "../../utils/stringFormatting.hpp"
+#include <Wire.h>
 
-void AdafruitLSM9DS1::begin(const int& SDAPin, const int& SCLPin, int AccelerometersRange, int GyroscopesScale, int MagnetometersGain) {
+void AdafruitLSM9DS1::begin(const int iSDAPin, const int iSCLPin, int iAccelerometersRange, int iGyroscopesScale, int iMagnetometersGain) {
     // Set pins for the I2C connection
-    Wire.begin(SDAPin, SCLPin);
+    Wire.begin(iSDAPin, iSCLPin);
 
     // Try to initialise and warn if we couldn't detect the chip
     if(!LSM9DS1.begin()) {
@@ -18,9 +18,9 @@ void AdafruitLSM9DS1::begin(const int& SDAPin, const int& SCLPin, int Accelerome
     //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_8G);
     //LSM9DS1.setupAccel(LSM9DS1.LSM9DS1_ACCELRANGE_16G);
   
-    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_245DPS);
+    LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_245DPS);
     //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_500DPS);
-    LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
+    //LSM9DS1.setupGyro(LSM9DS1.LSM9DS1_GYROSCALE_2000DPS);
 
     LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_4GAUSS);
     //LSM9DS1.setupMag(LSM9DS1.LSM9DS1_MAGGAIN_8GAUSS);
@@ -47,20 +47,7 @@ void AdafruitLSM9DS1::update() {
     magnetometers.z = magnetometers_event_t.magnetic.z;
 }
 
-std::string AdafruitLSM9DS1::axisSensorToString(const SensorData& sensorData) {
-    std::string xStr = std::to_string(sensorData.x);
-    std::string yStr = std::to_string(sensorData.y);
-    std::string zStr = std::to_string(sensorData.z);
-
-    return xStr + STRING_SEPARATOR + yStr + STRING_SEPARATOR + zStr;
-}
-
-std::string AdafruitLSM9DS1::accelerometersToString() {return axisSensorToString(accelerometers);}
-std::string AdafruitLSM9DS1::gyroscopesToString() {return axisSensorToString(gyroscopes);}
-std::string AdafruitLSM9DS1::magnetometersToString() {return axisSensorToString(magnetometers);}
-std::string AdafruitLSM9DS1::temperatureToString() {return std::to_string(temperature);}
-
-std::string AdafruitLSM9DS1::allSensorsToString() {
-    return accelerometersToString() + STRING_SEPARATOR + gyroscopesToString() + STRING_SEPARATOR + magnetometersToString() + STRING_SEPARATOR + temperatureToString();
-}
-
+Vector3d AdafruitLSM9DS1::getAccelerometers() const {return accelerometers;}
+Vector3d AdafruitLSM9DS1::getGyroscopes() const {return gyroscopes;}
+Vector3d AdafruitLSM9DS1::getMagnetometers() const {return magnetometers;}
+float AdafruitLSM9DS1::getTemperature() const {return temperature;}

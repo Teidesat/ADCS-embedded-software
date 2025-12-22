@@ -2,7 +2,7 @@
 
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/utils/noiseFilters.hpp"
-#include "../lib/IMUalgorithms/upsat/WahbaRotM.hpp"
+#include "../lib/algorithms/upsat/WahbaRotM.hpp"
 
 
 
@@ -14,7 +14,7 @@ const int bufferSize = 20;
 
 // LSM9DS1 object, noise filters and upsat algorithm structs
 NoiseFilters noiseFiltersAccX, noiseFiltersAccY, noiseFiltersAccZ, noiseFiltersGyroX, noiseFiltersGyroY, noiseFiltersGyroZ, noiseFiltersMagX, noiseFiltersMagY, noiseFiltersMagZ;
-sensorDat sensorData;
+sensorDat Vector3d;
 WahbaRotMStruct WStructRaw, WStructAverage;
 
 
@@ -35,24 +35,24 @@ void loop() {
   // average sensor data
   IMUdata imuAverageValues = imuRawValues;
   
-  //imuAverageValues.accelerometers.x = noiseFiltersAccX.updateMovingAverage(imuRawValues.accelerometers.x);
-  //imuAverageValues.accelerometers.y = noiseFiltersAccY.updateMovingAverage(imuRawValues.accelerometers.y);
-  //imuAverageValues.accelerometers.z = noiseFiltersAccZ.updateMovingAverage(imuRawValues.accelerometers.z);
+  //imuAverageValues.getAccelerometers().x = noiseFiltersAccX.updateMovingAverage(imuRawValues.getAccelerometers().x);
+  //imuAverageValues.getAccelerometers().y = noiseFiltersAccY.updateMovingAverage(imuRawValues.getAccelerometers().y);
+  //imuAverageValues.getAccelerometers().z = noiseFiltersAccZ.updateMovingAverage(imuRawValues.getAccelerometers().z);
 
-  //imuAverageValues.magnetometers.x = noiseFiltersGyroX.updateMovingAverage(imuRawValues.gyroscopes.x);
-  //imuAverageValues.magnetometers.y = noiseFiltersGyroY.updateMovingAverage(imuRawValues.gyroscopes.y);
-  //imuAverageValues.magnetometers.z = noiseFiltersGyroZ.updateMovingAverage(imuRawValues.gyroscopes.z);
+  //imuAverageValues.getMagnetometers().x = noiseFiltersGyroX.updateMovingAverage(imuRawValues.getGyroscopes().x);
+  //imuAverageValues.getMagnetometers().y = noiseFiltersGyroY.updateMovingAverage(imuRawValues.getGyroscopes().y);
+  //imuAverageValues.getMagnetometers().z = noiseFiltersGyroZ.updateMovingAverage(imuRawValues.getGyroscopes().z);
 
-  //imuAverageValues.magnetometers.x = noiseFiltersMagX.updateMovingAverage(imuRawValues.magnetometers.x);
-  //imuAverageValues.magnetometers.y = noiseFiltersMagY.updateMovingAverage(imuRawValues.magnetometers.y);
-  //imuAverageValues.magnetometers.z = noiseFiltersMagZ.updateMovingAverage(imuRawValues.magnetometers.z);
+  //imuAverageValues.getMagnetometers().x = noiseFiltersMagX.updateMovingAverage(imuRawValues.getMagnetometers().x);
+  //imuAverageValues.getMagnetometers().y = noiseFiltersMagY.updateMovingAverage(imuRawValues.getMagnetometers().y);
+  //imuAverageValues.getMagnetometers().z = noiseFiltersMagZ.updateMovingAverage(imuRawValues.getMagnetometers().z);
 
   // calculate attitude using upsat algorithm
   
   // raw pitch, roll and yaw
-  float accsRaw[3] = {imuRawValues.accelerometers.x, imuRawValues.accelerometers.y, imuRawValues.accelerometers.z};
-  float gyrosRaw[3] = {imuRawValues.gyroscopes.x, imuRawValues.gyroscopes.y, imuRawValues.gyroscopes.z};
-  float magsRaw[3] = {imuRawValues.magnetometers.x, imuRawValues.magnetometers.y, imuRawValues.magnetometers.z};
+  float accsRaw[3] = {imuRawValues.getAccelerometers().x, imuRawValues.getAccelerometers().y, imuRawValues.getAccelerometers().z};
+  float gyrosRaw[3] = {imuRawValues.getGyroscopes().x, imuRawValues.getGyroscopes().y, imuRawValues.getGyroscopes().z};
+  float magsRaw[3] = {imuRawValues.getMagnetometers().x, imuRawValues.getMagnetometers().y, imuRawValues.getMagnetometers().z};
 
   sensorDat sensorRawData = scaleSens(accsRaw, gyrosRaw, magsRaw);
   WahbaRotM(sensorRawData.Acc, sensorRawData.Gyr, sensorRawData.Mag, &WStructRaw);
@@ -63,9 +63,9 @@ void loop() {
   String pitchAndRollRawDegreesStr = formatPitchandRoll(currentAttitudeRawDegrees);
   
   // average pith, roll and yaw
-  //float accAvererage[3] = {imuAverageValues.accelerometers.x, imuAverageValues.accelerometers.y, imuAverageValues.accelerometers.z};
-  //float gyroAverage[3] = {imuAverageValues.gyroscopes.x, imuAverageValues.gyroscopes.y, imuAverageValues.gyroscopes.z};
-  //float magsAverage[3] = {imuAverageValues.magnetometers.x, imuAverageValues.magnetometers.y, imuAverageValues.magnetometers.z};
+  //float accAvererage[3] = {imuAverageValues.getAccelerometers().x, imuAverageValues.getAccelerometers().y, imuAverageValues.getAccelerometers().z};
+  //float gyroAverage[3] = {imuAverageValues.getGyroscopes().x, imuAverageValues.getGyroscopes().y, imuAverageValues.getGyroscopes().z};
+  //float magsAverage[3] = {imuAverageValues.getMagnetometers().x, imuAverageValues.getMagnetometers().y, imuAverageValues.getMagnetometers().z};
   //
   //sensorDat sensorAverageData = scaleSens(accAvererage, gyroAverage, magsAverage);
   //WahbaRotM(sensorAverageData.Acc, sensorAverageData.Gyr, sensorAverageData.Mag, &WStructAverage);

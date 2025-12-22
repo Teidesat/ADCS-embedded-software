@@ -1,7 +1,7 @@
 // acubesat
 
 #include "../lib/hardware/INS/INS.hpp"
-#include "../lib/IMUalgorithms/acubesat/acubesat.hpp"
+#include "../lib/algorithms/acubesat/acubesat.hpp"
 
 unsigned long lastUpdate;
 
@@ -20,9 +20,9 @@ void loop() {
   float deltaTime = (now - lastUpdate) / 1e6f;  // convert µs → seconds
 
   ins.update();
-  acubesatAlgorithm.predict(ins.imu.gyroscopes.x, ins.imu.gyroscopes.y, ins.imu.gyroscopes.z, 0.01);
+  acubesatAlgorithm.predict(ins.getIMU().getGyroscopes().x, ins.getIMU().getGyroscopes().y, ins.getIMU().getGyroscopes().z, 0.01);
   //Serial.println(ins.gnss.getLastNMEAmessage().c_str());
   Serial.println(String(acubesatAlgorithm.pitch) + " " + String(acubesatAlgorithm.roll) + " " + String(acubesatAlgorithm.yaw));
-  //Serial.println(String(ins.imu.gyroscopes.x) + " " + String(ins.imu.gyroscopes.y) + " " + String(ins.imu.gyroscopes.z));
+  //Serial.println(String(ins.getIMU().getGyroscopes().x) + " " + String(ins.getIMU().getGyroscopes().y) + " " + String(ins.getIMU().getGyroscopes().z));
   lastUpdate = now;
 }

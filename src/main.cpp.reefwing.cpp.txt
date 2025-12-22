@@ -1,7 +1,7 @@
 // reefwing
 
 #include "../lib/hardware/INS/INS.hpp"
-#include "../lib/IMUalgorithms/ReefwingAHRS/ReefwingAHRS.hpp"
+#include "../lib/algorithms/ReefwingAHRS/ReefwingAHRS.hpp"
 
 //  reefwingAHRS library has own implementation of lsm9ds1 object
 ReefwingAHRS imu;
@@ -14,18 +14,18 @@ void setup() {
 
 void loop() {
   IMUdata imuRawValues = readSensors();
-  IMUSensors imusensordata;
-  imusensordata.ax = imuRawValues.accelerometers.x;
-  imusensordata.ay = imuRawValues.accelerometers.y;
-  imusensordata.az = imuRawValues.accelerometers.z;
-  imusensordata.gx = imuRawValues.gyroscopes.x;
-  imusensordata.gy = imuRawValues.gyroscopes.y;
-  imusensordata.gz = imuRawValues.gyroscopes.z;
-  imusensordata.mx = imuRawValues.magnetometers.x;
-  imusensordata.my = imuRawValues.magnetometers.y;
-  imusensordata.mz = imuRawValues.magnetometers.z;
+  IMUSensors imuVector3d;
+  imuVector3d.ax = imuRawValues.getAccelerometers().x;
+  imuVector3d.ay = imuRawValues.getAccelerometers().y;
+  imuVector3d.az = imuRawValues.getAccelerometers().z;
+  imuVector3d.gx = imuRawValues.getGyroscopes().x;
+  imuVector3d.gy = imuRawValues.getGyroscopes().y;
+  imuVector3d.gz = imuRawValues.getGyroscopes().z;
+  imuVector3d.mx = imuRawValues.getMagnetometers().x;
+  imuVector3d.my = imuRawValues.getMagnetometers().y;
+  imuVector3d.mz = imuRawValues.getMagnetometers().z;
 
-  imu.setData(imusensordata);
+  imu.setData(imuVector3d);
   imu.update();
 
   String attitude = String(imu.angles.pitch) + ',' + String(imu.angles.roll);

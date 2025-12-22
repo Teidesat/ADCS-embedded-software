@@ -17,7 +17,7 @@ void setup() {
     // start sensors (microcontroller is mandatory to start)
     ins.microcontroller.begin();
     ins.sunSensor.begin(SDA_PIN, SCL_PIN);
-    ins.imu.begin(SDA_PIN, SCL_PIN);
+    ins.getIMU().begin(SDA_PIN, SCL_PIN);
     //ins.gnss.begin(RX_PIN, TX_PIN);
 }
 
@@ -28,7 +28,7 @@ void loop() {
     //Serial.println(ins.allSensorsToString().c_str());
   
     // show information the different sensors separately
-    Serial.println(ins.sunSensor.sensorDataToString().c_str());
-    Serial.println(ins.imu.allSensorsToString().c_str());
+    Serial.println(ins.sunSensor.Vector3dToString().c_str());
+    Serial.println(ins.getIMU().allSensorsToString().c_str());
     //Serial.println(ins.gnss.getLastNMEAmessage().c_str());
 }

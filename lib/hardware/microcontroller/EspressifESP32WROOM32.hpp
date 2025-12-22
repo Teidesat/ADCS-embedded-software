@@ -1,17 +1,16 @@
 #pragma once
 
-#include <HardwareSerial.h>
-
 class EspressifESP32WROOM32 {
     private:
-        // I2C protocol connection
-        const int BAUD_RATE = 9600;
         // deltatime variables
-        unsigned long previousTimeMiliseconds = 0;
         float deltatime;
+        unsigned long previousTimeMiliseconds = 0;
+        // I2C protocol connection
+        static const int BAUD_RATE = 9600;
 
     public:
-        void begin(const bool pauseExecution = true);
+        void begin(const bool iPauseExecution = true);
         void update();
-        float getDeltaTime();
+        float getDeltaTime() const; // miliseconds
+        float getTemperature() const; // °C
 };

@@ -1,19 +1,17 @@
 #include "AdafruitVEML7700.hpp"
 
-#include "../../utils/stringFormatting.hpp"
+#include <Wire.h>
 
-void AdafruitVEML7700::begin(const int& SDAPin, const int& SCLPin) {
-    // Set pins for the I2C connection
-    Wire.begin(SDAPin, SCLPin);
-
+void AdafruitVEML7700::begin(const int iSDAPin, const int iSCLPin, const float iLowThreshold, const float iHighThreshold, const bool iInterruptEnable) {
+    Wire.begin(iSDAPin, iSCLPin);
     if (!adafruitVEML7700.begin()) {
         Serial.println("Unable to initialize the VEML7700");
-        while (1);
+        while (1); {delay(1);} // will pause until serial console opens
     }
     
-    adafruitVEML7700.setLowThreshold(10000);
-    adafruitVEML7700.setHighThreshold(20000);
-    adafruitVEML7700.interruptEnable(true);
+    adafruitVEML7700.setLowThreshold(iLowThreshold);
+    adafruitVEML7700.setHighThreshold(iHighThreshold);
+    adafruitVEML7700.interruptEnable(iInterruptEnable);
 }
 
 void AdafruitVEML7700::update() {
@@ -22,12 +20,6 @@ void AdafruitVEML7700::update() {
     lux = adafruitVEML7700.readLux();
 }
 
-std::string AdafruitVEML7700::sensorDataToString() {
-    //std::string ALSStr = floatToFormattedString(ALS);
-    //std::string whiteStr = floatToFormattedString(white);
-    std::string ALSStr = std::to_string(ALS);
-    std::string whiteStr = std::to_string(white);
-    std::string luxStr = std::to_string(lux);
-
-    return ALSStr + STRING_SEPARATOR + whiteStr + STRING_SEPARATOR + luxStr;
-}
+float AdafruitVEML7700::getALS() const {return ALS;}
+float AdafruitVEML7700::getWhite() const {return white;}
+float AdafruitVEML7700::getLux() const {return lux;}

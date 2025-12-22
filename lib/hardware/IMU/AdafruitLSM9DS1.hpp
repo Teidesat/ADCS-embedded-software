@@ -1,30 +1,23 @@
 #pragma once
 
-#include <string>
+#include "../../utils/math/vector3d/vector3d.hpp"
 
-#include "../../utils/rotationMath.hpp"
-
-#include <Wire.h>
 #include <Adafruit_LSM9DS1.h>
 
 class AdafruitLSM9DS1 {
     private:
         Adafruit_LSM9DS1 LSM9DS1;
-
-        std::string axisSensorToString(const SensorData& sensorData);
+        Vector3d accelerometers; // meters/seconds^2
+        Vector3d gyroscopes; // radians/second
+        Vector3d magnetometers; // gauss
+        float temperature; // degree centigrade
     
     public:
-        float temperature;
-        SensorData accelerometers; // meters/seconds^2
-        SensorData gyroscopes; // radians/second
-        SensorData magnetometers; // gauss
-
-        void begin(const int& SDAPin, const int& SCLPin, int AccelerometersRange = 0, int GyroscopesScale = 0, int MagnetometersGain = 0);
+        void begin(const int iSDAPin, const int iSCLPin, int iAccelerometersRange = 0, int iGyroscopesScale = 0, int iMagnetometersGain = 0);
         void update();
-        
-        std::string accelerometersToString();
-        std::string gyroscopesToString();
-        std::string magnetometersToString();
-        std::string temperatureToString();
-        std::string allSensorsToString();
+
+        Vector3d getAccelerometers() const;
+        Vector3d getGyroscopes() const;
+        Vector3d getMagnetometers() const;
+        float getTemperature() const;
 };

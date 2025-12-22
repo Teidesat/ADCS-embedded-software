@@ -1,18 +1,19 @@
 #pragma once
 
-#include <Wire.h>
 #include <Adafruit_VEML7700.h>
 
 class AdafruitVEML7700 {
     private:
         Adafruit_VEML7700 adafruitVEML7700;
-        
-    public:
         float ALS; // raw ambient light sensor value
         float white; //total light captured by the sensor (both visible and infrared)
         float lux; // amount of light received by the sensor
         
-        void begin(const int& SDAPin, const int& SCLPin);
+    public:
+        void begin(const int iSDAPin, const int iSCLPin, const float iLowThreshold = 10000.0f, const float iHighThreshold = 20000.0f, const bool iInterruptEnable = true);
         void update();
-        std::string sensorDataToString();
+        
+        float getALS() const;
+        float getWhite() const;
+        float getLux() const;
 };

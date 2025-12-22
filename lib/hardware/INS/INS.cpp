@@ -1,17 +1,37 @@
 #include "INS.hpp"
 
-void INS::begin() {
-    // I2C (IMU and sun sensor)
-    const int SDA_PIN = 26;
-    const int SCL_PIN = 27;
-    // Serial2 UART (GNSS)
-    const int RX_PIN = 16;
-    const int TX_PIN = 17;
+Microcontroller::Microcontroller(float iDeltatime, float iTemperature): 
+    deltaTime(iDeltatime), 
+    temperature(iTemperature) 
+{}
+float Microcontroller::getDeltaTime() const {return deltaTime;}
+float Microcontroller::getTemperature() const {return temperature;}
 
+SunSensor::SunSensor(float iALS, float iLux, float iWhite): 
+    ALS(iALS), 
+    lux(iLux), 
+    white(iWhite) 
+{}
+float SunSensor::getALS() const {return ALS;}
+float SunSensor::getLux() const {return lux;}
+float SunSensor::getWhite() const {return white;}
+
+IMU::IMU(Vector3d iAccelerometers, Vector3d iGyroscopes, Vector3d iMagnetometers, float iTemperature) :
+    accelerometers(iAccelerometers),
+    gyroscopes(iGyroscopes),
+    magnetometers(iMagnetometers),
+    temperature(iTemperature)
+{}
+Vector3d IMU::getAccelerometers() const {return accelerometers;}
+Vector3d IMU::getGyroscopes() const {return gyroscopes;}
+Vector3d IMU::getMagnetometers() const {return magnetometers;}
+float IMU::getTemperature() const {return temperature;}
+
+void INS::begin(const int iSDApin, const int iSCLpin, const int iRXpin, const int iTXpin) {
     microcontroller.begin();
-    sunSensor.begin(SDA_PIN, SCL_PIN);
-    imu.begin(SDA_PIN, SCL_PIN);
-    gnss.begin(RX_PIN, TX_PIN);
+    sunSensor.begin(iSDApin, iSCLpin);
+    imu.begin(iSDApin, iSCLpin);
+    gnss.begin(iRXpin, iTXpin);
 }
 
 void INS::update() {
@@ -21,6 +41,7 @@ void INS::update() {
     //gnss.update();
 }
 
-std::string INS::allSensorsToString() {
-    return "microcontroller\n" + std::to_string(microcontroller.getDeltaTime()) + "\nSun Sensor\n" + sunSensor.sensorDataToString() + "\nIMU\n" + imu.allSensorsToString() + "\nGNSS\n" + gnss.getLastNMEAmessage();
-}
+Microcontroller INS::getMicrocontrollerData() const {return Microcontroller(microcontroller.getDeltaTime(), microcontroller.getTemperature());}
+GNSS INS::getGNSS() const {return GNSS();}
+IMU INS::getIMU() const {return IMU(imu.getAccelerometers(), imu.getGyroscopes(), imu.getMagnetometers(), imu.getTemperature());}
+SunSensor INS::getSunSensor() const {return SunSensor(sunSensor.getALS(), sunSensor.getLux(), sunSensor.getWhite());}

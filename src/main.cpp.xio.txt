@@ -1,7 +1,7 @@
 // xio
 
 #include "../lib/hardware/INS/INS.hpp"
-#include "../lib/IMUalgorithms/xio-technologies/xio-madgwickAHRS.hpp"
+#include "../lib/algorithms/xio-technologies/xio-madgwickAHRS.hpp"
 
 
 XioMadgwick xioMadgwick;
@@ -19,9 +19,9 @@ void loop() {
 
   
   // calculate attitude using xioMadgwick algorithm
-  xioMadgwick.madgwickAHRSupdate(imuRawValues.gyroscopes.x, imuRawValues.gyroscopes.y, imuRawValues.gyroscopes.z, 
-                                 imuRawValues.accelerometers.x, imuRawValues.accelerometers.y, imuRawValues.accelerometers.z, 
-                                 imuRawValues.magnetometers.x, imuRawValues.magnetometers.y, imuRawValues.magnetometers.z);
+  xioMadgwick.madgwickAHRSupdate(imuRawValues.getGyroscopes().x, imuRawValues.getGyroscopes().y, imuRawValues.getGyroscopes().z, 
+                                 imuRawValues.getAccelerometers().x, imuRawValues.getAccelerometers().y, imuRawValues.getAccelerometers().z, 
+                                 imuRawValues.getMagnetometers().x, imuRawValues.getMagnetometers().y, imuRawValues.getMagnetometers().z);
   xioMadgwick.quaternionToEuler();
   Attitude currentAttitudeRawDegrees = fillAttitudeValues(xioMadgwick.pitch, xioMadgwick.roll, xioMadgwick.yaw);
   String pitchAndRollRawDegreesStr = formatPitchandRoll(currentAttitudeRawDegrees);

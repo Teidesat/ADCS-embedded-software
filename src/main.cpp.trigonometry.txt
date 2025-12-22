@@ -1,7 +1,7 @@
 // trigonometry
 
 #include "../lib/hardware/INS/INS.hpp"
-#include "../lib/IMUalgorithms/teidesat/teidesat.hpp"
+#include "../lib/algorithms/teidesat/teidesat.hpp"
 
 INS ins;
 
@@ -13,7 +13,7 @@ void loop() {
   IMUdata imuRawValues = readSensors();
   String rawDataStr = formatIMUvalues(imuRawValues);
   
-  Orientation currentOrientation = calculateAttitude(imuRawValues.accelerometers.x, imuRawValues.accelerometers.y, imuRawValues.accelerometers.z, imuRawValues.magnetometers.x, imuRawValues.magnetometers.y, imuRawValues.magnetometers.z);
+  Orientation currentOrientation = calculateAttitude(imuRawValues.getAccelerometers().x, imuRawValues.getAccelerometers().y, imuRawValues.getAccelerometers().z, imuRawValues.getMagnetometers().x, imuRawValues.getMagnetometers().y, imuRawValues.getMagnetometers().z);
   Attitude currentAttitude = fillAttitudeValues(currentOrientation.pitch, currentOrientation.roll, currentOrientation.yaw);
 
   currentAttitude = convertAttitudeRadiansToDegrees(currentAttitude);

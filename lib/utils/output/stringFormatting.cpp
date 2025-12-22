@@ -1,28 +1,26 @@
 #include "stringFormatting.hpp"
 
-#include <Wire.h>
-
 #include <sstream>
 #include <iomanip>
 #include <cmath>
-
-std::string floatToFormattedString(float number) {
+/*
+std::string floatToFormattedString(const float number) {
     char sign = (number < 0) ? '-' : ' ';
     number = std::abs(number);
 
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << number;
-    String tmpStr = String(number, 2);
+    std::string tmpStr = std::string(number, 2);
 
     int decimalPos = tmpStr.indexOf('.');
-    String wholePart = tmpStr.substring(0, decimalPos);
-    String decimalPart = tmpStr.substring(decimalPos + 1, 2);
+    std::string wholePart = tmpStr.substring(0, decimalPos);
+    std::string decimalPart = tmpStr.substring(decimalPos + 1, 2);
 
-    String formattedHolePart;
+    std::string formattedHolePart;
     if (wholePart.length() > 3) {formattedHolePart = "###";} 
     else {formattedHolePart = wholePart;}
 
-    String raw_output = "";
+    std::string raw_output = "";
     if (sign == '-') {raw_output += sign;}
     raw_output += formattedHolePart;
     raw_output += '.';
@@ -33,3 +31,4 @@ std::string floatToFormattedString(float number) {
 
     return std::string(spacesToAdd, ' ') + raw_output.c_str();
 }
+*/

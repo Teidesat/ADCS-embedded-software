@@ -2,11 +2,11 @@
 
 UbloxNEO6M::UbloxNEO6M(): 
     Serial2(2),
-    NMMEAmessagesHistoryMaxSize(2)
+    NMEA_MESSAGES_HISTORY_MAX_SIZE(2)
 {}
 
-void UbloxNEO6M::begin(const int& RXPin, const int& TXPin) {
-    Serial2.begin(BAUD_RATE, SERIAL_8N1, RXPin, TXPin);
+void UbloxNEO6M::begin(const int iRXPin, const int iTXPin) {
+    Serial2.begin(BAUD_RATE, SERIAL_8N1, iRXPin, iTXPin);
 }
 
 void UbloxNEO6M::update() {
@@ -45,4 +45,4 @@ void UbloxNEO6M::printNMEAmessages() {
     }
 }
 
-std::string UbloxNEO6M::getLastNMEAmessage() {return lastNMEAmessage;}
+std::string UbloxNEO6M::getLastNMEAmessage() const {return lastNMEAmessage;}

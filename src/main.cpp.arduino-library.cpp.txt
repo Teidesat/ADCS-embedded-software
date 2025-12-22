@@ -1,7 +1,7 @@
 // arduino-library
 
 #include "../lib/hardware/INS/INS.hpp"
-#include "../lib/IMUalgorithms/arduino_library/arduino_library.hpp"
+#include "../lib/algorithms/arduino_library/arduino_library.hpp"
 
 // LSM9DS1 object and upsat algorithm structs
 ArduinoLibMadgwick arduinoLibMadgwick;
@@ -18,7 +18,7 @@ void loop() {
   String rawDataStr = formatIMUvalues(imuRawValues);
 
   // calculate attitude using madgwick algorithm
-  arduinoLibMadgwick.update(imuRawValues.gyroscopes.x, imuRawValues.gyroscopes.y, imuRawValues.gyroscopes.z, imuRawValues.accelerometers.x, imuRawValues.accelerometers.y, imuRawValues.accelerometers.z, imuRawValues.magnetometers.x, imuRawValues.magnetometers.y, imuRawValues.magnetometers.z);
+  arduinoLibMadgwick.update(imuRawValues.getGyroscopes().x, imuRawValues.getGyroscopes().y, imuRawValues.getGyroscopes().z, imuRawValues.getAccelerometers().x, imuRawValues.getAccelerometers().y, imuRawValues.getAccelerometers().z, imuRawValues.getMagnetometers().x, imuRawValues.getMagnetometers().y, imuRawValues.getMagnetometers().z);
   
   Attitude currentAttitudeRawRadians = fillAttitudeValues(arduinoLibMadgwick.getPitch(), arduinoLibMadgwick.getRoll(), arduinoLibMadgwick.getYaw());
   Attitude currentAttitudeRawDegrees = convertAttitudeRadiansToDegrees(currentAttitudeRawRadians);
