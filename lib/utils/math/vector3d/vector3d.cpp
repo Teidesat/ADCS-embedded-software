@@ -1,6 +1,6 @@
 #include "vector3d.hpp"
 
-Vector3d::Vector3d(const float iX = 0.0f, const float iY = 0.0f, const float iZ = 0.0f):
+Vector3d::Vector3d(const float iX, const float iY, const float iZ):
     x(iX),
     y(iY),
     z(iZ)

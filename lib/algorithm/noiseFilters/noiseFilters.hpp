@@ -1,21 +1,24 @@
 #pragma once
 
 #include <vector>
-#include <math.h>
 
-class NoiseFilters {
+class MovingAverage {
     private:
         std::vector<float> inputBuffer;
         int bufferMaxSize;
         float meanValue;
         float standardDeviation;
-        void push_input(float newInput);
+
+        void pushValue(const float value);
         void calculateMeanValue();
         void calculateStandardDeviation();
         
     public:
-        void setBufferSize(int bufferSize);
+        void setBufferSize(const int bufferSize);
         int getBufferSize();
         float getStandardDeviation();
-        float updateMovingAverage(float newInput);
+        float update(const float value);
 };
+
+
+float clamp(const float value, const float threshold);

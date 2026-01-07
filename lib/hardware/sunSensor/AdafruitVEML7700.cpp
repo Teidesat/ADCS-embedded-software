@@ -2,16 +2,23 @@
 
 #include <Wire.h>
 
-void AdafruitVEML7700::begin(const int iSDAPin, const int iSCLPin, const float iLowThreshold, const float iHighThreshold, const bool iInterruptEnable) {
-    Wire.begin(iSDAPin, iSCLPin);
+void AdafruitVEML7700::begin(const int sdaPin, 
+                             const int sclPin, 
+                             const float lowThreshold, 
+                             const float highThreshold, 
+                             const bool interruptEnable, 
+                             const int frequencyClock) {
+    Wire.begin(sdaPin, sclPin);
+    if(frequencyClock > 0) {Wire.setClock(frequencyClock);}
+
     if (!adafruitVEML7700.begin()) {
         Serial.println("Unable to initialize the VEML7700");
-        while (1); {delay(1);} // will pause until serial console opens
+        while(true) {delay(1);}
     }
     
-    adafruitVEML7700.setLowThreshold(iLowThreshold);
-    adafruitVEML7700.setHighThreshold(iHighThreshold);
-    adafruitVEML7700.interruptEnable(iInterruptEnable);
+    adafruitVEML7700.setLowThreshold(lowThreshold);
+    adafruitVEML7700.setHighThreshold(highThreshold);
+    adafruitVEML7700.interruptEnable(interruptEnable);
 }
 
 void AdafruitVEML7700::update() {

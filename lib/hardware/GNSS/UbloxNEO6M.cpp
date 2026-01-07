@@ -1,12 +1,11 @@
 #include "UbloxNEO6M.hpp"
 
 UbloxNEO6M::UbloxNEO6M(): 
-    Serial2(2),
-    NMEA_MESSAGES_HISTORY_MAX_SIZE(2)
+    Serial2(2)
 {}
 
-void UbloxNEO6M::begin(const int iRXPin, const int iTXPin) {
-    Serial2.begin(BAUD_RATE, SERIAL_8N1, iRXPin, iTXPin);
+void UbloxNEO6M::begin(const int RXpin, const int TXpin) {
+    Serial2.begin(BAUD_RATE, SERIAL_8N1, RXpin, TXpin);
 }
 
 void UbloxNEO6M::update() {

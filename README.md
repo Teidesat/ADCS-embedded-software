@@ -29,18 +29,20 @@ Due to the high cost of sun sensors, light sensors will be used for the prototyp
 
 ## Circuit configuration
 
-Using an `Espressif ESP32 WROOM 32` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and the IMU, 
+Using an `Espressif ESP32-WROOM-32` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and both the IMU module and the light sensor. For the GNSS module, the `UART` protocol is used.
 
 ![circuit image](./img/adcs-dummy-circuit.jpg)
 
-Pin Conections (SPI protocol):
+Pin Conections:
 
-|  Arduino  |   IMU   | 
-|:---------:|:-------:|
-|    3V     |   VIN   |
-|    G      |   GND   |
-|    D1     |   SCL   |
-|    D2     |   SDA   |
+|  Arduino  |   IMU   |  Light Sensor  |   GNSS   |
+|:---------:|:-------:|:--------------:|:--------:|
+|    3V3    |   VIN   |      VIN       |   VCC    |
+|    GND    |   GND   |      GND       |   GND    |
+|    D26    |   SDA   |      SDA       |          |
+|    D27    |   SCL   |      SCL       |          |
+|    RX2    |         |                |    TX    |
+|    TX2    |         |                |    RX    |
 
 ## Software configuration
 
@@ -64,56 +66,20 @@ All the implementations are located in the `lib/algorithms` directory.
 └── test
 ```
 
-
 # Attitude Algorithm implementations
 
 To upload the one of the implementations into the arduino board, change the name of the sketches in the `src/` directory from `main-IMPLEMENTATION-NAME.txt` to `main.cpp`. Every other implementation should end in `.txt` as only one main file should exist.
 
-## Upsat
-
-UPSat ADCS software modified to be used with arduino instead of Raspberry
-
-File where the algorithm is implemented: `main-upsat.txt`
-
-ADCS software folder in their repository
-[https://gitlab.com/librespacefoundation/upsat/upsat-adcs-software/-/tree/master/sensor-fusion-test?ref_type=heads]()
 
 
-## Acubesat
+# Unit Tests
 
-Algorithm based on ACUBESAT´s implementation. This implementation relies mostly in the gyroscopes to calculate the relative movement.
-https://gitlab.com/acubesat/adcs/adcs-software/business-logic-software
+run all tests. Use desktop environment to not depend on esp
+```sh
+pio test -e desktop
+```
 
-## ReefwingAHRS
-
-Library implementating different algorithms for the calculation of the orientation with an easy to setup interface. Using the `Madgwick algorithm` as it is better than the `Mahony algorithm`.  
-
-File where the algorithm is implemented: `main-reefwing.txt`
-
-Reefwing Library repository
-[https://github.com/Reefwing-Software/Reefwing-AHRS]() 
-
-## Adafruit-fork
-
-Adafruit`s fork library for the implementation of the main orientation algoritms (madgick and mahony).
-
-File where the algorithm is implemented: `main-adafruit-fork.txt`
-
-Adafruit references a fork of their library in one of their tutorial pages:  
-[https://learn.adafruit.com/ahrs-for-adafruits-9-dof-10-dof-breakout/sensor-fusion-algorithms]()
-
-Base repository 
-[https://github.com/adafruit/Adafruit_AHRS/tree/master]()
-
-Fork repository
-[https://github.com/PaulStoffregen/MadgwickAHRS]() (madgwick algorithm)  
-[https://github.com/PaulStoffregen/MahonyAHRS]() (mahony algorithm)
-
-## Trigonometry 
-
-Implementation based but not following exactly all the steps on the tutorial. Test the output of every sensor and simple sensor fusion. This implementation is not reliable for use in any kind of vehichle but just an aproximation on how the sensors works.
-
-File where the algorithm is implemented: `main-trigonometry.txt`
-
-tutorial serie for sensor fusion using trigonometry:  
-[https://www.youtube.com/watch?v=2AO_Gmh5K3Q&list=PLGs0VKk2DiYwEo-k0mjIkWXlkrJWAU4L9&index=1&ab_channel=PaulMcWhorter]()
+run specific test suit
+```sh
+pio test -e desktop -f test_attitudeDetermination
+```

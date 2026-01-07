@@ -10,7 +10,12 @@ class AdafruitVEML7700 {
         float lux; // amount of light received by the sensor
         
     public:
-        void begin(const int iSDAPin, const int iSCLPin, const float iLowThreshold = 10000.0f, const float iHighThreshold = 20000.0f, const bool iInterruptEnable = true);
+        void begin(const int sdaPin, 
+                   const int sclPin, 
+                   const float lowThreshold = 10000.0f, 
+                   const float highThreshold = 20000.0f, 
+                   const bool interruptEnable = true, 
+                   const int frequencyClock = 0);
         void update();
         
         float getALS() const;
