@@ -2,7 +2,7 @@
 
 #include "../../lib/algorithm/attitudeDetermination/attitudeDetermination.hpp"
 
-const float EPSILON = 0.001f;
+#include <limits>
 
 void test_suite_attitudeDetermination() {
     const Vector3d accelerometers(0.0f, 9.81f, 0.0f);
@@ -15,7 +15,7 @@ void test_suite_attitudeDetermination() {
     AttitudeAlgorithm attitudeAlgorithm;
     attitudeAlgorithm.update(accelerometers, gyroscopes, magnetometers, lux, deltatime);
 
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, 0.0f);
+    TEST_ASSERT_FLOAT_WITHIN(std::numeric_limits<float>::epsilon(), 0.0f, 0.0f);
 }
 
 

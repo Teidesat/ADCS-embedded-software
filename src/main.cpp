@@ -1,6 +1,7 @@
 #include "../lib/hardware/INS/INS.hpp"
 #include "../lib/algorithm/attitudeDetermination/attitudeDetermination.hpp"
-#include "../lib/algorithm/noiseFilters/noiseFilters.hpp"
+#include "../lib/utils/noiseFilters/noiseFilters.hpp"
+#include "../lib/utils/toJson/toJson.hpp"
 
 #include <string>
 
@@ -27,8 +28,8 @@ void setup() {
     const AdafruitLSM9DS1::MagnetometersRange magnetometersRange = AdafruitLSM9DS1::MagnetometersRange::GAUSS4;
 
     // light sensor range
-    const float lowThreshold = 10000.0f;
-    const float highThreshold = 20000.0f;
+    const float lowThreshold = 10000.0;
+    const float highThreshold = 20000.0;
     const float interruptEnable = true;
 
     ins.begin(SDApin, 
@@ -51,54 +52,46 @@ void loop() {
     ins.update();
 
     // process sensors data
-    //Vector3d pitchGyroscopes(0.0f, .getY(), 0.0f);
-
-    // calculate new attitude
+    const float highGyroThreshold = 0.08f;
+    const float lowGyroThreshold = -highGyroThreshold;
+    const float clampedGyroscopeX = deadband(ins.getIMU().getGyroscopes().x, lowGyroThreshold, highGyroThreshold);
+    const float clampedGyroscopeY = deadband(ins.getIMU().getGyroscopes().y, lowGyroThreshold, highGyroThreshold);
+    const float clampedGyroscopeZ = deadband(ins.getIMU().getGyroscopes().z, lowGyroThreshold, highGyroThreshold);
+    const Vector3d clampedGyroscopes(clampedGyroscopeX, clampedGyroscopeY, clampedGyroscopeZ);
+    
+    // calculate new position
     attitudeAlgorithm.update(ins.getIMU().getAccelerometers(), 
-                             ins.getIMU().getGyroscopes(), 
+                             clampedGyroscopes, 
                              ins.getIMU().getMagnetometers(), 
                              ins.getSunSensor().getLux(), 
                              ins.getMicrocontroller().getDeltaTime());
 
-    EulerAngles attitude = EulerAngles::toDegrees(attitudeAlgorithm.getAttitude().toEulerAngles());
+    // output
+    Quaternion attitudeQuaternion = attitudeAlgorithm.getAttitude();
+    EulerAngles attitudeEulerAngles = EulerAngles::toDegrees(attitudeQuaternion.toEulerAngles());
 
-    //Serial.println(attitude.shortInfo().c_str());
+    std::string luxTeleplot = ">lux: " + std::to_string(ins.getSunSensor().getLux());
+    std::string gyroXteleplot = ">gyroX: " + std::to_string(ins.getIMU().getGyroscopes().x);
+    std::string gyroYteleplot = ">gyroY: " + std::to_string(ins.getIMU().getGyroscopes().y);
+    std::string gyroZteleplot = ">gyroZ: " + std::to_string(ins.getIMU().getGyroscopes().z);
+    std::string gyroXclampedTeleplot = ">gyroXclamped: " + std::to_string(clampedGyroscopeX);
+    std::string gyroYclampedTeleplot = ">gyroYclamped: " + std::to_string(clampedGyroscopeY);
+    std::string gyroZclampedTeleplot = ">gyroZclamped: " + std::to_string(clampedGyroscopeZ);
+    std::string rollTeleplot = ">roll: " + std::to_string(attitudeEulerAngles.getRoll());
+    std::string pitchTeleplot = ">pitch: " + std::to_string(attitudeEulerAngles.getPitch());
+    std::string yawTeleplot = ">yaw: " + std::to_string(attitudeEulerAngles.getYaw());
 
-    // Sensors readings
-    //std::string deltatimeStr = ">deltatime:" + std::to_string(ins.getMicrocontroller().getDeltaTime());
-    //std::string microcontrollerTemperatureStr = ">microcontrollerTemperature:" + std::to_string(ins.getMicrocontroller().getTemperature());
-    std::string luxStr = ">lux:" + std::to_string(ins.getSunSensor().getLux());
-    //std::string accelerometerXstr = ">accelerometerX:" + std::to_string(ins.getIMU().getAccelerometers().getX());
-    //std::string accelerometerYstr = ">accelerometerY:" + std::to_string(ins.getIMU().getAccelerometers().getY());
-    //std::string accelerometerZstr = ">accelerometerZ:" + std::to_string(ins.getIMU().getAccelerometers().getZ());
-    //std::string gyroscopeXstr = ">gryroscopeX:" + std::to_string(ins.getIMU().getGyroscopes().getX());
-    //std::string gyroscopeYstr = ">gryroscopeY:" + std::to_string(ins.getIMU().getGyroscopes().getY());
-    //std::string gyroscopeZstr = ">gryroscopeZ:" + std::to_string(ins.getIMU().getGyroscopes().getZ());
-    //std::string magnetometerXstr = ">magnetometerX:" + std::to_string(ins.getIMU().getMagnetometers().getX());
-    //std::string magnetometerYstr = ">magnetometerY:" + std::to_string(ins.getIMU().getMagnetometers().getY());
-    //std::string magnetometerZstr = ">magnetometerZ:" + std::to_string(ins.getIMU().getMagnetometers().getZ());
-    //std::string imuTemperatureStr = ">imuTemperature:" + std::to_string(ins.getIMU().getTemperature());
+    //Serial.println(luxTeleplot.c_str());
+    //Serial.println(gyroXteleplot.c_str());
+    //Serial.println(gyroYteleplot.c_str());
+    //Serial.println(gyroZteleplot.c_str());
+    //Serial.println(gyroXclampedTeleplot.c_str());
+    //Serial.println(gyroYclampedTeleplot.c_str());
+    //Serial.println(gyroZclampedTeleplot.c_str());
+    //Serial.println(rollTeleplot.c_str());
+    //Serial.println(pitchTeleplot.c_str());
+    //Serial.println(yawTeleplot.c_str());
 
-    //Serial.println(deltatimeStr.c_str());
-    //Serial.println(microcontrollerTemperatureStr.c_str());
-    Serial.println(luxStr.c_str());
-    //Serial.println(accelerometerXstr.c_str());
-    //Serial.println(accelerometerYstr.c_str());
-    //Serial.println(accelerometerZstr.c_str());
-    //Serial.println(gyroscopeXstr.c_str());
-    //Serial.println(gyroscopeYstr.c_str());
-    //Serial.println(gyroscopeZstr.c_str());
-    //Serial.println(magnetometerXstr.c_str());
-    //Serial.println(magnetometerYstr.c_str());
-    //Serial.println(magnetometerZstr.c_str());
-    //Serial.println(imuTemperatureStr.c_str());
-
-    // Attitude
-    std::string rollStr = ">Roll:" + std::to_string(attitude.getRoll());
-    std::string pitchStr = ">Pitch:" + std::to_string(attitude.getPitch());
-    std::string yawStr = ">Yaw:" + std::to_string(attitude.getYaw()); 
-
-    Serial.println(rollStr.c_str());
-    Serial.println(pitchStr.c_str());
-    Serial.println(yawStr.c_str());
+    Serial.println(quaternionToJson(attitudeQuaternion).c_str());
+    //Serial.println(eulerAnglesToJson(attitudeEulerAngles).c_str());
 }

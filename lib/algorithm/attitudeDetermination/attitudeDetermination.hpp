@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../../utils/math/rotation.hpp"
+#include "../../utils/math/vector3d/vector3d.hpp"
+#include "../../utils/math/eulerAngles/eulerAngles.hpp"
+#include "../../utils/math/quaternion/quaternion.hpp"
 
 class AttitudeAlgorithm {
     private:

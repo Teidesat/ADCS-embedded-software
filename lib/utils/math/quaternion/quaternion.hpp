@@ -5,19 +5,13 @@
 class EulerAngles;
 
 class Quaternion {
-    private:
+    public:
         float w; // real element
         float x;
         float y;
         float z;
 
-    public:
-        Quaternion(const float w = 1.0f, const float x = 0.0f, const float y = 0.0f, const float z = 0.0f);
-        
-        float getW() const;
-        float getX() const;
-        float getY() const;
-        float getZ() const;
+        Quaternion(const float w = 1.0, const float x = 0.0, const float y = 0.0, const float z = 0.0);
         
         Quaternion conjugate() const;
         Quaternion normalize() const;

@@ -17,7 +17,7 @@ float EulerAngles::getPitch() const {return pitch;}
 float EulerAngles::getYaw() const {return yaw;}
 
 float EulerAngles::toDegrees(float component) {
-    constexpr float RADIANS_TO_DEGREES = 180.0f / M_PI;
+    constexpr float RADIANS_TO_DEGREES = 180.0 / M_PI;
     return component * RADIANS_TO_DEGREES;
 }
 
@@ -30,7 +30,7 @@ EulerAngles EulerAngles::toDegrees(EulerAngles attitude) {
 }
 
 float EulerAngles::toRadians(float component) {
-    constexpr float DEGREES_TO_RADIANS = M_PI / 180.0f;
+    constexpr float DEGREES_TO_RADIANS = M_PI / 180.0;
     return component * DEGREES_TO_RADIANS;
 }
 
@@ -43,9 +43,10 @@ EulerAngles EulerAngles::toRadians(EulerAngles attitude) {
 }
 
 Quaternion EulerAngles::toQuaternion() const {
-    const float rollHalfAngle = roll * 0.5;
-    const float pitchHalfAngle = pitch * 0.5;
-    const float yawHalfAngle = yaw * 0.5;
+    const float halfAngle = 0.5;
+    const float rollHalfAngle = roll * halfAngle;
+    const float pitchHalfAngle = pitch * halfAngle;
+    const float yawHalfAngle = yaw * halfAngle;
 
     const float rollCosine = std::cos(rollHalfAngle);
     const float rollSine = std::sin(rollHalfAngle);
@@ -61,9 +62,4 @@ Quaternion EulerAngles::toQuaternion() const {
     const float z = rollCosine * pitchCosine * yawSine - rollSine * pitchSine * yawCosine;
 
     return Quaternion(w, x, y, z);
-}
-
-std::string EulerAngles::shortInfo() const {
-    std::string attitude = "   Roll: " + std::to_string(roll) + "   Pitch: " + std::to_string(pitch) + "   Yaw: " + std::to_string(yaw);
-    return attitude;
 }

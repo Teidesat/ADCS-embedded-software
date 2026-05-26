@@ -1,0 +1,74 @@
+#define MODEL_RELEASE_DATE "17 Dec 2024"
+#define VERSIONDATE_LARGE "$Date: 2024-12-17 10:40:43 -0700 (Tue, 17 Dec 2024) $"
+
+void help_info(MAGtype_MagneticModel *MagneticModel, char* short_name);
+
+void help_info(MAGtype_MagneticModel *MagneticModel, char* short_name){
+    printf("\n Help information ");
+
+    #ifdef WMMHR
+        printf("\n The World Magnetic Model High-Resolution (WMMHR) for %d", (int) MagneticModel->epoch);
+    #else
+        printf("\n The World Magnetic Model (WMM) for %d", (int) MagneticModel->epoch); 
+    #endif 
+    printf("\n is a model of Earth's main magnetic field. The %s", short_name);
+    printf("\n is recomputed every five (5) years, in years divisible by ");
+    printf("\n five (i.e. 2020, 2025). See the contact information below");
+    printf("\n to obtain more information on the %s and associated software.", short_name);
+    printf("\n ");
+    printf("\n Input required is the location in geodetic latitude and");
+    printf("\n longitude (positive for northern latitudes and eastern ");
+    printf("\n longitudes), geodetic altitude in meters, and the date of ");
+    printf("\n interest in years.");
+
+    printf("\n\n\n The program computes the estimated Magnetic Declination");
+    printf("\n (Decl) which is sometimes called MagneticVAR, Inclination (Incl), Total");
+    printf("\n Intensity (F or TI), Horizontal Intensity (H or HI), Vertical");
+    printf("\n Intensity (Z), and Grid Variation (GV). Declination and Grid");
+    printf("\n Variation are measured in units of degrees and are considered");
+    printf("\n positive when east or north. Inclination is measured in units");
+    printf("\n of degrees and is considered positive when pointing down (into");
+    printf("\n the Earth). The %s is referenced to the WGS-84 ellipsoid and", short_name);
+    printf("\n is valid for 5 years after the base epoch. Uncertainties for the");
+    printf("\n %s are one standard deviation uncertainties averaged over the globe.", short_name);
+    printf("\n We represent the uncertainty as constant values in Incl, F, H, X,");
+    printf("\n Y, and Z. Uncertainty in Declination varies depending on the strength");
+    printf("\n of the horizontal field. For more information see the %s Technical", short_name);
+    printf("\n Report.");
+    
+    printf("\n\n\n It is very important to note that a degree and order 133 model,");
+    printf("\n such as %s, describes only the longest wavelength spatial magnetic ", short_name);
+    printf("\n fluctuations due to Earth's core, mantle and crust. Not included in the %s series", short_name);
+    printf("\n models are intermediate and short wavelength spatial fluctuations ");
+    printf("\n that originate in Earth's mantle and crust. Consequently, isolated");
+    printf("\n angular errors at various positions on the surface (primarily over");
+    printf("\n land, along continental margins and over oceanic sea-mounts, ridges and");
+    printf("\n trenches) of several degrees may be expected. Also not included in");
+    printf("\n the model are temporal fluctuations of magnetospheric and ionospheric");
+    printf("\n origin. On the days during and immediately following magnetic storms,");
+    printf("\n temporal fluctuations can cause substantial deviations of the Geomagnetic");
+    printf("\n field from model values. If the required declination accuracy is");
+    printf("\n more stringent than the %s series of models provide, the user is", short_name);
+    printf("\n advised to request special (regional or local) surveys be performed");
+    #ifdef WMMHR
+        printf("\n and models prepared. The World Magnetic Model High-Resolution is a joint product of");
+    #else
+        printf("\n and models prepared. The World Magnetic Model is a joint product of"); 
+    #endif
+    printf("\n the United States' National Geospatial-Intelligence Agency (NGA) and");
+    printf("\n the United Kingdom's Defence Geographic Centre (DGC). The %s was", short_name);
+    printf("\n developed jointly by the National Centers for Environmental Information");
+    printf("\n (NCEI, Boulder CO, USA) and the British Geological Survey (BGS, ");
+    printf("\n Edinburgh, Scotland).");
+
+    printf("\n\n\n Contact Information");
+
+    printf("\n  Software and Model Support");
+    printf("\n	National Centers for Environmental Information");
+    printf("\n	NOAA E/NE42");
+    printf("\n	325 Broadway");
+    printf("\n	Boulder, CO 80305 USA");
+    printf("\n	Attn: Manoj Nair or Arnaud Chulliat");
+    printf("\n	Email:  Geomag.Models@noaa.gov \n");
+
+}

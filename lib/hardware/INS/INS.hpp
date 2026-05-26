@@ -5,8 +5,6 @@
 #include "../sunSensor/AdafruitVEML7700.hpp"
 #include "../IMU/AdafruitLSM9DS1.hpp"
 
-
-
 class  Microcontroller {
     private:
         int clockFrequency;

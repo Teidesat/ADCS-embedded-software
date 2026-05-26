@@ -10,11 +10,6 @@ Quaternion::Quaternion(const float w, const float x, const float y, const float 
     z(z)
 {}
 
-float Quaternion::getW() const {return w;}
-float Quaternion::getX() const {return x;}
-float Quaternion::getY() const {return y;}
-float Quaternion::getZ() const {return z;}
-
 Quaternion Quaternion::conjugate() const {return Quaternion(w, -x, -y, -z);}
 
 Quaternion Quaternion::normalize() const {
@@ -35,7 +30,7 @@ Quaternion Quaternion::normalize() const {
 }
 
 float Quaternion::dotProduct(const Quaternion& quaternion) const {
-    return w * quaternion.getW() + x * quaternion.getX() + y * quaternion.getY() + z * quaternion.getZ();
+    return w * quaternion.w + x * quaternion.x + y * quaternion.y + z * quaternion.z;
 }
 
 bool Quaternion::equal(const Quaternion& quaternion) const {
@@ -52,21 +47,21 @@ Quaternion Quaternion::slerp(const Quaternion& quaternion, const float time) con
     float dotProductValue = dotProduct(quaternion);
     Quaternion shortestPathQuaternion = quaternion;
 
-    if (dotProductValue < 0.0f) {
+    if (dotProductValue < 0.0) {
         dotProductValue = -dotProductValue;
-        shortestPathQuaternion = Quaternion(-quaternion.getW(), -quaternion.getX(), -quaternion.getY(), -quaternion.getZ());
+        shortestPathQuaternion = Quaternion(-quaternion.w, -quaternion.x, -quaternion.y, -quaternion.z);
     }
 
-    const float SLERP_THRESHOLD = 0.9995f;
+    const float SLERP_THRESHOLD = 0.9995;
     float newW, newX, newY, newZ;
 
     if (dotProductValue > SLERP_THRESHOLD) {
-        const float inverseTime = 1.0f - time;
+        const float inverseTime = 1.0 - time;
 
-        newW = (inverseTime * w) + (time * shortestPathQuaternion.getW());
-        newX = (inverseTime * x) + (time * shortestPathQuaternion.getZ());
-        newY = (inverseTime * y) + (time * shortestPathQuaternion.getY());
-        newZ = (inverseTime * z) + (time * shortestPathQuaternion.getZ());
+        newW = (inverseTime * w) + (time * shortestPathQuaternion.w);
+        newX = (inverseTime * x) + (time * shortestPathQuaternion.z);
+        newY = (inverseTime * y) + (time * shortestPathQuaternion.y);
+        newZ = (inverseTime * z) + (time * shortestPathQuaternion.z);
     }
     else {
         const float totalAngle = std::acos(dotProductValue);
@@ -78,26 +73,26 @@ Quaternion Quaternion::slerp(const Quaternion& quaternion, const float time) con
         const float startWeight = std::cos(interpolatedAngle) - dotProductValue * sineInterpolatedAngle / sineTotalAngle;
         const float endWeight = sineInterpolatedAngle / sineTotalAngle;
 
-        newW = (startWeight * w) + (endWeight * shortestPathQuaternion.getW());
-        newX = (startWeight * x) + (endWeight * shortestPathQuaternion.getX());
-        newY = (startWeight * y) + (endWeight * shortestPathQuaternion.getY());
-        newZ = (startWeight * z) + (endWeight * shortestPathQuaternion.getZ());
+        newW = (startWeight * w) + (endWeight * shortestPathQuaternion.w);
+        newX = (startWeight * x) + (endWeight * shortestPathQuaternion.x);
+        newY = (startWeight * y) + (endWeight * shortestPathQuaternion.y);
+        newZ = (startWeight * z) + (endWeight * shortestPathQuaternion.z);
     }
 
     return Quaternion(newW, newX, newY, newZ).normalize();
 }
 
 Quaternion Quaternion::sum(const Quaternion& quaternion) const {
-    return Quaternion(w + quaternion.getW(), x + quaternion.getX(), y + quaternion.getY(), z + quaternion.getZ());
+    return Quaternion(w + quaternion.w, x + quaternion.x, y + quaternion.y, z + quaternion.z);
 }
 
 Quaternion Quaternion::operator+(const Quaternion& quaternion) const {return sum(quaternion);}
 
 Quaternion Quaternion::multiply(const Quaternion& quaternion) const {
-    const float newW = w * quaternion.getW() - x * quaternion.getX() - y * quaternion.getY() - z * quaternion.getZ();
-    const float newX = w * quaternion.getX() + x * quaternion.getW() + y * quaternion.getZ() - z * quaternion.getY();
-    const float newY = w * quaternion.getY() - x * quaternion.getZ() + y * quaternion.getW() + z * quaternion.getX();
-    const float newZ = w * quaternion.getZ() + x * quaternion.getY() - y * quaternion.getX() + z * quaternion.getW();
+    const float newW = w * quaternion.w - x * quaternion.x - y * quaternion.y - z * quaternion.z;
+    const float newX = w * quaternion.x + x * quaternion.w + y * quaternion.z - z * quaternion.y;
+    const float newY = w * quaternion.y - x * quaternion.z + y * quaternion.w + z * quaternion.x;
+    const float newZ = w * quaternion.z + x * quaternion.y - y * quaternion.x + z * quaternion.w;
     
     return Quaternion(newW, newX, newY, newZ);
 }
@@ -106,10 +101,10 @@ Quaternion Quaternion::operator*(const Quaternion& quaternion) const {return mul
 
 void Quaternion::operator*=(const Quaternion& quaternion) {
     Quaternion multipliedQuaternion = multiply(quaternion);
-    w = multipliedQuaternion.getW();
-    x = multipliedQuaternion.getX();
-    y = multipliedQuaternion.getY();
-    z = multipliedQuaternion.getZ();
+    w = multipliedQuaternion.w;
+    x = multipliedQuaternion.x;
+    y = multipliedQuaternion.y;
+    z = multipliedQuaternion.z;
 }
 
 Quaternion Quaternion::multiply(const float scalar) const {return Quaternion(w * scalar, x * scalar, y * scalar, z * scalar);}
@@ -123,29 +118,29 @@ void Quaternion::operator*=(const float scalar) {
 }
 
 EulerAngles Quaternion::toEulerAngles() const {
-    float roll = 0.0f; // ROLL (X-axis): Standard display is -180 to 180
-    float pitch = 0.0f; // Check for Gimbal Lock (Pitch at +/- 90 degrees)
-    float yaw = 0.0f; // YAW (Z-axis): Calculate initially as -180 to 180
+    float roll = 0.0; // ROLL (X-axis): Standard display is -180 to 180
+    float pitch = 0.0; // Check for Gimbal Lock (Pitch at +/- 90 degrees)
+    float yaw = 0.0; // YAW (Z-axis): Calculate initially as -180 to 180
 
-    const float pitchSine = 2.0f * (w * y - z * x);
+    const float pitchSine = 2.0 * (w * y - z * x);
 
-    if (std::fabs(pitchSine) >= 0.999999f) {
-        pitch = std::copysign(M_PI / 2.0f, pitchSine);
-        roll = std::atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
+    if (std::fabs(pitchSine) >= 0.999999) {
+        pitch = std::copysign(M_PI / 2.0, pitchSine);
+        roll = std::atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x * x + y * y));
     } 
     else {
         pitch = std::asin(pitchSine);
 
-        const float rollNum = 2.0f * (w * x + y * z);
-        const float rollDen = 1.0f - 2.0f * (x * x + y * y);
+        const float rollNum = 2.0 * (w * x + y * z);
+        const float rollDen = 1.0 - 2.0 * (x * x + y * y);
         roll = std::atan2(rollNum, rollDen);
 
-        const float yawNum = 2.0f * (w * z + x * y);
-        const float yawDen = 1.0f - 2.0f * (y * y + z * z);
+        const float yawNum = 2.0 * (w * z + x * y);
+        const float yawDen = 1.0 - 2.0 * (y * y + z * z);
         yaw = std::atan2(yawNum, yawDen);
     }
 
-    if (yaw < 0) {yaw += 2.0f * M_PI;} // Wrap Yaw for display (0 to 360 degrees)
+    if (yaw < 0) {yaw += 2.0 * M_PI;} // Wrap Yaw for display (0 to 360 degrees)
 
     return EulerAngles(roll, pitch, yaw);
 }

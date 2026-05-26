@@ -11,7 +11,7 @@ class EulerAngles {
         float yaw; // corresponds to z axis of rotation
 
     public:
-        EulerAngles(const float iPitch = 0.0f, const float iRoll = 0.0f, const float iYaw = 0.0f);
+        EulerAngles(const float iPitch = 0.0, const float iRoll = 0.0, const float iYaw = 0.0);
         
         float getRoll() const;  
         float getPitch() const;
@@ -23,6 +23,4 @@ class EulerAngles {
         static EulerAngles toRadians(EulerAngles attitude);
 
         Quaternion toQuaternion() const;
-
-        std::string shortInfo() const;
 };

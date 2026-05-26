@@ -4,8 +4,6 @@
 
 #include <Adafruit_LSM9DS1.h>
 
-
-
 class AdafruitLSM9DS1 {
     private:
         Adafruit_LSM9DS1 LSM9DS1;

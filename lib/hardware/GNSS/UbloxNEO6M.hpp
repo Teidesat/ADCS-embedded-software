@@ -14,6 +14,7 @@ class UbloxNEO6M {
         TinyGPSPlus NMEAparser;
         std::vector<std::string> NMMEAmessagesHistory;
         std::string lastNMEAmessage;
+        int timestamp; // milliseconds since the program started
 
         static const int BAUD_RATE = 9600;
         static const int MAX_NMEA_LENGTH = 82; // standard maximum NMEA message length

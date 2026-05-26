@@ -1,6 +1,7 @@
 #include <unity.h>
 
-#include "../../lib/utils/math/rotation.hpp"
+#include "../../lib/utils/math/eulerAngles/eulerAngles.hpp"
+#include "../../lib/utils/math/quaternion/quaternion.hpp"
 
 const float EPSILON = 0.001f;
 
