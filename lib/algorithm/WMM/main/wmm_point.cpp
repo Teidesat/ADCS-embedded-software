@@ -4,7 +4,10 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <string>
+=======
+>>>>>>> a160cadfc8c7ac8aa72d6a0da3c5db91ddd14869
 
 
 #include "../src/EGM9615.hpp"

@@ -7,12 +7,15 @@
 #include <time.h>
 #include "GeomagnetismLibrary.hpp"
 
+<<<<<<< HEAD
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
 
+=======
+>>>>>>> a160cadfc8c7ac8aa72d6a0da3c5db91ddd14869
 /*
  *
  * ABSTRACT
@@ -2268,10 +2271,19 @@ void MAG_WMMErrorCalc(double H, MAGtype_GeoMagneticElements *Uncertainty) {
     Uncertainty->Z = WMM_UNCERTAINTY_Z;
     Uncertainty->Incl = WMM_UNCERTAINTY_I;
     Uncertainty->Y = WMM_UNCERTAINTY_Y;
+<<<<<<< HEAD
     decl_variable = (WMM_UNCERTAINTY_D_COEF / H);
     decl_constant = (WMM_UNCERTAINTY_D_OFFSET);
     Uncertainty->Decl = sqrt(decl_constant*decl_constant + decl_variable*decl_variable);
     if (Uncertainty->Decl > 180) {Uncertainty->Decl = 180;}
+=======
+     decl_variable = (WMM_UNCERTAINTY_D_COEF / H);
+     decl_constant = (WMM_UNCERTAINTY_D_OFFSET);
+     Uncertainty->Decl = sqrt(decl_constant*decl_constant + decl_variable*decl_variable);
+     if (Uncertainty->Decl > 180) {
+         Uncertainty->Decl = 180;
+     }
+>>>>>>> a160cadfc8c7ac8aa72d6a0da3c5db91ddd14869
 }
 
 void MAG_PrintUserDataWithUncertainty(MAGtype_GeoMagneticElements GeomagElements,
