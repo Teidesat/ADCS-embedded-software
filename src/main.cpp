@@ -45,6 +45,9 @@ void setup() {
               pauseExecution,
               microcontrollerClockFrequency, 
               I2CclockFrequency);
+
+    bool setupReady = true; // condition here checking that all necesary data is set
+    if(!setupReady) {ESP.restart();}
 }
 
 void loop() {

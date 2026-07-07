@@ -22,10 +22,10 @@ template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns>::Matrix() {flattenedMatrix.fill(0);}
 
 template <std::size_t Rows, std::size_t Columns>
-float& Matrix<Rows, Columns>::at(const std::size_t row, const std::size_t column) {return flattenedMatrix.at(column * Rows + row);}
+float& Matrix<Rows, Columns>::at(const std::size_t row, const std::size_t column) {return flattenedMatrix[column * Rows + row];}
 
 template <std::size_t Rows, std::size_t Columns>
-const float& Matrix<Rows, Columns>::at(const std::size_t row, const std::size_t column) const {return flattenedMatrix.at(column * Rows + row);}
+const float& Matrix<Rows, Columns>::at(const std::size_t row, const std::size_t column) const {return flattenedMatrix[column * Rows + row];}
 
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::multiply(const float scalar) const {
