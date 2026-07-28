@@ -1,12 +1,12 @@
-#include "../lib/hardware/INS/INS.hpp"
-#include "../lib/algorithm/attitudeDetermination/attitudeDetermination.hpp"
-#include "../lib/utils/noiseFilters/noiseFilters.hpp"
-#include "../lib/utils/toJson/toJson.hpp"
+#include "hardware/INS/INS.hpp"
+#include "algorithm/attitudeDetermination/attitudeDetermination.hpp"
+#include "../lib/noiseFilters/noiseFilters.hpp"
+#include "toJson/toJson.hpp"
 
 #include <string>
 
 INS ins;
-AttitudeAlgorithm attitudeAlgorithm;
+ADCS::AttitudeAlgorithm attitudeAlgorithm;
 
 void setup() {
     // UART Pins (GNSS)

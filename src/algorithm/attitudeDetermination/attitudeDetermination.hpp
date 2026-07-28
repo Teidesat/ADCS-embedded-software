@@ -4,6 +4,8 @@
 #include "../../lib/math/eulerAngles/eulerAngles.hpp"
 #include "../../lib/math/quaternion/quaternion.hpp"
 
+namespace ADCS {
+
 class AttitudeAlgorithm {
     private:
         Quaternion attitudeQuaternion;
@@ -21,3 +23,5 @@ class AttitudeAlgorithm {
                     const float deltaTime);
         Quaternion getAttitude() const;
 };
+
+}

@@ -3,6 +3,8 @@
 #include <cmath>
 #include <limits>
 
+namespace ADCS {
+
 Quaternion AttitudeAlgorithm::calculateAccelerationsAttitude(const Vector3d& linearAcclerations, const Vector3d& magneticFlux) const {
     const float roll  = std::atan2(linearAcclerations.y, linearAcclerations.z);
     
@@ -72,3 +74,5 @@ void AttitudeAlgorithm::update(const Vector3d& linearAcclerations,
 }
 
 Quaternion AttitudeAlgorithm::getAttitude() const {return attitudeQuaternion;}
+
+}
