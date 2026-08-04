@@ -1,14 +1,55 @@
 #include "worldMagneticModel.hpp"
 
-#include "magneticModel/magneticModel.hpp"
+#include "../../lib/math/eulerAngles/eulerAngles.hpp"
+#include "constants/ellipsoid.hpp"
 
-#include <vector>
+#include <math.h>
 
 namespace WMM {
 
-Vector3d WorldMagneticModel::calculateExpectedMagneticField(const double latitude, const double longitude, const double altitude, const double date) const {
-    const MagneticModel magneticModel;
-    MagneticModel timedMagneticModel;
+GeodeticCoordinates::GeodeticCoordinates(const float newLatitude, const float newLongitude, const float newHeightAboveEllipsoid, const float newHeightAboveGeoid ): 
+    latitude(newLatitude),
+    longitude(newLongitude),
+    HeightAboveEllipsoid(newHeightAboveEllipsoid),
+    HeightAboveGeoid(newHeightAboveGeoid)
+{}
+
+Vector3d WorldMagneticModel::calculateExpectedMagneticField(const float latitude, 
+                                                            const float longitude, 
+                                                            const float altitude, 
+                                                            const int publishDateYear, 
+                                                            const int publishDateMonth, 
+                                                            const int publishDateDay) {
+    const GeodeticCoordinates geodeticCoordinates(latitude, longitude, altitude);
+    const SphericalCoordinates sphericalCoordinates = convertGeodeticCordinatesToSphericalcoordinates(geodeticCoordinates);
+
+    // Calculate the magnetic field using the WMM model
+    TimedMagneticModel timedMagneticModel;
+    timedMagneticModel.currentDateYear = publishDateYear;
+    timedMagneticModel.currentDateMonth = publishDateMonth;
+    timedMagneticModel.currentDateDay = publishDateDay;
+    timedMagneticModel.currentDecimalDate = WMM::MagneticModel::dateToYears(publishDateYear, publishDateMonth, publishDateDay, WMM::MagneticModel::epoch);
+    //call MAG_TimelyModifyMagneticModel
 }
+
+SphericalCoordinates WorldMagneticModel::convertGeodeticCordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates) {
+    float latitudeCosine, latitudeSine, rc, xp, zp;
+    SphericalCoordinates sphericalCoordinates;
+
+    latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.phi));
+    latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.phi));
+
+    rc = Ellipsoid::semiMajorAxis / sqrt(1.0 - Ellipsoid::firstEccentricitySquared * latitudeSine * latitudeSine);
+    xp = (rc + geodeticCoordinates.HeightAboveEllipsoid) * latitudeCosine;
+    zp = (rc * (1.0 - Ellipsoid::firstEccentricitySquared) + geodeticCoordinates.HeightAboveEllipsoid) * latitudeSine;
+
+    sphericalCoordinates.r = sqrt(xp * xp + zp * zp);
+    sphericalCoordinates.phig = EulerAngles::radiansToDegrees(asin(zp / CoordSpherical->r));
+    sphericalCoordinates.lambda = geodeticCoordinates.lambda; 
+
+    return 1;
+}
+
+
 
 }

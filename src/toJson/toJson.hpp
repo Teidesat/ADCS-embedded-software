@@ -13,6 +13,6 @@ std::string IMUtoJson(const IMU& imu);
 
 std::string eulerAnglesToJson(const EulerAngles& eulerAngles);
 std::string quaternionToJson(const Quaternion& quaternion);
-std::string AttitudeToJson(const AttitudeAlgorithm& attitudeAlgorithm);
+std::string AttitudeToJson(const ADCS::AttitudeAlgorithm& attitudeAlgorithm);
 
 std::string combineJsons(const std::string& json1, const std::string& json2);

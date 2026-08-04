@@ -2,13 +2,10 @@
 
 class EspressifESP32WROOM32 {
     private:
-        // deltatime variables
         float deltatime;
-        //unsigned long int previousTimeMiliseconds = 0;
         unsigned long int previousTimeMicros = 0;
-        // I2C protocol connection
         static const int BAUD_RATE = 9600;
-        int timestamp; // milliseconds since the program started
+        int timestamp;
 
     public:
         void begin(const bool pauseExecution = true, const int clockFrequency = 160);

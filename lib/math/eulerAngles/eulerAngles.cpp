@@ -6,40 +6,39 @@
 
 
 
-EulerAngles::EulerAngles(const float iRoll, const float iPitch, const float iYaw): 
-    roll(iRoll), 
-    pitch(iPitch), 
-    yaw(iYaw) 
+EulerAngles::EulerAngles(const float newRoll, const float newPitch, const float newYaw): 
+    roll(newRoll), 
+    pitch(newPitch), 
+    yaw(newYaw) 
 {}
 
 float EulerAngles::getRoll() const {return roll;}  
 float EulerAngles::getPitch() const {return pitch;}
 float EulerAngles::getYaw() const {return yaw;}
 
-float EulerAngles::toDegrees(float component) {
-    constexpr float RADIANS_TO_DEGREES = 180.0 / M_PI;
-    return component * RADIANS_TO_DEGREES;
+float EulerAngles::radiansToDegrees(float radians) {
+    constexpr float radiansToDegreesConversionRate = 180.0 / M_PI;
+    return radians * radiansToDegreesConversionRate;}
+
+EulerAngles EulerAngles::radiansToDegrees(EulerAngles attitude) {
+    const float newRoll = radiansToDegrees(attitude.getRoll());
+    const float newPitch = radiansToDegrees(attitude.getPitch());
+    const float newYaw = radiansToDegrees(attitude.getYaw());
+
+    return EulerAngles(newRoll, newPitch, newYaw);
 }
 
-EulerAngles EulerAngles::toDegrees(EulerAngles attitude) {
-    const float roll = toDegrees(attitude.getRoll());
-    const float pitch = toDegrees(attitude.getPitch());
-    const float yaw = toDegrees(attitude.getYaw());
-
-    return EulerAngles(roll, pitch, yaw);
+float EulerAngles::degreesToRadians(float degrees) {
+    constexpr float degreesToRadiansConversionRate = M_PI / 180.0;
+    return degrees * degreesToRadiansConversionRate;
 }
 
-float EulerAngles::toRadians(float component) {
-    constexpr float DEGREES_TO_RADIANS = M_PI / 180.0;
-    return component * DEGREES_TO_RADIANS;
-}
+EulerAngles EulerAngles::degreesToRadians(EulerAngles attitude) {
+    const float newRoll = degreesToRadians(attitude.getRoll());
+    const float newPitch = degreesToRadians(attitude.getPitch());
+    const float newYaw = degreesToRadians(attitude.getYaw());
 
-EulerAngles EulerAngles::toRadians(EulerAngles attitude) {
-    const float roll = toRadians(attitude.getRoll());
-    const float pitch = toRadians(attitude.getPitch());
-    const float yaw = toRadians(attitude.getYaw());
-
-    return EulerAngles(roll, pitch, yaw);
+    return EulerAngles(newRoll, newPitch, newYaw);
 }
 
 Quaternion EulerAngles::toQuaternion() const {

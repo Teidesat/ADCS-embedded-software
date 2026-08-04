@@ -1,8 +1,5 @@
 #pragma once
 
-#include <array>
-#include <vector>
-
 #define WMM_UNCERTAINTY_F 138
 #define WMM_UNCERTAINTY_H 133
 #define WMM_UNCERTAINTY_X 137
@@ -11,10 +8,6 @@
 #define WMM_UNCERTAINTY_I 0.20
 #define WMM_UNCERTAINTY_D_OFFSET 0.26
 #define WMM_UNCERTAINTY_D_COEF 5417
-
-#ifndef M_PI
-#define M_PI    ((2)*(acos(0.0)))
-#endif
 
 #define RAD2DEG(rad)    ((rad)*(180.0L/M_PI))
 #define DEG2RAD(deg)    ((deg)*(M_PI/180.0L))
@@ -184,13 +177,9 @@ int MAG_CalculateSecularVariationElements(MAGtype_MagneticResults MagneticVariat
 
 int MAG_CalculateGridVariation(MAGtype_CoordGeodetic location, MAGtype_GeoMagneticElements *elements);
 
-int MAG_DateToYear(MAGtype_Date *Calendar_Date, char *Error);
-
 void MAG_DegreeToDMSstring(double DegreesOfArc, int UnitDepth, char *DMSstring);
 
 void MAG_DMSstringToDegree(char *DMSstring, double *DegreesOfArc);
-
-int MAG_GeodeticToSpherical(MAGtype_Ellipsoid Ellip, MAGtype_CoordGeodetic CoordGeodetic, MAGtype_CoordSpherical *CoordSpherical);
 
 int MAG_GetTransverseMercator(MAGtype_CoordGeodetic CoordGeodetic, MAGtype_UTMParameters *UTMParameters);
 

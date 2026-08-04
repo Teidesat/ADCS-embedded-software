@@ -5,7 +5,7 @@
 
 #include <string>
 
-INS ins;
+ADCS::INS ins;
 ADCS::AttitudeAlgorithm attitudeAlgorithm;
 
 void setup() {

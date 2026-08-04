@@ -7,85 +7,6 @@
 #include <time.h>
 #include "GeomagnetismLibrary.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-
-/*
- *
- * ABSTRACT
- *
- * The purpose of Geomagnetism Library is primarily to support the World Magnetic Model (WMM) 2015-2020.
- * It however is built to be used for spherical harmonic models of the Earth's magnetic field
- * generally and supports models even with a large (>>12) number of degrees.  It is also used in many 
- * other geomagnetic models distributed by NCEI.
- *
- * REUSE NOTES
- *
- * Geomagnetism Library is intended for reuse by any application that requires
- * Computation of Geomagnetic field from a spherical harmonic model.
- *
- * REFERENCES
- *
- *    Further information on Geoid can be found in the WMM Technical Documents.
- *
- *
- * LICENSES
- *
- *  The WMM source code is in the public domain and not licensed or under copyright.
- *	The information and software may be used freely by the public. As required by 17 U.S.C. 403,
- *	third parties producing copyrighted works consisting predominantly of the material produced by
- *	U.S. government agencies must provide notice with such work(s) identifying the U.S. Government material
- *	incorporated and stating that such material is not subject to copyright protection.
- *
- * RESTRICTIONS
- *
- *    Geomagnetism library has no restrictions.
- *
- * ENVIRONMENT
- *
- *    Geomagnetism library was tested in the following environments
- *
- *    1. Red Hat Linux  with GCC Compiler
- *    2. MS Windows 7 with MinGW compiler
- *    3. Sun Solaris with GCC Compiler
- *
- *
-
-
- *  National Centers for Environmental Information
- *  NOAA E/NE42, 325 Broadway
- *  Boulder, CO 80305 USA
- *  Attn: Arnaud Chulliat
- *  Phone:  (303) 497-6522
- *  Email:  Arnaud.Chulliat@noaa.gov
-
- *  Software and Model Support
- *  National Centers for Environmental Information
- *  NOAA E/NE42
- *  325 Broadway
- *  Boulder, CO 80305 USA
- *  Attn: Adam Woods or Manoj Nair
- *  Phone:  (303) 497-6640 or -4642
- *  Email:  geomag.models@noaa.gov
- *  URL: http://www.ngdc.noaa.gov/Geomagnetic/WMM/DoDWMM.shtml
-
-
- *  For more details on the subroutines, please consult the WMM
- *  Technical Documentations at
- *  http://www.ngdc.noaa.gov/Geomagnetic/WMM/DoDWMM.shtml
-
- *  Nov 23, 2009
- *  Written by Manoj C Nair and Adam Woods
- *  Manoj.C.Nair@noaa.Gov
- *  Adam.Woods@noaa.gov
- */
-
-
-
-
 /******************************************************************************
  ************************************Wrapper***********************************
  * This grouping consists of functions call groups of other functions to do a
@@ -612,70 +533,6 @@ int MAG_CalculateSecularVariationElements(MAGtype_MagneticResults MagneticVariat
     return 1;
 } /*MAG_CalculateSecularVariationElements*/
 
-int MAG_DateToYear(MAGtype_Date *CalendarDate, char *Error)
-
-/* Converts a given calendar date into a decimal year,
-it also outputs an error string if there is a problem
-INPUT  CalendarDate  Pointer to the  data  structure with the following elements
-                        int	Year;
-                        int	Month;
-                        int	Day;
-                        double DecimalYear;      decimal years
-OUTPUT  CalendarDate  Pointer to the  data  structure with the following elements updated
-                        double DecimalYear;      decimal years
-                Error	pointer to an error string
-CALLS : none
-
- */
-{
-    int temp = 0; /*Total number of days */
-    int MonthDays[13];
-    int ExtraDay = 0;
-    int i;
-    int Error_size = 255;
-    if(CalendarDate->Month == 0)
-    {
-        CalendarDate->DecimalYear = CalendarDate->Year;
-        return 1;
-    }
-    if((CalendarDate->Year % 4 == 0 && CalendarDate->Year % 100 != 0) || CalendarDate->Year % 400 == 0)
-        ExtraDay = 1;
-    MonthDays[0] = 0;
-    MonthDays[1] = 31;
-    MonthDays[2] = 28 + ExtraDay;
-    MonthDays[3] = 31;
-    MonthDays[4] = 30;
-    MonthDays[5] = 31;
-    MonthDays[6] = 30;
-    MonthDays[7] = 31;
-    MonthDays[8] = 31;
-    MonthDays[9] = 30;
-    MonthDays[10] = 31;
-    MonthDays[11] = 30;
-    MonthDays[12] = 31;
-
-    /******************Validation********************************/
-    if(CalendarDate->Month <= 0 || CalendarDate->Month > 12)
-    {
-        // The Error is passed as pointer and its size if defined outside of the function. The functions used to pass Error to MAG_DateToYear() defines the size of DMSstring are all 255.
-        MAG_strlcpy_equivalent(Error, "\nError: The Month entered is invalid, valid months are '1 to 12'\n", Error_size);
-        return 0;
-    }
-    if(CalendarDate->Day <= 0 || CalendarDate->Day > MonthDays[CalendarDate->Month])
-    {
-        printf("\nThe number of days in month %d is %d\n", CalendarDate->Month, MonthDays[CalendarDate->Month]);
-        MAG_strlcpy_equivalent(Error, "\nError: The day entered is invalid\n",Error_size);
-        return 0;
-    }
-    /****************Calculation of t***************************/
-    for(i = 1; i <= CalendarDate->Month; i++)
-        temp += MonthDays[i - 1];
-    temp += CalendarDate->Day;
-    CalendarDate->DecimalYear = CalendarDate->Year + (temp - 1) / (365.0 + ExtraDay);
-    return 1;
-
-} /*MAG_DateToYear*/
-
 void MAG_DegreeToDMSstring(double DegreesOfArc, int UnitDepth, char *DMSstring)
 
 /*This converts a given decimal degree into a DMS string.
@@ -752,64 +609,6 @@ CALLS : none
     degree = degree * sign;
     *DegreesOfArc = sign * (degree + minute / 60.0 + second / 3600.0);
 } /*MAG_DMSstringToDegree*/
-
-
-
-int MAG_GeodeticToSpherical(MAGtype_Ellipsoid Ellip, MAGtype_CoordGeodetic CoordGeodetic, MAGtype_CoordSpherical *CoordSpherical)
-
-/* Converts Geodetic coordinates to Spherical coordinates
-
-  INPUT   Ellip  data  structure with the following elements
-                        double a; semi-major axis of the ellipsoid
-                        double b; semi-minor axis of the ellipsoid
-                        double fla;  flattening
-                        double epssq; first eccentricity squared
-                        double eps;  first eccentricity
-                        double re; mean radius of  ellipsoid
-
-                CoordGeodetic  Pointer to the  data  structure with the following elements updates
-                        double lambda; ( longitude )
-                        double phi; ( geodetic latitude )
-                        double HeightAboveEllipsoid; ( height above the WGS84 ellipsoid (HaE) )
-                        double HeightAboveGeoid; (height above the EGM96 Geoid model )
-
- OUTPUT		CoordSpherical 	Pointer to the data structure with the following elements
-                        double lambda; ( longitude)
-                        double phig; ( geocentric latitude )
-                        double r;  	  ( distance from the center of the ellipsoid)
-
-CALLS : none
-
- */
-{
-    double CosLat, SinLat, rc, xp, zp; /*all local variables */
-
-    /*
-     ** Convert geodetic coordinates, (defined by the WGS-84
-     ** reference ellipsoid), to Earth Centered Earth Fixed Cartesian
-     ** coordinates, and then to spherical coordinates.
-     */
-
-    CosLat = cos(DEG2RAD(CoordGeodetic.phi));
-    SinLat = sin(DEG2RAD(CoordGeodetic.phi));
-
-    /* compute the local radius of curvature on the WGS-84 reference ellipsoid */
-
-    rc = Ellip.a / sqrt(1.0 - Ellip.epssq * SinLat * SinLat);
-
-    /* compute ECEF Cartesian coordinates of specified point (for longitude=0) */
-
-    xp = (rc + CoordGeodetic.HeightAboveEllipsoid) * CosLat;
-    zp = (rc * (1.0 - Ellip.epssq) + CoordGeodetic.HeightAboveEllipsoid) * SinLat;
-
-    /* compute spherical radius and angle lambda and phi of specified point */
-
-    CoordSpherical->r = sqrt(xp * xp + zp * zp);
-    CoordSpherical->phig = RAD2DEG(asin(zp / CoordSpherical->r)); /* geocentric latitude */
-    CoordSpherical->lambda = CoordGeodetic.lambda; /* longitude */
-
-    return 1;
-}/*MAG_GeodeticToSpherical*/
 
 int MAG_GetTransverseMercator(MAGtype_CoordGeodetic CoordGeodetic, MAGtype_UTMParameters *UTMParameters)
 /* Gets the UTM Parameters for a given Latitude and Longitude.
@@ -1898,7 +1697,7 @@ CALLS : none
         }
     }
     return 1;
-} /* MAG_TimelyModifyMagneticModel */
+}
 
 /*End of Spherical Harmonic Functions*/
 

@@ -1,26 +1,27 @@
 #pragma once
 
 #include <string>
+#include <math.h>
 
 class Quaternion;
 
 class EulerAngles {
     private:
-        float roll; // corresponds to x axis of rotation
-        float pitch; // corresponds to y axis of rotation
-        float yaw; // corresponds to z axis of rotation
+        float roll = 0; // corresponds to x axis of rotation
+        float pitch = 0; // corresponds to y axis of rotation
+        float yaw = 0; // corresponds to z axis of rotation
 
     public:
-        EulerAngles(const float iPitch = 0.0, const float iRoll = 0.0, const float iYaw = 0.0);
+        EulerAngles(const float newPitch = 0.0, const float newRoll = 0.0, const float newYaw = 0.0);
         
         float getRoll() const;  
         float getPitch() const;
         float getYaw() const;
         
-        static float toDegrees(float component);
-        static EulerAngles toDegrees(EulerAngles attitude);
-        static float toRadians(float component);
-        static EulerAngles toRadians(EulerAngles attitude);
+        static float radiansToDegrees(float radians);
+        static EulerAngles radiansToDegrees(EulerAngles attitude);
+        static float degreesToRadians(float degrees);
+        static EulerAngles degreesToRadians(EulerAngles attitude);
 
         Quaternion toQuaternion() const;
 };

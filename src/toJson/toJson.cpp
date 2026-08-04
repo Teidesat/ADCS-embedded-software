@@ -66,7 +66,7 @@ std::string quaternionToJson(const Quaternion& quaternion) {
     return json;
 }
 
-std::string AttitudeToJson(const AttitudeAlgorithm& attitudeAlgorithm)  {
+std::string AttitudeToJson(const ADCS::AttitudeAlgorithm& attitudeAlgorithm)  {
     std::string json = "{";
     json += "\"eulerAngles\":" + eulerAnglesToJson(attitudeAlgorithm.getAttitude().toEulerAngles()) + ",";
     json += "\"quaternion\":" + quaternionToJson(attitudeAlgorithm.getAttitude());
