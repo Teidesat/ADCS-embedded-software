@@ -63,7 +63,7 @@ int main() {
     MAG_PrintUserDataWithUncertainty(GeoMagneticElements, Errors, CoordGeodetic, UserDate, TimedMagneticModel, &Geoid); /* Print the results */
 
     if(print_boz_warning_strong) {printf("\n %s\n", BOZ_WARN_TEXT_STRONG);} 
-    else if (print_boz_warning_weak) {printf("\n %s\n", BOZ_WARN_TEXT_WEAK);}
+    else if(print_boz_warning_weak) {printf("\n %s\n", BOZ_WARN_TEXT_WEAK);}
 
 
     return 0;

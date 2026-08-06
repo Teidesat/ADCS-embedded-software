@@ -9,10 +9,10 @@ namespace WMM {
 
 class TimedMagneticModel {
     public:
-        std::array<float, MagneticModel::numberOfCoefficients> mainFieldCoefficientsG = {}; /* C - Gauss coefficients of main geomagnetic model (nT) Index is (n * (n + 1) / 2 + m) */
-        std::array<float, MagneticModel::numberOfCoefficients> mainFieldCoefficientsH = {}; /* C - Gauss coefficients of main geomagnetic model (nT) */
-        std::array<float, MagneticModel::numberOfCoefficients> secularVarCoefficientsG = {}; /* CD - Gauss coefficients of secular geomagnetic model (nT/yr) */
-        std::array<float, MagneticModel::numberOfCoefficients> secularVarCoefficientsH = {}; /* CD - Gauss coefficients of secular geomagnetic model (nT/yr) */
+        std::array<float, MagneticModel::numberOfCoefficients> mainFieldCoefficientsG = {}; /* Gauss coefficients of main geomagnetic model (nT) */
+        std::array<float, MagneticModel::numberOfCoefficients> mainFieldCoefficientsH = {}; /* Gauss coefficients of main geomagnetic model (nT) */
+        std::array<float, MagneticModel::numberOfCoefficients> secularVarCoefficientsG = {}; /* Gauss coefficients of secular geomagnetic model (nT/yr) */
+        std::array<float, MagneticModel::numberOfCoefficients> secularVarCoefficientsH = {}; /* Gauss coefficients of secular geomagnetic model (nT/yr) */
         // int secularVariation = 0; // Whether or not the magnetic secular variation vector will be needed by program // to be removed
         float currentDecimalDate = 0;
         int currentDateYear = 0;
@@ -20,28 +20,22 @@ class TimedMagneticModel {
         int currentDateDay = 0;
 };
 
-class SphericalCoordinates {
-    public:    
-        float longitude = 0.0; //lambda
-        float geodetic = 0.0;//phig 
-        float radius = 0.0; //r  //distance from the center of the ellipsoid
-};
-
-    double lambda; /* longitude */
-    double phi; /* geodetic latitude */
-    double HeightAboveEllipsoid; /* height above the ellipsoid (HaE) */       // both values ar given by the GPS, geodetic and ellipsoid altitudes
-    double HeightAboveGeoid; /* (height above the EGM96 geoid model ) */
-    int UseGeoid;
-
 class GeodeticCoordinates {
     public:
         float longitude = 0.0; //lambda
-        float latitude = 0.0; //geodetic latitude // phi
+        float latitude = 0.0; // phi
         float HeightAboveEllipsoid = 0.0; //height above the ellipsoid (HaE)
         float HeightAboveGeoid = 0.0; //height above the EGM96 geoid model
 
         GeodeticCoordinates(const float newLatitude = 0.0, const float newLongitude = 0.0, const float newHeightAboveEllipsoid = 0.0, const float newHeightAboveGeoid = 0.0);
         // int UseGeoid = 0; // remove, use in corresponding function
+};
+
+class SphericalCoordinates {
+    public:    
+        float longitude = 0.0; //lambda
+        float latitude = 0.0; //phig 
+        float radius = 0.0; //r
 };
 
 class GeomagneticElements{

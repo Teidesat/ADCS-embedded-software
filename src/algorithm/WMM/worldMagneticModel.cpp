@@ -36,20 +36,18 @@ SphericalCoordinates WorldMagneticModel::convertGeodeticCordinatesToSphericalcoo
     float latitudeCosine, latitudeSine, rc, xp, zp;
     SphericalCoordinates sphericalCoordinates;
 
-    latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.phi));
-    latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.phi));
+    latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
+    latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
 
     rc = Ellipsoid::semiMajorAxis / sqrt(1.0 - Ellipsoid::firstEccentricitySquared * latitudeSine * latitudeSine);
     xp = (rc + geodeticCoordinates.HeightAboveEllipsoid) * latitudeCosine;
     zp = (rc * (1.0 - Ellipsoid::firstEccentricitySquared) + geodeticCoordinates.HeightAboveEllipsoid) * latitudeSine;
 
-    sphericalCoordinates.r = sqrt(xp * xp + zp * zp);
-    sphericalCoordinates.phig = EulerAngles::radiansToDegrees(asin(zp / CoordSpherical->r));
-    sphericalCoordinates.lambda = geodeticCoordinates.lambda; 
+    sphericalCoordinates.radius = sqrt(xp * xp + zp * zp);
+    sphericalCoordinates.latitude = EulerAngles::radiansToDegrees(asin(zp / sphericalCoordinates.radius));
+    sphericalCoordinates.longitude = geodeticCoordinates.longitude; 
 
-    return 1;
+    return sphericalCoordinates;
 }
-
-
 
 }
