@@ -63,6 +63,7 @@ void loop() {
     const Vector3d clampedGyroscopes(clampedGyroscopeX, clampedGyroscopeY, clampedGyroscopeZ);
     
     // calculate new position
+    // add to all functions checks for all the parameters are in the correct thresholds, if not, restart the system?
     attitudeAlgorithm.update(ins.getIMU().getAccelerometers(), 
                              clampedGyroscopes, 
                              ins.getIMU().getMagnetometers(), 

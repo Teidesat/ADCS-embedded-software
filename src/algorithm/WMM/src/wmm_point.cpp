@@ -1,10 +1,8 @@
 /*--------------------------------------------------------------------------*/
 
 #include <stdio.h>
-#include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <string>
 
 
 #include "../src/magcalc.hpp"
@@ -12,13 +10,6 @@
 #include "../src/GeomagInteractiveLib.hpp"
 /*---------------------------------------------------------------------------*/
 
-/* 
-WMM Point Calculation Program.
-
-The Geomagnetism Library is used to make a command prompt program. The program prompts
-the user to enter a location, performs the computations and prints the results to the
-standard output.
- */
 
 
 // BOZ: blackoutzone
@@ -48,9 +39,6 @@ int main() {
     MAGtype_Geoid Geoid;
     int print_boz_warning_strong = 0;
     int print_boz_warning_weak = 0;
-
-
-
     
     point_calc(Ellip, CoordGeodetic, &CoordSpherical, UserDate, MagneticModels, TimedMagneticModel, &GeoMagneticElements, &Errors);
     

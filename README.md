@@ -66,12 +66,6 @@ All the implementations are located in the `lib/algorithms` directory.
 └── test
 ```
 
-# Attitude Algorithm implementations
-
-To upload the one of the implementations into the arduino board, change the name of the sketches in the `src/` directory from `main-IMPLEMENTATION-NAME.txt` to `main.cpp`. Every other implementation should end in `.txt` as only one main file should exist.
-
-
-
 # Unit Tests
 
 run all tests. Use desktop environment to not depend on esp
@@ -83,3 +77,7 @@ run specific test suit
 ```sh
 pio test -e desktop -f test_attitudeDetermination
 ```
+
+# Notes
+
+All comments containing the interrogation character `?` mean that some modifications to the code are needed

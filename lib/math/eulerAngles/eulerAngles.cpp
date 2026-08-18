@@ -2,9 +2,7 @@
 
 #include "../quaternion/quaternion.hpp"
 
-#include <cmath>
-
-
+#include <math.h>
 
 EulerAngles::EulerAngles(const float newRoll, const float newPitch, const float newYaw): 
     roll(newRoll), 
@@ -17,7 +15,7 @@ float EulerAngles::getPitch() const {return pitch;}
 float EulerAngles::getYaw() const {return yaw;}
 
 float EulerAngles::radiansToDegrees(float radians) {
-    constexpr float radiansToDegreesConversionRate = 180.0 / M_PI;
+    constexpr float radiansToDegreesConversionRate = 180.0 / M_PI; // use M_PI?
     return radians * radiansToDegreesConversionRate;}
 
 EulerAngles EulerAngles::radiansToDegrees(EulerAngles attitude) {

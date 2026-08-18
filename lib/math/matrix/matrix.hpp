@@ -30,8 +30,8 @@ const float& Matrix<Rows, Columns>::at(const std::size_t row, const std::size_t 
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::multiply(const float scalar) const {
     Matrix<Rows, Columns> newMatrix;
-    for (std::size_t i = 0; i < Columns; ++i) {
-        for (std::size_t j = 0; j < Rows; ++j) {newMatrix.at(j, i) = at(j, i) * scalar;}
+    for(std::size_t i = 0; i < Columns; ++i) {
+        for(std::size_t j = 0; j < Rows; ++j) {newMatrix.at(j, i) = at(j, i) * scalar;}
     }
     return newMatrix;
 }
@@ -43,8 +43,8 @@ Matrix<Rows, Columns> Matrix<Rows, Columns>::operator*(const float scalar) const
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::add(const Matrix<Rows, Columns>& matrix) const {
     Matrix<Rows, Columns> newMatrix;
-    for (std::size_t i = 0; i < Columns; ++i) {
-        for (std::size_t j = 0; j < Rows; ++j) {newMatrix.at(j, i) = at(j, i) + matrix.at(j, i);}
+    for(std::size_t i = 0; i < Columns; ++i) {
+        for(std::size_t j = 0; j < Rows; ++j) {newMatrix.at(j, i) = at(j, i) + matrix.at(j, i);}
     }
     return newMatrix;
 }

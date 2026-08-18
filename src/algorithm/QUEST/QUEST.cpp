@@ -30,8 +30,8 @@ Matrix<3, 1> normalizeVector(const Matrix<3, 1>& inputVector) {
  */
 Matrix<3, 3> computeOuterProduct(const Matrix<3, 1>& bodyVector, const Matrix<3, 1>& referenceVector) {
     Matrix<3, 3> resultMatrix;
-    for (std::size_t row = 0; row < 3; ++row) {
-        for (std::size_t column = 0; column < 3; ++column) {
+    for(std::size_t row = 0; row < 3; ++row) {
+        for(std::size_t column = 0; column < 3; ++column) {
             resultMatrix.at(row, column) = bodyVector.at(row, 0) * referenceVector.at(column, 0);
         }
     }
@@ -84,8 +84,8 @@ Quaternion QUEST(const Vector3d accelerometerBody,
 
     // Construct the Davenport M matrix
     Matrix<3, 3> davenportM;
-    for (std::size_t i = 0; i < 3; ++i) {
-        for (std::size_t j = 0; j < 3; ++j) {
+    for(std::size_t i = 0; i < 3; ++i) {
+        for(std::size_t j = 0; j < 3; ++j) {
             const float sumSymmetric = profileMatrixB.at(i, j) + profileMatrixB.at(j, i);
             davenportM.at(i, j) = (i == j) ? (alphaFactor - sumSymmetric) : -sumSymmetric;
         }

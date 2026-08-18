@@ -7,9 +7,7 @@
 void help_info(MAGtype_MagneticModel *MagneticModel, char* short_name);
 
 void help_info(MAGtype_MagneticModel *MagneticModel, char* short_name){
-    printf("\n Help information ");
 
-    printf("\n The World Magnetic Model (WMM) for %d", (int) MagneticModel->epoch); 
 
     printf("\n is a model of Earth's main magnetic field. The %s", short_name);
     printf("\n is recomputed every five (5) years, in years divisible by ");
@@ -28,8 +26,6 @@ void help_info(MAGtype_MagneticModel *MagneticModel, char* short_name){
     printf("\n Variation are measured in units of degrees and are considered");
     printf("\n positive when east or north. Inclination is measured in units");
     printf("\n of degrees and is considered positive when pointing down (into");
-    printf("\n the Earth). The %s is referenced to the WGS-84 ellipsoid and", short_name);
-    printf("\n is valid for 5 years after the base epoch. Uncertainties for the");
     printf("\n %s are one standard deviation uncertainties averaged over the globe.", short_name);
     printf("\n We represent the uncertainty as constant values in Incl, F, H, X,");
     printf("\n Y, and Z. Uncertainty in Declination varies depending on the strength");

@@ -35,7 +35,7 @@ float Quaternion::dotProduct(const Quaternion& quaternion) const {
 
 bool Quaternion::equal(const Quaternion& quaternion) const {
     const float dotProductValue = dotProduct(quaternion);
-    if(1.0f - std::abs(dotProductValue) <= std::numeric_limits<float>::epsilon()) {return true;}
+    if(1.0f - std::abs(dotProductValue) <= std::numeric_limits<float>::epsilon()) {return true;} // maybe use epsilon as threshold in the code?
 
     return false;
 }
@@ -52,7 +52,7 @@ Quaternion Quaternion::slerp(const Quaternion& quaternion, const float time) con
         shortestPathQuaternion = Quaternion(-quaternion.w, -quaternion.x, -quaternion.y, -quaternion.z);
     }
 
-    const float SLERP_THRESHOLD = 0.9995;
+    const float SLERP_THRESHOLD = 0.9995; // good value for comparison?
     float newW, newX, newY, newZ;
 
     if (dotProductValue > SLERP_THRESHOLD) {
@@ -124,7 +124,7 @@ EulerAngles Quaternion::toEulerAngles() const {
 
     const float pitchSine = 2.0 * (w * y - z * x);
 
-    if (std::fabs(pitchSine) >= 0.999999) {
+    if (std::fabs(pitchSine) >= 0.999999) {   // move to constant, and maybe reused and maybe 1 is better?
         pitch = std::copysign(M_PI / 2.0, pitchSine);
         roll = std::atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x * x + y * y));
     } 
