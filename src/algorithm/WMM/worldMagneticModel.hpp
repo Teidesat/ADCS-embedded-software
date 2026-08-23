@@ -40,7 +40,7 @@ class TimedMagneticModel {
 // convert into template with numberOfterms as T?
 class SphericalHarmonicVariables {
     public:
-        std::array<float, StaticMagneticModel::numberOfTerms + 1> relativeRadiusPower;
+        std::array<float, StaticMagneticModel::numberOfTerms + 1> relativeRadiusPower; // is it nmax or numberofterms, and +1 should be added?
         std::array<float, StaticMagneticModel::numberOfTerms + 1> cosMlambda;
         std::array<float, StaticMagneticModel::numberOfTerms + 1> sinMlambda;
 };
@@ -68,15 +68,6 @@ class GeomagneticElements {
         float X; // Northern component of the magnetic field vector
         float Y; // Eastern component of the magnetic field vector
         float Z; // Downward component of the magnetic field vector
-        float GV; // The Grid Variation
-        float Decldot; // Yearly Rate of change in declination
-        float Incldot; // Yearly Rate of change in inclination
-        float Fdot; // Yearly rate of change in Magnetic field strength
-        float Hdot; // Yearly rate of change in horizontal field strength
-        float Xdot; // Yearly rate of change in the northern component
-        float Ydot; // Yearly rate of change in the eastern component
-        float Zdot; // Yearly rate of change in the downward component
-        float GVdot; // Yearly rate of change in grid variation
 };
 
 class WorldMagneticModel {
@@ -96,18 +87,12 @@ class WorldMagneticModel {
         static MagneticResults summation(const LegendreFunction& legendreFunction, 
                                          const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, 
                                          const SphericalCoordinates& sphericalCoordinates);
-
-        // summationSpecial is the same as secVarSummationSpecial, can they be combined, the same for sumation and SecVarSummation?
-        static float secVarSummationSpecial(const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, const SphericalCoordinates& sphericalCoordinates);
-        static MagneticResults SecVarSummation(const LegendreFunction& legendreFunction,
-                                               const SphericalHarmonicVariables& spericalHarmonicVariables,
-                                               const SphericalCoordinates& sphericalCoordinates);
         
         static MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, 
                                                     const GeodeticCoordinates& geodeticCoordinates, 
                                                     const MagneticResults& magneticResultsInput);
 
-        static GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo, const MagneticResults& magneticResultsGeoVar);
+        static GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo);
 
         static GeomagneticElements calculateGeomagneticError(const double H);
 
