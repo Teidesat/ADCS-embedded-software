@@ -70,38 +70,28 @@ class GeomagneticElements {
         float Z; // Downward component of the magnetic field vector
 };
 
-class WorldMagneticModel {
-    private:
-        static SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates);
-        static float dateToYears(const int year, const int month, const int day, const float epoch);
-        static TimedMagneticModel timelyModifyCoefficients(const int year, const int month, const int day);
+
+    
+SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates);
+float dateToYears(const int year, const int month, const int day, const float epoch);
+TimedMagneticModel timelyModifyCoefficients(const int year, const int month, const int day);
         
-        static SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical);
+SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical);
         
-        static LegendreFunction WorldMagneticModel::computePcupLow(const float sineOfLatitude);
-        static LegendreFunction WorldMagneticModel::computePcupHigh(const float sineOfLatitude);
-        static LegendreFunction computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates);
+LegendreFunction computePcupLow(const float sineOfLatitude);
+LegendreFunction computePcupHigh(const float sineOfLatitude);
+LegendreFunction computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates);
 
-        static float summationSpecial(const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, 
-                                        const SphericalCoordinates& sphericalCoordinates);
-        static MagneticResults summation(const LegendreFunction& legendreFunction, 
-                                         const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, 
-                                         const SphericalCoordinates& sphericalCoordinates);
+float summationSpecial(const TimedMagneticModel& timedMagneticModel, const SphericalHarmonicVariables& spericalHarmonicVariables, const SphericalCoordinates& sphericalCoordinates);
+MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const LegendreFunction& legendreFunction, const SphericalHarmonicVariables& spericalHarmonicVariables, const SphericalCoordinates& sphericalCoordinates);
         
-        static MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, 
-                                                    const GeodeticCoordinates& geodeticCoordinates, 
-                                                    const MagneticResults& magneticResultsInput);
+MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput);
+GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo);
 
-        static GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo);
+GeomagneticElements calculateGeomagneticError(const double H);
 
-        static GeomagneticElements calculateGeomagneticError(const double H);
+GeomagneticElements calculateGeomagneticResults(const TimedMagneticModel& timedMagneticModel, const SphericalCoordinates& CoordSpherical, const GeodeticCoordinates& CoordGeodetic);
 
-        static GeomagneticElements calculateGeomagneticResults(const SphericalCoordinates& CoordSpherical,
-                                                               const GeodeticCoordinates& CoordGeodetic);
-
-    public:
-        static Vector3d calculatePointMagneticField(const float latitude,const float longitude,const float altitude,const int year,const int month,const int day);
-
-};
+Vector3d calculatePointMagneticField(const float latitude, const float longitude,const float altitude,const int year,const int month,const int day);
 
 }

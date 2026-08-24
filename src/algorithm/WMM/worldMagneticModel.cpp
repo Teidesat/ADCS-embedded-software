@@ -14,7 +14,7 @@ GeodeticCoordinates::GeodeticCoordinates(const float newLatitude, const float ne
     HeightAboveGeoid(newHeightAboveGeoid)
 {}
 
-SphericalCoordinates WorldMagneticModel::convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates) {
+SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates) {
     const float latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
     const float latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
     const float rc = Ellipsoid::semiMajorAxis / sqrt(1.0 - Ellipsoid::firstEccentricitySquared * latitudeSine * latitudeSine);
@@ -29,7 +29,7 @@ SphericalCoordinates WorldMagneticModel::convertGeodeticCoordinatesToSphericalco
     return sphericalCoordinates;
 }
 
-float WorldMagneticModel::dateToYears(const int year, const int month, const int day, const float epoch) {  //check that month day and year are valid?
+float dateToYears(const int year, const int month, const int day, const float epoch) {  //check that month day and year are valid?
     float extraDay = 0;
     if((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {extraDay = 1;}
 
@@ -47,7 +47,7 @@ float WorldMagneticModel::dateToYears(const int year, const int month, const int
     return decimalDate;
 }
 
-TimedMagneticModel WorldMagneticModel::timelyModifyCoefficients(const int year, const int month, const int day) {
+TimedMagneticModel timelyModifyCoefficients(const int year, const int month, const int day) {
     TimedMagneticModel timedMagneticModel;
     timedMagneticModel.year = year;
     timedMagneticModel.month = month;
@@ -74,7 +74,7 @@ TimedMagneticModel WorldMagneticModel::timelyModifyCoefficients(const int year, 
     return timedMagneticModel;
 }
 
-SphericalHarmonicVariables WorldMagneticModel::computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical) {
+SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical) {
     SphericalHarmonicVariables sphericalHarmonicVariables;
     const float radiusRatio = Ellipsoid::meanRadius / CoordSpherical.radius;
     sphericalHarmonicVariables.relativeRadiusPower[0] = (Ellipsoid::meanRadius / CoordSpherical.radius) * (Ellipsoid::meanRadius / CoordSpherical.radius);
@@ -100,7 +100,7 @@ SphericalHarmonicVariables WorldMagneticModel::computeSphericalHarmonicVariables
     return sphericalHarmonicVariables;
 }
 
-LegendreFunction WorldMagneticModel::computePcupLow(const float sineOfLatitude) {
+LegendreFunction computePcupLow(const float sineOfLatitude) {
     // Compute the Gauss-normalized associated Legendre functions
     const float cosineOfLatitude = sqrt((1.0 - sineOfLatitude) * (1.0 + sineOfLatitude));
     LegendreFunction legendreFunction;
@@ -181,7 +181,7 @@ LegendreFunction WorldMagneticModel::computePcupLow(const float sineOfLatitude) 
 
   The derivatives can't be computed for latitude = |90| degrees.
  */
-LegendreFunction WorldMagneticModel::computePcupHigh(const float sineOfLatitude) {
+LegendreFunction computePcupHigh(const float sineOfLatitude) {
     const float cosineOfLatitude = sqrt((1.0 - sineOfLatitude) * (1.0 + sineOfLatitude));
 
     // return empty object if any of these conditions are met?
@@ -276,7 +276,7 @@ LegendreFunction WorldMagneticModel::computePcupHigh(const float sineOfLatitude)
 /* This function evaluates all of the Schmidt-semi normalized associated Legendre. Note: In geomagnetism, the derivatives of 
     ALF are usually found with respect to the colatitudes. Here the derivatives are found with respect to the latitude. 
     The difference is a sign reversal for the derivative of the Associated Legendre Functions.*/
-LegendreFunction WorldMagneticModel::computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates) {
+LegendreFunction computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates) {
     const float threshold = 1.0e-10; // used in other places already, store it in file for constants threshold?
     LegendreFunction legendre;
     float sineOfLatitude = sin(EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
@@ -286,7 +286,7 @@ LegendreFunction WorldMagneticModel::computedAssociatedLegendreFunction(const Sp
     return legendre;
 }
 
-float summationSpecial(const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, const SphericalCoordinates& sphericalCoordinates) {
+float summationSpecial(const TimedMagneticModel& timedMagneticModel, const SphericalHarmonicVariables& spericalHarmonicVariables, const SphericalCoordinates& sphericalCoordinates) {
     std::array<float, StaticMagneticModel::numberOfTerms + 1> PcupS = {};
     PcupS[0] = 1;
     float schmidtQuasiNorm1 = 1.0;
@@ -314,20 +314,20 @@ float summationSpecial(const SphericalHarmonicVariables& spericalHarmonicVariabl
                            n=1             m=0   n            n           n  */
         /* Equation 11 in the WMM Technical report. Derivative with respect to longitude, divided by radius. */
         const int index = (i * (i + 1) / 2 + 1);
-        magneticResultBy += spericalHarmonicVariablesphVariables.relativeRadiusPower[i] *
-                (StaticMagneticModel::mainFieldCoefficientsG[index] * spericalHarmonicVariablesphVariables.sinMlambda[1] -
-                StaticMagneticModel::mainFieldCoefficientsH[index] * spericalHarmonicVariablesphVariables.cosMlambda[1])
+        magneticResultBy += spericalHarmonicVariables.relativeRadiusPower[i] *
+                (timedMagneticModel.mainFieldCoefficientsG[index] * spericalHarmonicVariables.sinMlambda[1] -
+                timedMagneticModel.mainFieldCoefficientsH[index] * spericalHarmonicVariables.cosMlambda[1])
                 * PcupS[i] * schmidtQuasiNorm3;
     }
 
     return magneticResultBy;
 }
 
-MagneticResults WorldMagneticModel::summation(const LegendreFunction& legendreFunction, 
-                                              const SphericalHarmonicVariables& spericalHarmonicVariablesphVariables, 
+MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const LegendreFunction& legendreFunction, 
+                                              const SphericalHarmonicVariables& spericalHarmonicVariables, 
                                               const SphericalCoordinates& sphericalCoordinates) {
     /* Computes Geomagnetic Field Elements X, Y and Z in Spherical coordinate system using
-    spherical harmonic summation.
+    spherical harmonic sumation.
 
 
     The vector Magnetic field is given by -grad V, where V is Geomagnetic scalar potential
@@ -353,27 +353,27 @@ MagneticResults WorldMagneticModel::summation(const LegendreFunction& legendreFu
                     Bz =   -SUM (a/r)   (n+1) SUM  [g cos(m p) + h sin(m p)] P (sin(phi))
                                     n=1      	      m=0   n            n           n  */
             /* Equation 12 in the WMM Technical report.  Derivative with respect to radius.*/
-            magneticResults.Bz -= spericalHarmonicVariablesphVariables.relativeRadiusPower[n] *
-                    (StaticMagneticModel::mainFieldCoefficientsG[index] * spericalHarmonicVariablesphVariables.cosMlambda[m] +
-                    StaticMagneticModel::mainFieldCoefficientsH[index] * spericalHarmonicVariablesphVariables.sinMlambda[m])
+            magneticResults.Bz -= spericalHarmonicVariables.relativeRadiusPower[n] *
+                    (timedMagneticModel.mainFieldCoefficientsG[index] * spericalHarmonicVariables.cosMlambda[m] +   // using timeMagneticModel?
+                    timedMagneticModel.mainFieldCoefficientsH[index] * spericalHarmonicVariables.sinMlambda[m])
                     * (double) (n + 1) * legendreFunction.Pcup[index];
 
             /*		  1 nMax  (n+2)    n     m            m           m
                     By =    SUM (a/r) (m)  SUM  [g cos(m p) + h sin(m p)] dP (sin(phi))
                                n=1             m=0   n            n           n  */
             /* Equation 11 in the WMM Technical report. Derivative with respect to longitude, divided by radius. */
-            magneticResults.By += spericalHarmonicVariablesphVariables.relativeRadiusPower[n] *
-                    (StaticMagneticModel::mainFieldCoefficientsG[index] * spericalHarmonicVariablesphVariables.sinMlambda[m] -
-                    StaticMagneticModel::mainFieldCoefficientsH[index] * spericalHarmonicVariablesphVariables.cosMlambda[m])
+            magneticResults.By += spericalHarmonicVariables.relativeRadiusPower[n] *
+                    (timedMagneticModel.mainFieldCoefficientsG[index] * spericalHarmonicVariables.sinMlambda[m] -
+                    timedMagneticModel.mainFieldCoefficientsH[index] * spericalHarmonicVariables.cosMlambda[m])
                     * (double) (m) * legendreFunction.Pcup[index];
             /*		   nMax  (n+2) n     m            m           m
                     Bx = - SUM (a/r)   SUM  [g cos(m p) + h sin(m p)] dP (sin(phi))
                                n=1         m=0   n            n           n  */
             /* Equation 10  in the WMM Technical report. Derivative with respect to latitude, divided by radius. */
 
-            magneticResults.Bx -= spericalHarmonicVariablesphVariables.relativeRadiusPower[n] *
-                    (StaticMagneticModel::mainFieldCoefficientsG[index] * spericalHarmonicVariablesphVariables.cosMlambda[m] +
-                    StaticMagneticModel::mainFieldCoefficientsH[index] * spericalHarmonicVariablesphVariables.sinMlambda[m]) // no cosMlambda and sinLambda correctly used?
+            magneticResults.Bx -= spericalHarmonicVariables.relativeRadiusPower[n] *
+                    (timedMagneticModel.mainFieldCoefficientsG[index] * spericalHarmonicVariables.cosMlambda[m] +
+                    timedMagneticModel.mainFieldCoefficientsH[index] * spericalHarmonicVariables.sinMlambda[m]) // no cosMlambda and sinLambda correctly used?
                     * legendreFunction.derivedPcup[index];
 
         }
@@ -388,12 +388,12 @@ MagneticResults WorldMagneticModel::summation(const LegendreFunction& legendreFu
      * MAG_CheckGeographicPoles.
      */
     if(fabs(cos_phi) > threshold) {magneticResults.By = magneticResults.By / cos_phi;} 
-    else{magneticResults.By = summationSpecial(spericalHarmonicVariablesphVariables, sphericalCoordinates);}
+    else{magneticResults.By = summationSpecial(timedMagneticModel, spericalHarmonicVariables, sphericalCoordinates);}
     
     return magneticResults;
 }
 
-MagneticResults WorldMagneticModel::rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput) { // magneticResultsInput, look for a better name?
+MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput) { // magneticResultsInput, look for a better name?
     const float Psi = (M_PI / 180) * (sphericalCoordinates.latitude - geodeticCoordinates.latitude); // Difference between the spherical and Geodetic latitudes, is it the conversion below?
     // const float phi EulerAngles::degreesToRadians(sphericalCoordinates.phig - geodeticCoordinates.phi); 
 
@@ -406,7 +406,7 @@ MagneticResults WorldMagneticModel::rotateMagneticVector(const SphericalCoordina
     return magneticResultsGeo;
 }
 
-GeomagneticElements WorldMagneticModel::calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo) {
+GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo) {
     GeomagneticElements geomagneticElements;
     
     geomagneticElements.X = magneticResultsGeo.Bx;
@@ -421,20 +421,21 @@ GeomagneticElements WorldMagneticModel::calculateGeoMagneticElements(const Magne
     return geomagneticElements;
 }
 
-GeomagneticElements WorldMagneticModel::calculateGeomagneticResults(const SphericalCoordinates& sphericalCoordinates, 
+GeomagneticElements calculateGeomagneticResults(const TimedMagneticModel& timedMagneticModel,
+                                                                    const SphericalCoordinates& sphericalCoordinates, 
                                                                     const GeodeticCoordinates& geodeticCoordinates) {
     SphericalHarmonicVariables spericalHarmonicVariables = computeSphericalHarmonicVariables(sphericalCoordinates);
     LegendreFunction legendreFunction = computedAssociatedLegendreFunction(sphericalCoordinates);
     
     //do if(legendre.attribute != 0 && spericalHarmonicVariables.attribute != 0 && ... to check that everything is alright)?
-    const MagneticResults magneticResultsSph = summation(legendreFunction, spericalHarmonicVariables, sphericalCoordinates); // Accumulate the spherical harmonic coefficients
+    const MagneticResults magneticResultsSph = summation(timedMagneticModel, legendreFunction, spericalHarmonicVariables, sphericalCoordinates); // Accumulate the spherical harmonic coefficients
     const MagneticResults magneticResultsGeo = rotateMagneticVector(sphericalCoordinates, geodeticCoordinates, magneticResultsSph); // Map the computed Magnetic fields to Geodeitic coordinates
     GeomagneticElements geomagneticElements = calculateGeoMagneticElements(magneticResultsGeo);
 
     return geomagneticElements;
 }
 
-GeomagneticElements WorldMagneticModel::calculateGeomagneticError(const double H) {
+GeomagneticElements calculateGeomagneticError(const double H) {
     const float WMM_UNCERTAINTY_F =  138;
     const float WMM_UNCERTAINTY_H =  133;
     const float WMM_UNCERTAINTY_X =  137;
@@ -459,11 +460,11 @@ GeomagneticElements WorldMagneticModel::calculateGeomagneticError(const double H
 }
 
 // translating point_calc
-Vector3d WorldMagneticModel::calculatePointMagneticField(const float latitude, const float longitude, const float altitude, const int year, const int month, const int day) {
+Vector3d calculatePointMagneticField(const float latitude, const float longitude, const float altitude, const int year, const int month, const int day) {
     const GeodeticCoordinates geodeticCoordinates(latitude, longitude, altitude);
     const SphericalCoordinates sphericalCoordinates = convertGeodeticCoordinatesToSphericalcoordinates(geodeticCoordinates);
     const TimedMagneticModel timedMagneticModel = timelyModifyCoefficients(year, month, day); // timed magnetic model not needed?
-    GeomagneticElements geomagneticElements = calculateGeomagneticResults(sphericalCoordinates, geodeticCoordinates);
+    GeomagneticElements geomagneticElements = calculateGeomagneticResults(timedMagneticModel, sphericalCoordinates, geodeticCoordinates);
 
     GeomagneticElements geomagneticElementsErrors = calculateGeomagneticError(geomagneticElements.H);
 
