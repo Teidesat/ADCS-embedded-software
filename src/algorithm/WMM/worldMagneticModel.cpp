@@ -459,7 +459,63 @@ GeomagneticElements calculateGeomagneticError(const double H) {
     return geomagneticElementsUncertainty;
 }
 
-// translating point_calc
+
+/*
+// print results?
+int MAG_Warnings(int control, double value, MAGtype_MagneticModel *MagneticModel) {
+    switch(control) {
+        case 1:// Horizontal Field strength low 
+            printf("\nCaution: location is approaching the blackout zone around the magnetic pole. Compass accuracy may be degraded in this region");
+            break;
+        case 2:// Horizontal Field strength very low 
+            printf("\nWarning: location is in the blackout zone around the magnetic pole. Compass accuracy is highly degraded in this region.");
+            break;
+        case 3:// Elevation outside the recommended range 
+            printf("\nWarning: The value you have entered of %.1f km for the elevation is outside of the recommended range.\n Elevations above -10.0 km are recommended for accurate results. \n", value);
+            break;
+        case 4:// Date outside the recommended range
+            printf("\nWARNING - TIME EXTENDS BEYOND INTENDED USAGE RANGE\n CONTACT NCEI FOR PRODUCT UPDATES:\n");
+            printf("\n VALID RANGE  = %d - %d\n", (int) MagneticModel->min_year, (int) MagneticModel->CoefficientFileEndDate);
+            printf(" TIME   = %f\n", value);
+            break;
+		case 5:// Elevation outside the allowable range
+		    printf("\nError: The value you have entered of %f km for the elevation is outside of the recommended range.\n Elevations above -10.0 km are recommended for accurate results. \n", value);
+            break;
+    }
+    return 2;
+}
+
+void MAG_PrintUserDataWithUncertainty(MAGtype_GeoMagneticElements GeomagElements,
+                                    MAGtype_GeoMagneticElements Errors,
+                                    MAGtype_CoordGeodetic SpaceInput,
+                                    MAGtype_Date TimeInput,
+                                    MAGtype_MagneticModel *timedMagneticModel,
+                                    MAGtype_Geoid *Geoid) {
+
+    if(GeomagElements.H < 6000 && GeomagElements.H > 2000) {MAG_Warnings(1, GeomagElements.H, timedMagneticModel);}
+    if(GeomagElements.H < 2000) {MAG_Warnings(2, GeomagElements.H, timedMagneticModel);}
+
+    if(SpaceInput.phi < 0) {printf("Latitude	%.2fS\n", -SpaceInput.phi);}
+    else {printf("Latitude	%.2fN\n", SpaceInput.phi);}
+    if(SpaceInput.lambda < 0) {printf("Longitude	%.2fW\n", -SpaceInput.lambda);}
+    else {printf("Longitude	%.2fE\n", SpaceInput.lambda);}
+    if(Geoid->UseGeoid == 1) {printf("Altitude:	%.2f Kilometers above mean sea level\n", SpaceInput.HeightAboveGeoid);}
+    else {printf("Altitude:	%.2f Kilometers above the WGS-84 ellipsoid\n", SpaceInput.HeightAboveEllipsoid);}
+
+    printf("Date:		%.1f\n", TimeInput.DecimalYear);
+    printf("\n	Main Field\n");
+    printf("F	=	%-9.1f +/-%5.1f nT\n", GeomagElements.F, Errors.F);
+    printf("H	=	%-9.1f +/-%5.1f nT\n", GeomagElements.H, Errors.H);
+    printf("X	=	%-9.1f +/-%5.1f nT\n", GeomagElements.X, Errors.X);
+    printf("Y	=	%-9.1f +/-%5.1f nT\n", GeomagElements.Y, Errors.Y);
+    printf("Z	=	%-9.1f +/-%5.1f nT\n", GeomagElements.Z, Errors.Z);
+    if(GeomagElements.Decl < 0) {printf("Decl	=%20s  (WEST)+/-%4f\n", DeclString, 60 * Errors.Decl);}
+    else {printf("Decl	=%20s  (EAST)+/-%4f\n", DeclString, 60 * Errors.Decl);}
+    if(GeomagElements.Incl < 0) {printf("Incl	=%20s  (UP)+/-%4f\n", InclString, 60 * Errors.Incl);}
+    else {printf("Incl	=%20s  (DOWN)+/-%4f\n", InclString, 60 * Errors.Incl);}
+}
+*/
+
 Vector3d calculatePointMagneticField(const float latitude, const float longitude, const float altitude, const int year, const int month, const int day) {
     const GeodeticCoordinates geodeticCoordinates(latitude, longitude, altitude);
     const SphericalCoordinates sphericalCoordinates = convertGeodeticCoordinatesToSphericalcoordinates(geodeticCoordinates);
@@ -467,6 +523,18 @@ Vector3d calculatePointMagneticField(const float latitude, const float longitude
     GeomagneticElements geomagneticElements = calculateGeomagneticResults(timedMagneticModel, sphericalCoordinates, geodeticCoordinates);
 
     GeomagneticElements geomagneticElementsErrors = calculateGeomagneticError(geomagneticElements.H);
+
+    // print results?
+    //MAG_PrintUserDataWithUncertainty(GeoMagneticElements, Errors, CoordGeodetic, UserDate, TimedMagneticModel, &Geoid); /* Print the results */
+    // BOZ: blackoutzone https://www.ngdc.noaa.gov/geomag/WMM/data/MIL-PRF-89500B.pdf
+    //const char* BOZ_WARN_TEXT_STRONG = "Warning: some calculated locations are in the blackout zone around the magnetic pole. Compass accuracy is highly degraded in this region";
+    //const char* BOZ_WARN_TEXT_WEAK = "Caution: some calculated locations approach the blackout zone around the magnetic pole. Compass accuracy may be degraded in this region";
+    //const char* WMM_MileSpec_WARN = "Warning: WMM will not meet MilSpec at this altitude https://www.ncei.noaa.gov/products/world-magnetic-model/accuracy-limitations-error-model";
+    //const char* WMM_MileSpec_INFO = "Warning: The height validity of the geomagnetic components is dependent on the geomagnetic activity level https://www.ncei.noaa.gov/products/world-magnetic-model/accuracy-limitations-error-model";
+    //if(CoordGeodetic.HeightAboveEllipsoid < -1 || CoordGeodetic.HeightAboveEllipsoid > 1900) {printf("%s\n", WMM_MileSpec_WARN);}
+    //else {printf(WMM_MileSpec_INFO);} 
+    //if(GeoMagneticElements.H <= 2000.0) {printf(BOZ_WARN_TEXT_STRONG);} 
+    //else if(GeoMagneticElements.H <= 6000.0) {printf(BOZ_WARN_TEXT_WEAK);}
 
     return Vector3d(0, 0, 0);
 }
