@@ -15,10 +15,10 @@ class EulerAngles {
         float getPitch() const;
         float getYaw() const;
         
-        static constexpr float radiansToDegrees(float radians);
-        static constexpr EulerAngles radiansToDegrees(EulerAngles attitude);
-        static constexpr float degreesToRadians(float degrees);
-        static constexpr EulerAngles degreesToRadians(EulerAngles attitude);
+        static float radiansToDegrees(float radians);
+        EulerAngles radiansToDegrees() const;
+        static float degreesToRadians(float degrees);
+        EulerAngles degreesToRadians() const;
 
         Quaternion toQuaternion() const;
 };

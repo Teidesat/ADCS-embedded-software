@@ -495,6 +495,8 @@ void MAG_PrintUserDataWithUncertainty(MAGtype_GeoMagneticElements GeomagElements
     if(GeomagElements.H < 6000 && GeomagElements.H > 2000) {MAG_Warnings(1, GeomagElements.H, timedMagneticModel);}
     if(GeomagElements.H < 2000) {MAG_Warnings(2, GeomagElements.H, timedMagneticModel);}
 
+    // if(magneticField from magneometers too high) {"warning("you are in a solar storm, magnetic model might not be accurate")"})
+
     if(SpaceInput.phi < 0) {printf("Latitude	%.2fS\n", -SpaceInput.phi);}
     else {printf("Latitude	%.2fN\n", SpaceInput.phi);}
     if(SpaceInput.lambda < 0) {printf("Longitude	%.2fW\n", -SpaceInput.lambda);}

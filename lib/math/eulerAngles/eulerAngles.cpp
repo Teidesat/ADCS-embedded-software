@@ -16,14 +16,15 @@ float EulerAngles::getYaw() const {return yaw;}
 
 float EulerAngles::radiansToDegrees(float radians) {
     constexpr float radiansToDegreesConversionRate = 180.0 / M_PI; // use M_PI?
-    return radians * radiansToDegreesConversionRate;}
+    return radians * radiansToDegreesConversionRate;
+}
 
-EulerAngles EulerAngles::radiansToDegrees(EulerAngles attitude) {
-    const float newRoll = radiansToDegrees(attitude.getRoll());
-    const float newPitch = radiansToDegrees(attitude.getPitch());
-    const float newYaw = radiansToDegrees(attitude.getYaw());
+EulerAngles EulerAngles::radiansToDegrees() const {
+    const float rollInDegrees = radiansToDegrees(roll);
+    const float pitchInDegrees = radiansToDegrees(pitch);
+    const float yawIndegrees = radiansToDegrees(yaw);
 
-    return EulerAngles(newRoll, newPitch, newYaw);
+    return EulerAngles(rollInDegrees, pitchInDegrees, yawIndegrees);
 }
 
 float EulerAngles::degreesToRadians(float degrees) {
@@ -31,12 +32,12 @@ float EulerAngles::degreesToRadians(float degrees) {
     return degrees * degreesToRadiansConversionRate;
 }
 
-EulerAngles EulerAngles::degreesToRadians(EulerAngles attitude) {
-    const float newRoll = degreesToRadians(attitude.getRoll());
-    const float newPitch = degreesToRadians(attitude.getPitch());
-    const float newYaw = degreesToRadians(attitude.getYaw());
+EulerAngles EulerAngles::degreesToRadians() const {
+    const float rollInRadians = degreesToRadians(roll);
+    const float pitchInRadians = degreesToRadians(pitch);
+    const float yawInRadians = degreesToRadians(yaw);
 
-    return EulerAngles(newRoll, newPitch, newYaw);
+    return EulerAngles(rollInRadians, pitchInRadians, yawInRadians);
 }
 
 Quaternion EulerAngles::toQuaternion() const {

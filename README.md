@@ -31,7 +31,7 @@ Due to the high cost of sun sensors, light sensors will be used for the prototyp
 
 Using an `Espressif ESP32-WROOM-32` microcontroller as the board computer. The `I2C` protocol is used for the comunication between the microcontroller and both the IMU module and the light sensor. For the GNSS module, the `UART` protocol is used.
 
-![circuit image](./img/adcs-dummy-circuit.jpg)
+![circuit image](./img/adcs-dummy-board.jpg)
 
 Pin Conections:
 

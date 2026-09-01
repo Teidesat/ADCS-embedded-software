@@ -1,5 +1,7 @@
 #include "toJson.hpp"
 
+namespace ADCS {
+
 std::string microcontrollerToJson(const Microcontroller& microcontroller) {
     std::string json = "{";
     json += "\"deltaTime\":" + std::to_string(microcontroller.getDeltaTime()) + ",";
@@ -66,15 +68,6 @@ std::string quaternionToJson(const Quaternion& quaternion) {
     return json;
 }
 
-std::string AttitudeToJson(const ADCS::AttitudeAlgorithm& attitudeAlgorithm)  {
-    std::string json = "{";
-    json += "\"eulerAngles\":" + eulerAnglesToJson(attitudeAlgorithm.getAttitude().toEulerAngles()) + ",";
-    json += "\"quaternion\":" + quaternionToJson(attitudeAlgorithm.getAttitude());
-    json += "}";
-
-    return json;
-}
-
 std::string combineJsons(const std::string& json1, const std::string& json2) {
     std::string json = "{";
     json += json1.substr(1, json1.size() - 2) + ",";
@@ -82,4 +75,6 @@ std::string combineJsons(const std::string& json1, const std::string& json2) {
     json += "}";
 
     return json;
+}
+
 }
