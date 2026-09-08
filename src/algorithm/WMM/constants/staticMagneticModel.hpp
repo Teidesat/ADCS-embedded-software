@@ -13,7 +13,7 @@ class StaticMagneticModel {
         static const int publishYear = 2024;
         static const int publishMonth = 11;
         static const int publishDay = 13;
-        static const int nMax = 12;
+        static constexpr int nMax = 12;
         static constexpr int numberOfTerms = ((nMax + 1) * (nMax + 2)) / 2;
 
         static constexpr std::array<float, numberOfTerms> mainFieldCoefficientsG = {0.0,

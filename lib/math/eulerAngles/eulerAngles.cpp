@@ -14,8 +14,8 @@ float EulerAngles::getRoll() const {return roll;}
 float EulerAngles::getPitch() const {return pitch;}
 float EulerAngles::getYaw() const {return yaw;}
 
-float EulerAngles::radiansToDegrees(float radians) {
-    constexpr float radiansToDegreesConversionRate = 180.0 / M_PI; // use M_PI?
+float EulerAngles::radiansToDegrees(const float radians) {
+    constexpr float radiansToDegreesConversionRate = 180.0 / M_PI; // use M_PI or other?
     return radians * radiansToDegreesConversionRate;
 }
 
@@ -27,7 +27,7 @@ EulerAngles EulerAngles::radiansToDegrees() const {
     return EulerAngles(rollInDegrees, pitchInDegrees, yawIndegrees);
 }
 
-float EulerAngles::degreesToRadians(float degrees) {
+float EulerAngles::degreesToRadians(const float degrees) {
     constexpr float degreesToRadiansConversionRate = M_PI / 180.0;
     return degrees * degreesToRadiansConversionRate;
 }

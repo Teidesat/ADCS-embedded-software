@@ -92,6 +92,6 @@ GeomagneticElements calculateGeomagneticError(const double H);
 
 GeomagneticElements calculateGeomagneticResults(const TimedMagneticModel& timedMagneticModel, const SphericalCoordinates& CoordSpherical, const GeodeticCoordinates& CoordGeodetic);
 
-Vector3d calculatePointMagneticField(const float latitude, const float longitude,const float altitude,const int year,const int month,const int day);
+GeomagneticElements calculatePointMagneticField(const float latitude, const float longitude,const float altitude,const int year,const int month,const int day);
 
 }

@@ -526,7 +526,7 @@ Vector3d calculatePointMagneticField(const float latitude, const float longitude
 
     GeomagneticElements geomagneticElementsErrors = calculateGeomagneticError(geomagneticElements.H);
 
-    // print results?
+    // add warnings to the object?
     //MAG_PrintUserDataWithUncertainty(GeoMagneticElements, Errors, CoordGeodetic, UserDate, TimedMagneticModel, &Geoid); /* Print the results */
     // BOZ: blackoutzone https://www.ngdc.noaa.gov/geomag/WMM/data/MIL-PRF-89500B.pdf
     //const char* BOZ_WARN_TEXT_STRONG = "Warning: some calculated locations are in the blackout zone around the magnetic pole. Compass accuracy is highly degraded in this region";
@@ -538,7 +538,7 @@ Vector3d calculatePointMagneticField(const float latitude, const float longitude
     //if(GeoMagneticElements.H <= 2000.0) {printf(BOZ_WARN_TEXT_STRONG);} 
     //else if(GeoMagneticElements.H <= 6000.0) {printf(BOZ_WARN_TEXT_WEAK);}
 
-    return Vector3d(0, 0, 0);
+    return geomagneticElements;
 }
 
 }
