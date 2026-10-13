@@ -34,7 +34,7 @@ void INS::update() {
 }
 
 Microcontroller INS::getMicrocontroller() const {return Microcontroller(microcontroller.getDeltaTime(), microcontroller.getTemperature());}
-GNSS INS::getGNSS() const {return GNSS();}
+//GNSS INS::getGNSS() const {return GNSS();}
 IMU INS::getIMU() const {return IMU(imu.getAccelerometers(), imu.getGyroscopes(), imu.getMagnetometers(), imu.getTemperature());}
 SunSensor INS::getSunSensor() const {return SunSensor(sunSensor.getALS(), sunSensor.getLux(), sunSensor.getWhite());}
 

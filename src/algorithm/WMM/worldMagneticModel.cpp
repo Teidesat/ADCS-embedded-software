@@ -3,23 +3,22 @@
 #include "../../lib/math/eulerAngles/eulerAngles.hpp"
 #include "constants/ellipsoid.hpp"
 
-#include <math.h>
+#include <cmath>
 
 namespace WMM {
 
-GeodeticCoordinates::GeodeticCoordinates(const float newLatitude, const float newLongitude, const float newHeightAboveEllipsoid, const float newHeightAboveGeoid ): 
-    latitude(newLatitude),
+GeodeticCoordinates::GeodeticCoordinates(const float newLongitude, const float newLatitude, const float newHeightAboveEllipsoid): 
     longitude(newLongitude),
-    HeightAboveEllipsoid(newHeightAboveEllipsoid),
-    HeightAboveGeoid(newHeightAboveGeoid)
+    latitude(newLatitude),
+    heightAboveEllipsoid(newHeightAboveEllipsoid)
 {}
 
-SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates) {
+SphericalCoordinates convertGeodeticCoordinatesToSphericalCoordinates(const GeodeticCoordinates& geodeticCoordinates) {
     const float latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
     const float latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
     const float rc = Ellipsoid::semiMajorAxis / sqrt(1.0 - Ellipsoid::firstEccentricitySquared * latitudeSine * latitudeSine);
-    const float xp = (rc + geodeticCoordinates.HeightAboveEllipsoid) * latitudeCosine;
-    const float zp = (rc * (1.0 - Ellipsoid::firstEccentricitySquared) + geodeticCoordinates.HeightAboveEllipsoid) * latitudeSine;
+    const float xp = (rc + geodeticCoordinates.heightAboveEllipsoid) * latitudeCosine;
+    const float zp = (rc * (1.0 - Ellipsoid::firstEccentricitySquared) + geodeticCoordinates.heightAboveEllipsoid) * latitudeSine;
 
     SphericalCoordinates sphericalCoordinates;
     sphericalCoordinates.radius = sqrt(xp * xp + zp * zp);
@@ -29,17 +28,18 @@ SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const Geod
     return sphericalCoordinates;
 }
 
-float dateToYears(const int year, const int month, const int day, const float epoch) {  //check that month day and year are valid?
+float dateToYears(const int day, const int month, const int year, const float epoch) {  //check that month day and year are valid?
     float extraDay = 0;
     if((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {extraDay = 1;}
 
-    std::array<int, 13> daysInAMonth = {0, 31 ,28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    std::array<int, 12> daysEachMonth = {31 ,28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    const int monthTodaysEachMonthIndex = month - 1;
     const float daysInAYear = 365.0;
     const float daysInAYearLeapYearAdjust = daysInAYear + extraDay;
-    daysInAMonth[2] += extraDay;
+    daysEachMonth[2] += extraDay;
 
     int totalDays = 0;
-    for(int i = 0; i < month; i++) {totalDays += daysInAMonth[i];}
+    for(int i = 0; i < monthTodaysEachMonthIndex; i++) {totalDays += daysEachMonth[i];}
     totalDays += day;
     float decimalDate = year + (totalDays - 1) / daysInAYearLeapYearAdjust;
 
@@ -47,14 +47,14 @@ float dateToYears(const int year, const int month, const int day, const float ep
     return decimalDate;
 }
 
-TimedMagneticModel timelyModifyCoefficients(const int year, const int month, const int day) {
+TimedMagneticModel timelyModifyCoefficients(const int day, const int month, const int year) {
     TimedMagneticModel timedMagneticModel;
-    timedMagneticModel.year = year;
-    timedMagneticModel.month = month;
     timedMagneticModel.day = day;
+    timedMagneticModel.month = month;
+    timedMagneticModel.year = year;
 
     constexpr int b = (StaticMagneticModel::nMax * (StaticMagneticModel::nMax + 1) / 2 + StaticMagneticModel::nMax);
-    const float timedModeldecimalDate = dateToYears(timedMagneticModel.year, timedMagneticModel.month, timedMagneticModel.day, StaticMagneticModel::epoch);
+    const float timedModeldecimalDate = dateToYears(timedMagneticModel.day, timedMagneticModel.month, timedMagneticModel.year, StaticMagneticModel::epoch);
     
     for(int i = 1; i <= StaticMagneticModel::nMax; i++) {
         for(int j = 0; j <= i; j++) {
@@ -77,9 +77,9 @@ TimedMagneticModel timelyModifyCoefficients(const int year, const int month, con
 SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical) {
     SphericalHarmonicVariables sphericalHarmonicVariables;
     const float radiusRatio = Ellipsoid::meanRadius / CoordSpherical.radius;
-    sphericalHarmonicVariables.relativeRadiusPower[0] = (Ellipsoid::meanRadius / CoordSpherical.radius) * (Ellipsoid::meanRadius / CoordSpherical.radius);
+    sphericalHarmonicVariables.relativeRadiusPower[0] = (radiusRatio) * (radiusRatio);
     for(int i = 1; i <= StaticMagneticModel::numberOfTerms; i++) {
-        sphericalHarmonicVariables.relativeRadiusPower[i] = sphericalHarmonicVariables.relativeRadiusPower[i - 1] * (Ellipsoid::meanRadius / CoordSpherical.radius);
+        sphericalHarmonicVariables.relativeRadiusPower[i] = sphericalHarmonicVariables.relativeRadiusPower[i - 1] * (radiusRatio);
     }
 
     const float cosLongitude = cos(EulerAngles::degreesToRadians(CoordSpherical.longitude));
@@ -109,7 +109,6 @@ LegendreFunction computePcupLow(const float sineOfLatitude) {
 
     for(int i = 1; i <= StaticMagneticModel::numberOfTerms; i++) {
         for(int j = 0; j <= i; j++) { // for all arrays used, never go out of bounds for the index?
-            const int pyramidIndex = i * (i + 1) / 2 + j; // 
             if(i == j) {
                 const int pyramidIndex = (i - 1) * i / 2 + j - 1; // pyramid index is overwritten here, is it ok, check all indexes?
                 legendreFunction.Pcup [pyramidIndex] = cosineOfLatitude * legendreFunction.Pcup[pyramidIndex];
@@ -394,7 +393,7 @@ MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const Le
 }
 
 MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput) { // magneticResultsInput, look for a better name?
-    const float Psi = (M_PI / 180) * (sphericalCoordinates.latitude - geodeticCoordinates.latitude); // Difference between the spherical and Geodetic latitudes, is it the conversion below?
+    const float Psi = (EulerAngles::pi / 180) * (sphericalCoordinates.latitude - geodeticCoordinates.latitude); // Difference between the spherical and Geodetic latitudes, is it the conversion below?
     // const float phi EulerAngles::degreesToRadians(sphericalCoordinates.phig - geodeticCoordinates.phi); 
 
     // Rotate spherical field components to the Geodetic system
@@ -518,13 +517,13 @@ void MAG_PrintUserDataWithUncertainty(MAGtype_GeoMagneticElements GeomagElements
 }
 */
 
-Vector3d calculatePointMagneticField(const float latitude, const float longitude, const float altitude, const int year, const int month, const int day) {
-    const GeodeticCoordinates geodeticCoordinates(latitude, longitude, altitude);
-    const SphericalCoordinates sphericalCoordinates = convertGeodeticCoordinatesToSphericalcoordinates(geodeticCoordinates);
-    const TimedMagneticModel timedMagneticModel = timelyModifyCoefficients(year, month, day); // timed magnetic model not needed?
+GeomagneticElements calculatePointMagneticField(const float latitude, const float longitude, const float altitude, const int year, const int month, const int day) {
+    const GeodeticCoordinates geodeticCoordinates(longitude, latitude, altitude);
+    const SphericalCoordinates sphericalCoordinates = convertGeodeticCoordinatesToSphericalCoordinates(geodeticCoordinates);
+    const TimedMagneticModel timedMagneticModel = timelyModifyCoefficients(day, month, year); // timed magnetic model not needed?
     GeomagneticElements geomagneticElements = calculateGeomagneticResults(timedMagneticModel, sphericalCoordinates, geodeticCoordinates);
 
-    GeomagneticElements geomagneticElementsErrors = calculateGeomagneticError(geomagneticElements.H);
+    //GeomagneticElements geomagneticElementsErrors = calculateGeomagneticError(geomagneticElements.H); // are errors used at the end?
 
     // add warnings to the object?
     //MAG_PrintUserDataWithUncertainty(GeoMagneticElements, Errors, CoordGeodetic, UserDate, TimedMagneticModel, &Geoid); /* Print the results */

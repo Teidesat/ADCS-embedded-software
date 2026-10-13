@@ -2,6 +2,8 @@
 
 #include "../../../../lib/math/vector3d/vector3d.hpp"
 
+#include <string>
+
 namespace ADCS {
 
 class  Microcontroller {
@@ -24,6 +26,13 @@ class GNSS {
         float speed;
         float course;
         float satellites;
+
+    public:
+        GNSS(std::string& message);
+        
+        void parseMessage(const std::string& message);
+        float degreesMinutesAndSecondsToDecimal(const float degrees, const float minutes, const float seconds) const;
+    
 };
 
 class SunSensor {

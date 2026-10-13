@@ -9,13 +9,13 @@ namespace WMM {
 
 class GeodeticCoordinates {
     public:
-        float longitude = 0.0; //lambda?
-        float latitude = 0.0; // phi?
-        float HeightAboveEllipsoid = 0.0; //height above the ellipsoid (HaE)?
-        float HeightAboveGeoid = 0.0; //height above the EGM96 geoid model?
+        float longitude; //lambda?
+        float latitude; // phi?
+        float heightAboveEllipsoid; //height above the ellipsoid (HaE)?
+        // float HeightAboveGeoid; height above the EGM96 geoid model remove?
 
-        GeodeticCoordinates(const float newLatitude = 0.0, const float newLongitude = 0.0, const float newHeightAboveEllipsoid = 0.0, const float newHeightAboveGeoid = 0.0);
-        // int UseGeoid = 0; // remove, use in corresponding function
+        // in all class constructors use new for the function parameter?
+        GeodeticCoordinates(const float newLongitude, const float newLatitude, const float newHeightAboveEllipsoid);  // use new for the constructor parameters names?
 };
 
 class SphericalCoordinates {
@@ -70,11 +70,9 @@ class GeomagneticElements {
         float Z; // Downward component of the magnetic field vector
 };
 
-
-    
-SphericalCoordinates convertGeodeticCoordinatesToSphericalcoordinates(const GeodeticCoordinates& geodeticCoordinates);
-float dateToYears(const int year, const int month, const int day, const float epoch);
-TimedMagneticModel timelyModifyCoefficients(const int year, const int month, const int day);
+SphericalCoordinates convertGeodeticCoordinatesToSphericalCoordinates(const GeodeticCoordinates& geodeticCoordinates);
+float dateToYears(const int day, const int month, const int year, const float epoch);
+TimedMagneticModel timelyModifyCoefficients(const int day, const int month, const int year);
         
 SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoordinates& CoordSpherical);
         
@@ -82,8 +80,13 @@ LegendreFunction computePcupLow(const float sineOfLatitude);
 LegendreFunction computePcupHigh(const float sineOfLatitude);
 LegendreFunction computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates);
 
-float summationSpecial(const TimedMagneticModel& timedMagneticModel, const SphericalHarmonicVariables& spericalHarmonicVariables, const SphericalCoordinates& sphericalCoordinates);
-MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const LegendreFunction& legendreFunction, const SphericalHarmonicVariables& spericalHarmonicVariables, const SphericalCoordinates& sphericalCoordinates);
+float summationSpecial(const TimedMagneticModel& timedMagneticModel, 
+                       const SphericalHarmonicVariables& spericalHarmonicVariables, 
+                       const SphericalCoordinates& sphericalCoordinates);
+MagneticResults summation(const TimedMagneticModel& timedMagneticModel, 
+                          const LegendreFunction& legendreFunction, 
+                          const SphericalHarmonicVariables& spericalHarmonicVariables, 
+                          const SphericalCoordinates& sphericalCoordinates);
         
 MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput);
 GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magneticResultsGeo);
@@ -92,6 +95,6 @@ GeomagneticElements calculateGeomagneticError(const double H);
 
 GeomagneticElements calculateGeomagneticResults(const TimedMagneticModel& timedMagneticModel, const SphericalCoordinates& CoordSpherical, const GeodeticCoordinates& CoordGeodetic);
 
-GeomagneticElements calculatePointMagneticField(const float latitude, const float longitude,const float altitude,const int year,const int month,const int day);
+GeomagneticElements calculatePointMagneticField(const float latitude, const float longitude,const float altitude,const int year, const int month,const int day);
 
 }

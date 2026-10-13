@@ -4,15 +4,17 @@ class Quaternion;
 
 class EulerAngles {
     private:
-        float roll = 0; // corresponds to x axis of rotation
-        float pitch = 0; // corresponds to y axis of rotation
-        float yaw = 0; // corresponds to z axis of rotation
+        float pitch = 0.0;
+        float roll = 0.0;
+        float yaw = 0.0;
 
     public:
-        EulerAngles(const float newPitch = 0.0, const float newRoll = 0.0, const float newYaw = 0.0);
+        static constexpr double pi = 3.14159265358979323846;  // good value for pi?
+
+        EulerAngles(const float pitchInput, const float rollInput, const float yawInput);
         
-        float getRoll() const;  
         float getPitch() const;
+        float getRoll() const;  
         float getYaw() const;
         
         static float radiansToDegrees(const float radians);

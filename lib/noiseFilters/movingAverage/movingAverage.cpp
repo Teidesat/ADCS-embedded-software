@@ -1,6 +1,6 @@
 #include "movingAverage.hpp"
 
-#include <math.h>
+#include <cmath>
 
 MovingAverage::MovingAverage(const int bufferSize):
     meanValue(0.0),
@@ -17,14 +17,12 @@ void MovingAverage::addValue(const float value) {
 void MovingAverage::calculateMeanValue() {
     meanValue = inputBuffer[0];
     for(std::size_t i = 1; i < inputBuffer.size(); i++) {meanValue += inputBuffer[i];}
-    int actualBufferSize = inputBuffer.size();
-    if(actualBufferSize > bufferMaxSize) {actualBufferSize = bufferMaxSize;}
     meanValue /= inputBuffer.size();
 }
 
 void MovingAverage::calculateStandardDeviation() {
     standardDeviation = std::pow(inputBuffer[0] - meanValue, 2);
-    for(int i = 1; i < inputBuffer.size(); i++) {standardDeviation += std::pow(inputBuffer[i] - meanValue, 2);}
+    for(std::size_t i = 1; i < inputBuffer.size(); i++) {standardDeviation += std::pow(inputBuffer[i] - meanValue, 2);}
     standardDeviation =  standardDeviation / (inputBuffer.size() - 1);
     standardDeviation = std::sqrt(standardDeviation);
 }

@@ -5,7 +5,7 @@
 class MovingAverage {
     private:
         std::vector<float> inputBuffer;
-        int bufferMaxSize;
+        std::size_t bufferMaxSize;
         float meanValue;
         float standardDeviation;
 

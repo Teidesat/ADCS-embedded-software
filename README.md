@@ -76,6 +76,8 @@ pio test -e desktop
 run specific test suit
 ```sh
 pio test -e desktop -f test_attitudeDetermination
+pio test -e desktop -f test_mathRotation
+pio test -e desktop -f test_worldMagneticModel
 ```
 
 # Notes

@@ -1,14 +1,16 @@
+#include "../../lib/math/eulerAngles/eulerAngles.hpp"
+#include "../../lib/math/quaternion/quaternion.hpp"
+
 #include <unity.h>
 
-#include "../../lib/utils/math/eulerAngles/eulerAngles.hpp"
-#include "../../lib/utils/math/quaternion/quaternion.hpp"
+#include <limits>
 
-const float EPSILON = 0.001f;
+const float EPSILON = std::numeric_limits<float>::epsilon(); // change epsilon to std::numeric_limits<float>::epsilon()?
 
 void test_quaternion_to_eulerAngles_levelFlight() {
     Quaternion quaternion(1.0f, 0.0f, 0.0f, 0.0f);
     EulerAngles eulerAnglesRadians = quaternion.toEulerAngles();
-    EulerAngles eulerAnglesDegrees = EulerAngles::toDegrees(eulerAnglesRadians);
+    EulerAngles eulerAnglesDegrees = eulerAnglesRadians.radiansToDegrees();
  
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, eulerAnglesRadians.getRoll());
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, eulerAnglesRadians.getPitch());
@@ -21,7 +23,7 @@ void test_quaternion_to_eulerAngles_levelFlight() {
 void test_quaternion_to_eulerAngles_90DegreesRoll() {
     Quaternion quaternion(0.707107f, 0.707107f, 0.0f, 0.0f);
     EulerAngles eulerAnglesRadians = quaternion.toEulerAngles();
-    EulerAngles eulerAnglesDegrees = EulerAngles::toDegrees(eulerAnglesRadians);
+    EulerAngles eulerAnglesDegrees = eulerAnglesRadians.radiansToDegrees();
 
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 1.570796f, eulerAnglesRadians.getRoll());
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, eulerAnglesRadians.getPitch());
@@ -34,7 +36,7 @@ void test_quaternion_to_eulerAngles_90DegreesRoll() {
 void test_quaternion_to_eulerAngles_levelFlight_inverted() {
     Quaternion quaternion(0.0f, 1.0f, 0.0f, 0.0f);
     EulerAngles eulerAnglesRadians = quaternion.toEulerAngles();
-    EulerAngles eulerAnglesDegrees = EulerAngles::toDegrees(eulerAnglesRadians);
+    EulerAngles eulerAnglesDegrees = eulerAnglesRadians.radiansToDegrees();
 
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 3.141593f, eulerAnglesRadians.getRoll());
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, eulerAnglesRadians.getPitch());
@@ -47,7 +49,7 @@ void test_quaternion_to_eulerAngles_levelFlight_inverted() {
 void test_quaternion_to_eulerAngles_90DegreesPitchUp() {
     Quaternion quaternion(0.707107f, 0.0f, 0.707107f, 0.0f);
     EulerAngles eulerAnglesRadians = quaternion.toEulerAngles();
-    EulerAngles eulerAnglesDegrees = EulerAngles::toDegrees(eulerAnglesRadians);
+    EulerAngles eulerAnglesDegrees = eulerAnglesRadians.radiansToDegrees();
 
     //TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, eulerAnglesRadians.getRoll()); // result 3.141593 // gimbal lock
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 1.570796f, eulerAnglesRadians.getPitch());
@@ -73,7 +75,7 @@ void test_quaternion_to_eulerAngles_90DegreesPitchDown() {
 void test_quaternion_to_eulerAngles_20degreesRoll_15DegreesPitchUp_5degreesYaw() {
     Quaternion quaternion(0.976442f, 0.166392f, 0.135930f, 0.019945f);
     EulerAngles eulerAnglesRadians = quaternion.toEulerAngles();
-    EulerAngles eulerAnglesDegrees = EulerAngles::toDegrees(eulerAnglesRadians);
+    EulerAngles eulerAnglesDegrees = eulerAnglesRadians.radiansToDegrees();
 
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.349066f, eulerAnglesRadians.getRoll());
     TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.261799f, eulerAnglesRadians.getPitch());
@@ -87,10 +89,10 @@ void test_eulerAngles_to_quaternion_levelFlight() {
     EulerAngles eulerAnglesLevelFlight(0.0f, 0.0f, 0.0f);
     Quaternion quaternionLevelFlight = eulerAnglesLevelFlight.toQuaternion();
 
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 1.0f, quaternionLevelFlight.getW());
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.getX());
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.getY());
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.getZ());
+    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 1.0f, quaternionLevelFlight.w);
+    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.x);
+    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.y);
+    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 0.0f, quaternionLevelFlight.z);
 }
 
 void test_compare_quaternions_levelFlight_inverted() {
@@ -130,7 +132,7 @@ void setup() {
 void loop() {}
 #endif
 
-int main(int argc, char **argv) {
+int main() {
     setup();
     return 0;
 }

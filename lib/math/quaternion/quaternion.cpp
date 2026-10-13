@@ -125,7 +125,7 @@ EulerAngles Quaternion::toEulerAngles() const {
     const float pitchSine = 2.0 * (w * y - z * x);
 
     if (std::fabs(pitchSine) >= 0.999999) {   // move to constant, and maybe reused and maybe 1 is better?
-        pitch = std::copysign(M_PI / 2.0, pitchSine);
+        pitch = std::copysign(EulerAngles::pi / 2.0, pitchSine);
         roll = std::atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x * x + y * y));
     } 
     else {
@@ -140,7 +140,7 @@ EulerAngles Quaternion::toEulerAngles() const {
         yaw = std::atan2(yawNum, yawDen);
     }
 
-    if (yaw < 0) {yaw += 2.0 * M_PI;} // Wrap Yaw for display (0 to 360 degrees)
+    if (yaw < 0) {yaw += 2.0 * EulerAngles::pi;} // Wrap Yaw for display (0 to 360 degrees)
 
     return EulerAngles(roll, pitch, yaw);
 }

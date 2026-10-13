@@ -4,17 +4,17 @@
 
 template <std::size_t Rows, std::size_t Columns>
 class Matrix {
-private:
-    std::array<float, Rows * Columns> flattenedMatrix;
+    private:
+        std::array<float, Rows * Columns> flattenedMatrix;
 
-public:
-    Matrix();
-    float& at(const std::size_t row, const std::size_t column);
-    const float& at(const std::size_t row, const std::size_t column) const;
-    Matrix<Rows, Columns> multiply(const float scalar) const;
-    Matrix<Rows, Columns> operator*(const float scalar) const;
-    Matrix<Rows, Columns> add(const Matrix<Rows, Columns>& matrix) const;
-    Matrix<Rows, Columns> operator+(const Matrix<Rows, Columns>& matrix) const;
+    public:
+        Matrix();
+        float& at(const std::size_t row, const std::size_t column);
+        const float& at(const std::size_t row, const std::size_t column) const;
+        Matrix<Rows, Columns> multiply(const float scalar) const;
+        Matrix<Rows, Columns> operator*(const float scalar) const;
+        Matrix<Rows, Columns> add(const Matrix<Rows, Columns>& matrix) const;
+        Matrix<Rows, Columns> operator+(const Matrix<Rows, Columns>& matrix) const;
 };
 
 
@@ -39,7 +39,6 @@ Matrix<Rows, Columns> Matrix<Rows, Columns>::multiply(const float scalar) const 
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::operator*(const float scalar) const {return multiply(scalar);}
 
-
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::add(const Matrix<Rows, Columns>& matrix) const {
     Matrix<Rows, Columns> newMatrix;
@@ -48,7 +47,6 @@ Matrix<Rows, Columns> Matrix<Rows, Columns>::add(const Matrix<Rows, Columns>& ma
     }
     return newMatrix;
 }
-
 
 template <std::size_t Rows, std::size_t Columns>
 Matrix<Rows, Columns> Matrix<Rows, Columns>::operator+(const Matrix<Rows, Columns>& matrix) const {return add(matrix);}

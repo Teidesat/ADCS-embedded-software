@@ -58,7 +58,6 @@ float AttitudeAlgorithm::calculateTrustInAccelerometers(const float luminosity, 
 Quaternion AttitudeAlgorithm::blendQuaternionsWeighted(const Quaternion& gyroAttitude, const Quaternion& accelerometersAttitude, const float luminosity) {
     const float maxLuminosity = 100.0f;
     const float trustInAccelerometers = calculateTrustInAccelerometers(luminosity, maxLuminosity);
-    const float trustInGyroscopes = 1 - trustInAccelerometers;
     return gyroAttitude.slerp(accelerometersAttitude, trustInAccelerometers);
 }
 
