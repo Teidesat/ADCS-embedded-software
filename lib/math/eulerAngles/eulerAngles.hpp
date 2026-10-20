@@ -1,26 +1,20 @@
 #pragma once
 
+namespace math {
+
 class Quaternion;
 
-class EulerAngles {
-    private:
-        float pitch = 0.0;
-        float roll = 0.0;
-        float yaw = 0.0;
-
+class EulerAngles { // only store angles in radians, because of the trigonometric functions
     public:
-        static constexpr double pi = 3.14159265358979323846;  // good value for pi?
+        double roll = 0.0;
+        double pitch = 0.0;
+        double yaw = 0.0;
 
-        EulerAngles(const float pitchInput, const float rollInput, const float yawInput);
+        EulerAngles(const double rollValue, const double pitchValue, const double yawValue);
         
-        float getPitch() const;
-        float getRoll() const;  
-        float getYaw() const;
-        
-        static float radiansToDegrees(const float radians);
-        EulerAngles radiansToDegrees() const;
-        static float degreesToRadians(const float degrees);
-        EulerAngles degreesToRadians() const;
-
+        static double radiansToDegrees(const double radians);
+        static double degreesToRadians(const double degrees);
         Quaternion toQuaternion() const;
 };
+
+}

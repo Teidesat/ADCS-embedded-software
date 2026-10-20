@@ -48,16 +48,16 @@ std::string IMUtoJson(const IMU& imu) {
     return json;
 }
 
-std::string eulerAnglesToJson(const EulerAngles& eulerAngles) {
+std::string eulerAnglesToJson(const math::EulerAngles& eulerAngles) {
     std::string json = "{";
-    json += "\"roll\":" + std::to_string(eulerAngles.getRoll()) + ",";
-    json += "\"pitch\":" + std::to_string(eulerAngles.getPitch()) + ",";
-    json += "\"yaw\":" + std::to_string(eulerAngles.getYaw());
+    json += "\"roll\":" + std::to_string(eulerAngles.roll) + ",";
+    json += "\"pitch\":" + std::to_string(eulerAngles.pitch) + ",";
+    json += "\"yaw\":" + std::to_string(eulerAngles.yaw);
     json += "}";
 
     return json;
 }
-std::string quaternionToJson(const Quaternion& quaternion) {
+std::string quaternionToJson(const math::Quaternion& quaternion) {
     std::string json = "{";
     json += "\"w\":" + std::to_string(quaternion.w) + ",";
     json += "\"x\":" + std::to_string(quaternion.x) + ",";

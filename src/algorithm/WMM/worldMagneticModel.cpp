@@ -1,6 +1,8 @@
 #include "worldMagneticModel.hpp"
 
 #include "../../lib/math/eulerAngles/eulerAngles.hpp"
+#include "../../lib/math/constants.hpp"
+
 #include "constants/ellipsoid.hpp"
 
 #include <cmath>
@@ -14,15 +16,15 @@ GeodeticCoordinates::GeodeticCoordinates(const float newLongitude, const float n
 {}
 
 SphericalCoordinates convertGeodeticCoordinatesToSphericalCoordinates(const GeodeticCoordinates& geodeticCoordinates) {
-    const float latitudeCosine = cos(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
-    const float latitudeSine = sin(EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
+    const float latitudeCosine = cos(math::EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
+    const float latitudeSine = sin(math::EulerAngles::degreesToRadians(geodeticCoordinates.latitude));
     const float rc = Ellipsoid::semiMajorAxis / sqrt(1.0 - Ellipsoid::firstEccentricitySquared * latitudeSine * latitudeSine);
     const float xp = (rc + geodeticCoordinates.heightAboveEllipsoid) * latitudeCosine;
     const float zp = (rc * (1.0 - Ellipsoid::firstEccentricitySquared) + geodeticCoordinates.heightAboveEllipsoid) * latitudeSine;
 
     SphericalCoordinates sphericalCoordinates;
     sphericalCoordinates.radius = sqrt(xp * xp + zp * zp);
-    sphericalCoordinates.latitude = EulerAngles::radiansToDegrees(asin(zp / sphericalCoordinates.radius));
+    sphericalCoordinates.latitude = math::EulerAngles::radiansToDegrees(asin(zp / sphericalCoordinates.radius));
     sphericalCoordinates.longitude = geodeticCoordinates.longitude; 
 
     return sphericalCoordinates;
@@ -82,8 +84,8 @@ SphericalHarmonicVariables computeSphericalHarmonicVariables(const SphericalCoor
         sphericalHarmonicVariables.relativeRadiusPower[i] = sphericalHarmonicVariables.relativeRadiusPower[i - 1] * (radiusRatio);
     }
 
-    const float cosLongitude = cos(EulerAngles::degreesToRadians(CoordSpherical.longitude));
-    const float sinLongitude = sin(EulerAngles::degreesToRadians(CoordSpherical.longitude));
+    const float cosLongitude = cos(math::EulerAngles::degreesToRadians(CoordSpherical.longitude));
+    const float sinLongitude = sin(math::EulerAngles::degreesToRadians(CoordSpherical.longitude));
 
     sphericalHarmonicVariables.cosMlambda[0] = 1.0;
     sphericalHarmonicVariables.sinMlambda[0] = 0.0;
@@ -278,7 +280,7 @@ LegendreFunction computePcupHigh(const float sineOfLatitude) {
 LegendreFunction computedAssociatedLegendreFunction(const SphericalCoordinates& sphericalCoordinates) {
     const float threshold = 1.0e-10; // used in other places already, store it in file for constants threshold?
     LegendreFunction legendre;
-    float sineOfLatitude = sin(EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
+    float sineOfLatitude = sin(math::EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
     if(1 - fabs(sineOfLatitude) < threshold) {legendre = computePcupLow(sineOfLatitude);}   // If nMax is less tha 16 or at the poles and Overflow may occur if nMax > 20?
     else {legendre = computePcupHigh(sineOfLatitude);}
 
@@ -292,7 +294,7 @@ float summationSpecial(const TimedMagneticModel& timedMagneticModel, const Spher
 
 
     float magneticResultBy = 0.0;
-    const float sin_phi = sin(EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
+    const float sin_phi = sin(math::EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
 
     for(int i = 1; i <= StaticMagneticModel::nMax; i++) {
 
@@ -378,7 +380,7 @@ MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const Le
         }
     }
 
-    cos_phi = cos(EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
+    cos_phi = cos(math::EulerAngles::degreesToRadians(sphericalCoordinates.latitude));
     const float threshold = 1.0e-10; // use constant threshold?
 
     /* Special calculation for component - By - at Geographic poles.
@@ -393,7 +395,7 @@ MagneticResults summation(const TimedMagneticModel& timedMagneticModel, const Le
 }
 
 MagneticResults rotateMagneticVector(const SphericalCoordinates& sphericalCoordinates, const GeodeticCoordinates& geodeticCoordinates, const MagneticResults& magneticResultsInput) { // magneticResultsInput, look for a better name?
-    const float Psi = (EulerAngles::pi / 180) * (sphericalCoordinates.latitude - geodeticCoordinates.latitude); // Difference between the spherical and Geodetic latitudes, is it the conversion below?
+    const float Psi = (math::Constants::pi / 180) * (sphericalCoordinates.latitude - geodeticCoordinates.latitude); // Difference between the spherical and Geodetic latitudes, is it the conversion below?
     // const float phi EulerAngles::degreesToRadians(sphericalCoordinates.phig - geodeticCoordinates.phi); 
 
     // Rotate spherical field components to the Geodetic system
@@ -414,8 +416,8 @@ GeomagneticElements calculateGeoMagneticElements(const MagneticResults& magnetic
 
     geomagneticElements.H = sqrt(magneticResultsGeo.Bx * magneticResultsGeo.Bx + magneticResultsGeo.By * magneticResultsGeo.By);
     geomagneticElements.F = sqrt(geomagneticElements.H * geomagneticElements.H + magneticResultsGeo.Bz * magneticResultsGeo.Bz);
-    geomagneticElements.Decl = EulerAngles::radiansToDegrees(atan2(geomagneticElements.Y, geomagneticElements.X)); // all calls from the original WMM code of radians to degrees are ok, and from degreees to radians?
-    geomagneticElements.Incl = EulerAngles::radiansToDegrees(atan2(geomagneticElements.Z, geomagneticElements.H));
+    geomagneticElements.Decl = math::EulerAngles::radiansToDegrees(atan2(geomagneticElements.Y, geomagneticElements.X)); // all calls from the original WMM code of radians to degrees are ok, and from degreees to radians?
+    geomagneticElements.Incl = math::EulerAngles::radiansToDegrees(atan2(geomagneticElements.Z, geomagneticElements.H));
     
     return geomagneticElements;
 }

@@ -76,9 +76,12 @@ pio test -e desktop
 run specific test suit
 ```sh
 pio test -e desktop -f test_attitudeDetermination
-pio test -e desktop -f test_mathRotation
+pio test -e desktop -f test_math
 pio test -e desktop -f test_worldMagneticModel
 ```
+
+For Euler angles to quaternion conversion and vice versa the following page was used for validation and verify that the results are correct and precise:
+[https://rotationconverter.app]()
 
 # Notes
 

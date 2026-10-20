@@ -13,13 +13,10 @@
  * Does not alter the input.
  */
 Matrix<3, 1> normalizeVector(const Matrix<3, 1>& inputVector) {
-    const float magnitude = std::sqrt(std::pow(inputVector.at(0, 0), 2) + 
-                                     std::pow(inputVector.at(1, 0), 2) + 
-                                     std::pow(inputVector.at(2, 0), 2));
+    const double magnitude = std::sqrt(std::pow(inputVector.at(0, 0), 2) + std::pow(inputVector.at(1, 0), 2) + std::pow(inputVector.at(2, 0), 2));
     
-    if (magnitude < std::numeric_limits<float>::epsilon()) {
-        return inputVector; // Return as is if too small to normalize
-    }
+    // change function so there is only one return?
+    if (magnitude < std::numeric_limits<double>::epsilon()) {return inputVector;} // Return as is if too small to normalize   // should I use this epsilon?
     
     return inputVector.multiply(1.0f / magnitude);
 }
@@ -46,8 +43,8 @@ Quaternion QUEST(const Vector3d accelerometerBody,
                  const Vector3d& gravityReference, 
                  const Vector3d& magnetometerBody, 
                  const Vector3d& magneticNorthReference, 
-                 const float accelerometerWeight, 
-                 const float magnetometerWeight) {
+                 const double accelerometerWeight, 
+                 const double magnetometerWeight) {
     
     // Convert inputs to Matrix form
     Matrix<3, 1> accelBodyMat; 
@@ -72,11 +69,11 @@ Quaternion QUEST(const Vector3d accelerometerBody,
     const Matrix<3, 3> profileMatrixB = computeOuterProduct(unitAccelBody, unitGravityRef).multiply(accelerometerWeight) + computeOuterProduct(unitMagBody, unitMagRef).multiply(magnetometerWeight);
 
     // Scalar constants for the Davenport M matrix
-    const float matrixTrace = profileMatrixB.at(0, 0) + profileMatrixB.at(1, 1) + profileMatrixB.at(2, 2);
-    const float optimalEigenvalue = accelerometerWeight + magnetometerWeight;
-    const float alphaFactor = optimalEigenvalue + matrixTrace;
+    const double matrixTrace = profileMatrixB.at(0, 0) + profileMatrixB.at(1, 1) + profileMatrixB.at(2, 2);
+    const double optimalEigenvalue = accelerometerWeight + magnetometerWeight;
+    const double alphaFactor = optimalEigenvalue + matrixTrace;
     
-    const float zVector[3] = {
+    const double zVector[3] = {
         profileMatrixB.at(1, 2) - profileMatrixB.at(2, 1),
         profileMatrixB.at(2, 0) - profileMatrixB.at(0, 2),
         profileMatrixB.at(0, 1) - profileMatrixB.at(1, 0)
@@ -86,13 +83,13 @@ Quaternion QUEST(const Vector3d accelerometerBody,
     Matrix<3, 3> davenportM;
     for(std::size_t i = 0; i < 3; ++i) {
         for(std::size_t j = 0; j < 3; ++j) {
-            const float sumSymmetric = profileMatrixB.at(i, j) + profileMatrixB.at(j, i);
+            const double sumSymmetric = profileMatrixB.at(i, j) + profileMatrixB.at(j, i);
             davenportM.at(i, j) = (i == j) ? (alphaFactor - sumSymmetric) : -sumSymmetric;
         }
     }
 
     // Solve for the vector part of the quaternion using Cramer's Rule
-    const float davenportDeterminant = 
+    const double davenportDeterminant = 
         davenportM.at(0, 0) * (davenportM.at(1, 1) * davenportM.at(2, 2) - davenportM.at(1, 2) * davenportM.at(2, 1)) -
         davenportM.at(0, 1) * (davenportM.at(1, 0) * davenportM.at(2, 2) - davenportM.at(1, 2) * davenportM.at(2, 0)) +
         davenportM.at(0, 2) * (davenportM.at(1, 0) * davenportM.at(2, 1) - davenportM.at(1, 1) * davenportM.at(2, 0));
@@ -102,11 +99,11 @@ Quaternion QUEST(const Vector3d accelerometerBody,
     }
 
     // Cramer's rule to solve the system [davenportM][q_vector] = [zVector]
-    const float qx = ((davenportM.at(1,1)*davenportM.at(2,2) - davenportM.at(1,2)*davenportM.at(2,1)) * zVector[0] + (davenportM.at(0,2)*davenportM.at(2,1) - davenportM.at(0,1)*davenportM.at(2,2)) * zVector[1] + (davenportM.at(0,1)*davenportM.at(1,2) - davenportM.at(0,2)*davenportM.at(1,1)) * zVector[2]) / davenportDeterminant;
-    const float qy = ((davenportM.at(1,2)*davenportM.at(2,0) - davenportM.at(1,0)*davenportM.at(2,2)) * zVector[0] + (davenportM.at(0,0)*davenportM.at(2,2) - davenportM.at(0,2)*davenportM.at(2,0)) * zVector[1] + (davenportM.at(0,2)*davenportM.at(1,0) - davenportM.at(0,0)*davenportM.at(1,2)) * zVector[2]) / davenportDeterminant;
-    const float qz = ((davenportM.at(1,0)*davenportM.at(2,1) - davenportM.at(1,1)*davenportM.at(2,0)) * zVector[0] + (davenportM.at(0,1)*davenportM.at(2,0) - davenportM.at(0,0)*davenportM.at(2,1)) * zVector[1] + (davenportM.at(0,0)*davenportM.at(1,1) - davenportM.at(0,1)*davenportM.at(1,0)) * zVector[2]) / davenportDeterminant;
-    const float qw = 1.0f;
+    const double qx = ((davenportM.at(1,1)*davenportM.at(2,2) - davenportM.at(1,2)*davenportM.at(2,1)) * zVector[0] + (davenportM.at(0,2)*davenportM.at(2,1) - davenportM.at(0,1)*davenportM.at(2,2)) * zVector[1] + (davenportM.at(0,1)*davenportM.at(1,2) - davenportM.at(0,2)*davenportM.at(1,1)) * zVector[2]) / davenportDeterminant;
+    const double qy = ((davenportM.at(1,2)*davenportM.at(2,0) - davenportM.at(1,0)*davenportM.at(2,2)) * zVector[0] + (davenportM.at(0,0)*davenportM.at(2,2) - davenportM.at(0,2)*davenportM.at(2,0)) * zVector[1] + (davenportM.at(0,2)*davenportM.at(1,0) - davenportM.at(0,0)*davenportM.at(1,2)) * zVector[2]) / davenportDeterminant;
+    const double qz = ((davenportM.at(1,0)*davenportM.at(2,1) - davenportM.at(1,1)*davenportM.at(2,0)) * zVector[0] + (davenportM.at(0,1)*davenportM.at(2,0) - davenportM.at(0,0)*davenportM.at(2,1)) * zVector[1] + (davenportM.at(0,0)*davenportM.at(1,1) - davenportM.at(0,1)*davenportM.at(1,0)) * zVector[2]) / davenportDeterminant;
+    const double qw = 1.0f;
 
-    const float normalizationFactor = std::sqrt(qw*qw + qx*qx + qy*qy + qz*qz);
+    const double normalizationFactor = std::sqrt(qw * qw + qx * qx + qy * qy + qz * qz);
     return Quaternion{qw / normalizationFactor, qx / normalizationFactor, qy / normalizationFactor, qz / normalizationFactor};
 }

@@ -71,9 +71,9 @@ void loop() {
                              ins.getMicrocontroller().getDeltaTime());
 
     // output
-    Quaternion attitudeQuaternion = attitudeAlgorithm.getAttitude();
-    EulerAngles attitudeEulerAnglesRadians = attitudeQuaternion.toEulerAngles();
-    EulerAngles attitudeEulerAnglesDegrees = attitudeEulerAnglesRadians.radiansToDegrees();
+    math::Quaternion attitudeQuaternion = attitudeAlgorithm.getAttitude();
+    math::EulerAngles attitudeEulerAnglesRadians = attitudeQuaternion.toEulerAngles();
+    math::EulerAngles attitudeEulerAnglesDegrees = attitudeEulerAnglesRadians.radiansToDegrees();
 
     std::string luxTeleplot = ">lux: " + std::to_string(ins.getSunSensor().getLux());
     std::string gyroXteleplot = ">gyroX: " + std::to_string(ins.getIMU().getGyroscopes().x);
@@ -82,9 +82,9 @@ void loop() {
     std::string gyroXclampedTeleplot = ">gyroXclamped: " + std::to_string(clampedGyroscopeX);
     std::string gyroYclampedTeleplot = ">gyroYclamped: " + std::to_string(clampedGyroscopeY);
     std::string gyroZclampedTeleplot = ">gyroZclamped: " + std::to_string(clampedGyroscopeZ);
-    std::string rollTeleplot = ">roll: " + std::to_string(attitudeEulerAnglesDegrees.getRoll());
-    std::string pitchTeleplot = ">pitch: " + std::to_string(attitudeEulerAnglesDegrees.getPitch());
-    std::string yawTeleplot = ">yaw: " + std::to_string(attitudeEulerAnglesDegrees.getYaw());
+    std::string rollTeleplot = ">roll: " + std::to_string(attitudeEulerAnglesDegrees.roll);
+    std::string pitchTeleplot = ">pitch: " + std::to_string(attitudeEulerAnglesDegrees.pitch);
+    std::string yawTeleplot = ">yaw: " + std::to_string(attitudeEulerAnglesDegrees.yaw);
 
     //Serial.println(luxTeleplot.c_str());
     //Serial.println(gyroXteleplot.c_str());

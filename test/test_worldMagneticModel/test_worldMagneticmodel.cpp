@@ -2,22 +2,21 @@
 #include "../../src/algorithm/WMM/worldMagneticModel.cpp"
 
 #include <unity.h>
-#include <limits> // use numeric_limits<float>::epsilon() to get the precision of float type?
 
-const float EPSILON = std::numeric_limits<float>::epsilon(); // correct to use this presicion?
+#include "../../lib/math/constants.hpp"
 
 void test_worldMagneticModel_decimalDate() {
     const int day1 = 1;
     const int month1 = 1;
     const int year1 = 2025;
     const float result1 = 2025.0;
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, result1, WMM::dateToYears(day1, month1, year1, WMM::StaticMagneticModel::epoch));
+    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result1, WMM::dateToYears(day1, month1, year1, WMM::StaticMagneticModel::epoch));
 
     const int day2 = 1;
     const int month2 = 1;
     const int year2 = 2025;
     const float result2 = 2025.0;
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, result2, WMM::dateToYears(day2, month2, year2, WMM::StaticMagneticModel::epoch));
+    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result2, WMM::dateToYears(day2, month2, year2, WMM::StaticMagneticModel::epoch));
 }
 
 /*
@@ -55,15 +54,13 @@ void tearDown() {}
 void setup() {
     UNITY_BEGIN();
 
-    // TEST WORLD MAGNETIC MODEL
+    // test world magnetic model
     RUN_TEST(test_worldMagneticModel_decimalDate);
 
     UNITY_END();
 }
 
-#ifdef ARDUINO
 void loop() {}
-#endif
 
 int main() {
     setup();

@@ -1,12 +1,16 @@
 #pragma once
 
+namespace math {
+
 class Vector3d {
     public:
-        float x;
-        float y;
-        float z;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
 
-        Vector3d(const float x = 0.0, const float y = 0.0, const float z = 0.0);
-        Vector3d multiply(const float scalar) const;
-        Vector3d operator*(const float scalar) const;
+        Vector3d(const double xValue, const double yValue, const double zValue);
+        Vector3d multiply(const double scalar) const;
+        Vector3d operator*(const double scalar) const;
 };
+
+}

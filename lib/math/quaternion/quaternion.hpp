@@ -2,35 +2,37 @@
 
 #include "../eulerAngles/eulerAngles.hpp"
 
+namespace math {
+
 class EulerAngles;
 
 class Quaternion {
     public:
-        float w; // real element
-        float x;
-        float y;
-        float z;
+        double w = 0.0; // real part
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
 
-        Quaternion(const float w = 1.0, const float x = 0.0, const float y = 0.0, const float z = 0.0);
+        Quaternion(const double wValue, const double xValue, const double yValue, const double zValue);
         
         Quaternion conjugate() const;
         Quaternion normalize() const;
-        float dotProduct(const Quaternion& quaternion) const;
+        double dotProduct(const Quaternion& quaternion) const;
 
         // For comparing and interpolating, both current and input quaternion should be in a normalized form
         bool equal(const Quaternion& quaternion) const;
         bool operator==(const Quaternion& quaternion) const;
         bool operator!=(const Quaternion& quaternion) const;
-        Quaternion slerp(const Quaternion& quaternion, const float time) const;
+        Quaternion slerp(const Quaternion& quaternion, const double time) const;
 
         Quaternion sum(const Quaternion& quaternion) const;
         Quaternion operator+(const Quaternion& quaternion) const;
         Quaternion multiply(const Quaternion& quaternion) const;
         Quaternion operator*(const Quaternion& quaternion) const;
-        void operator*=(const Quaternion& quaternion);
-        Quaternion multiply(const float scalar) const;
-        Quaternion operator*(const float scalar) const;
-        void operator*=(const float scalar);
+        Quaternion multiply(const double scalar) const;
+        Quaternion operator*(const double scalar) const;
 
         EulerAngles toEulerAngles() const; // using sequence ZYX
 };
+
+}

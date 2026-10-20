@@ -7,5 +7,5 @@ Quaternion QUEST(const Vector3d& accelerometerBody,
                  const Vector3d& gravityReference, 
                  const Vector3d& magnetometerBody, 
                  const Vector3d& magneticNorthReference, 
-                 const float accelerometerWeight, 
-                 const float magnetometerWeight);
+                 const double accelerometerWeight, 
+                 const double magnetometerWeight);

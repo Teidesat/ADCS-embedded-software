@@ -1,10 +1,14 @@
 #include "vector3d.hpp"
 
-Vector3d::Vector3d(const float x, const float y, const float z):
-    x(x),
-    y(y),
-    z(z)
+namespace math {
+
+Vector3d::Vector3d(const double xValue, const double yValue, const double zValue):
+    x(xValue),
+    y(yValue),
+    z(zValue)
 {}
 
-Vector3d Vector3d::multiply(const float scalar) const {return Vector3d(x * scalar, y * scalar, z * scalar);}
-Vector3d Vector3d::operator*(const float scalar) const {return multiply(scalar);}
+Vector3d Vector3d::multiply(const double scalar) const {return Vector3d(x * scalar, y * scalar, z * scalar);}
+Vector3d Vector3d::operator*(const double scalar) const {return multiply(scalar);}
+
+}
