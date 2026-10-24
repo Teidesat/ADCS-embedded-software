@@ -2,6 +2,8 @@
 
 #include "../quaternion/quaternion.hpp"
 
+#include "../constants.hpp"
+
 #include <cmath>
 
 namespace math {
@@ -13,12 +15,12 @@ EulerAngles::EulerAngles(const double rollValue, const double pitchValue, const 
 {}
 
 double EulerAngles::radiansToDegrees(const double radians) {
-    constexpr double radiansToDegreesConversionRate = 180.0 / pi;
+    constexpr double radiansToDegreesConversionRate = 180.0 / Constants::pi;
     return radians * radiansToDegreesConversionRate;
 }
 
 double EulerAngles::degreesToRadians(const double degrees) {
-    constexpr double degreesToRadiansConversionRate = pi / 180.0;
+    constexpr double degreesToRadiansConversionRate = Constants::pi / 180.0;
     return degrees * degreesToRadiansConversionRate;
 }
 

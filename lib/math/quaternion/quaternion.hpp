@@ -18,11 +18,6 @@ class Quaternion {
         Quaternion conjugate() const;
         Quaternion normalize() const;
         double dotProduct(const Quaternion& quaternion) const;
-
-        // For comparing and interpolating, both current and input quaternion should be in a normalized form
-        bool equal(const Quaternion& quaternion) const;
-        bool operator==(const Quaternion& quaternion) const;
-        bool operator!=(const Quaternion& quaternion) const;
         Quaternion slerp(const Quaternion& quaternion, const double time) const;
 
         Quaternion sum(const Quaternion& quaternion) const;

@@ -185,7 +185,7 @@ LegendreFunction computePcupLow(const float sineOfLatitude) {
 LegendreFunction computePcupHigh(const float sineOfLatitude) {
     const float cosineOfLatitude = sqrt((1.0 - sineOfLatitude) * (1.0 + sineOfLatitude));
 
-    // return empty object if any of these conditions are met?
+    // return empty object if any of these conditions are met? comparing floats directly to value with no threshold?
     if(cosineOfLatitude == 0) {printf("Error in PcupHigh: \n");}
     if(fabs(sineOfLatitude) == 1.0) {printf("Error in PcupHigh: derivative cannot be calculated at poles\n");}
 

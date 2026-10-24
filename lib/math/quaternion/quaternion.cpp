@@ -35,17 +35,6 @@ double Quaternion::dotProduct(const Quaternion& quaternion) const {
     return w * quaternion.w + x * quaternion.x + y * quaternion.y + z * quaternion.z;
 }
 
-bool Quaternion::equal(const Quaternion& quaternion) const {
-    const double dotProductValue = dotProduct(quaternion);
-    bool isEqual = false;
-    if(1.0f - std::abs(dotProductValue) <= Constants::doubleComparisonThreshold) {isEqual = true;}
-
-    return isEqual;
-}
-
-bool Quaternion::operator==(const Quaternion& quaternion) const {return equal(quaternion);}
-bool Quaternion::operator!=(const Quaternion& quaternion) const {return !equal(quaternion);}
-
 Quaternion Quaternion::slerp(const Quaternion& quaternion, const double time) const {
     double dotProductValue = dotProduct(quaternion);
     Quaternion shortestPathQuaternion = quaternion;
@@ -116,7 +105,8 @@ EulerAngles Quaternion::toEulerAngles() const { // keep function in the cubesat?
 
     if (std::fabs(pitchSine) >= gimbalLockThreshold) {
         pitch = std::copysign(Constants::pi / 2.0, pitchSine);
-        roll = std::atan2(2.0 * (w * x + y * z), 1.0 - 2.0 * (x * x + y * y));
+        roll = 0;
+        yaw = 2.0 * std::copysign(1.0, pitchSine) * std::atan2(z, w);
     } 
     else {
         pitch = std::asin(pitchSine);
