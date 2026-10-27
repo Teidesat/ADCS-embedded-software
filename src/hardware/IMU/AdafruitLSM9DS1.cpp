@@ -66,13 +66,13 @@ void AdafruitLSM9DS1::update() {
     sensors_event_t accelerometersEvent, magnetometersEvent, gyroscopesEvent, temperatureEvent;
     LSM9DS1.getEvent(&accelerometersEvent, &magnetometersEvent, &gyroscopesEvent, &temperatureEvent);
 
-    accelerometers = Vector3d(accelerometersEvent.acceleration.x, accelerometersEvent.acceleration.y, accelerometersEvent.acceleration.z);
-    gyroscopes = Vector3d(gyroscopesEvent.gyro.x, gyroscopesEvent.gyro.y, gyroscopesEvent.gyro.z);
-    magnetometers = Vector3d(magnetometersEvent.magnetic.x, magnetometersEvent.magnetic.y, magnetometersEvent.magnetic.z);
+    accelerometers = math::Vector3d(accelerometersEvent.acceleration.x, accelerometersEvent.acceleration.y, accelerometersEvent.acceleration.z);
+    gyroscopes = math::Vector3d(gyroscopesEvent.gyro.x, gyroscopesEvent.gyro.y, gyroscopesEvent.gyro.z);
+    magnetometers = math::Vector3d(magnetometersEvent.magnetic.x, magnetometersEvent.magnetic.y, magnetometersEvent.magnetic.z);
     temperature = temperatureEvent.temperature;
 }
 
-Vector3d AdafruitLSM9DS1::getAccelerometers() const {return accelerometers;}
-Vector3d AdafruitLSM9DS1::getGyroscopes() const {return gyroscopes;}
-Vector3d AdafruitLSM9DS1::getMagnetometers() const {return magnetometers;}
+math::Vector3d AdafruitLSM9DS1::getAccelerometers() const {return accelerometers;}
+math::Vector3d AdafruitLSM9DS1::getGyroscopes() const {return gyroscopes;}
+math::Vector3d AdafruitLSM9DS1::getMagnetometers() const {return magnetometers;}
 float AdafruitLSM9DS1::getTemperature() const {return temperature;}

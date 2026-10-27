@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string> //change to string_view?
 #include <vector>
 
 #include <HardwareSerial.h>
@@ -18,7 +18,7 @@ class UbloxNEO6M {
 
         const int MAX_NMEA_LENGTH = 82; // standard maximum NMEA message length
         const int NMEA_MESSAGES_HISTORY_MAX_SIZE = 5;
-        static const int BAUD_RATE = 9600;
+        static const int baudRate = 9600;
         
     public:
         UbloxNEO6M();

@@ -31,7 +31,6 @@ class GNSS {
         GNSS(std::string& message);
         
         void parseMessage(const std::string& message);
-        float degreesMinutesAndSecondsToDecimal(const float degrees, const float minutes, const float seconds) const;
     
 };
 
@@ -50,16 +49,16 @@ class SunSensor {
 
 class IMU {
     private:
-        Vector3d accelerometers;
-        Vector3d gyroscopes;
-        Vector3d magnetometers;
+        math::Vector3d accelerometers;
+        math::Vector3d gyroscopes;
+        math::Vector3d magnetometers;
         float temperature;
 
     public:
-        IMU(const Vector3d accelerometers, const Vector3d gyroscopes, const Vector3d magnetometers, const float temperature);
-        Vector3d getAccelerometers() const;
-        Vector3d getGyroscopes() const;
-        Vector3d getMagnetometers() const;
+        IMU(const math::Vector3d accelerometers, const math::Vector3d gyroscopes, const math::Vector3d magnetometers, const float temperature);
+        math::Vector3d getAccelerometers() const;
+        math::Vector3d getGyroscopes() const;
+        math::Vector3d getMagnetometers() const;
         float getTemperature() const;
 };
 

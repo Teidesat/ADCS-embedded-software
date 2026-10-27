@@ -1,6 +1,8 @@
+#include "../lib/math/eulerAngles/eulerAngles.hpp"
+#include "../lib/noiseFilters/noiseFilters.hpp"
+
 #include "hardware/INS/INS.hpp"
 #include "algorithm/attitudeDetermination/attitudeDetermination.hpp"
-#include "../lib/noiseFilters/noiseFilters.hpp"
 #include "toJson/toJson.hpp"
 
 #include <string>
@@ -60,7 +62,7 @@ void loop() {
     const float clampedGyroscopeX = deadband(ins.getIMU().getGyroscopes().x, lowGyroThreshold, highGyroThreshold);
     const float clampedGyroscopeY = deadband(ins.getIMU().getGyroscopes().y, lowGyroThreshold, highGyroThreshold);
     const float clampedGyroscopeZ = deadband(ins.getIMU().getGyroscopes().z, lowGyroThreshold, highGyroThreshold);
-    const Vector3d clampedGyroscopes(clampedGyroscopeX, clampedGyroscopeY, clampedGyroscopeZ);
+    const math::Vector3d clampedGyroscopes(clampedGyroscopeX, clampedGyroscopeY, clampedGyroscopeZ);
     
     // calculate new position
     // add to all functions checks for all the parameters are in the correct thresholds, if not, restart the system?
@@ -72,8 +74,7 @@ void loop() {
 
     // output
     math::Quaternion attitudeQuaternion = attitudeAlgorithm.getAttitude();
-    math::EulerAngles attitudeEulerAnglesRadians = attitudeQuaternion.toEulerAngles();
-    math::EulerAngles attitudeEulerAnglesDegrees = attitudeEulerAnglesRadians.radiansToDegrees();
+    math::EulerAngles attitudeEulerAngles = attitudeQuaternion.toEulerAngles();
 
     std::string luxTeleplot = ">lux: " + std::to_string(ins.getSunSensor().getLux());
     std::string gyroXteleplot = ">gyroX: " + std::to_string(ins.getIMU().getGyroscopes().x);
@@ -82,9 +83,9 @@ void loop() {
     std::string gyroXclampedTeleplot = ">gyroXclamped: " + std::to_string(clampedGyroscopeX);
     std::string gyroYclampedTeleplot = ">gyroYclamped: " + std::to_string(clampedGyroscopeY);
     std::string gyroZclampedTeleplot = ">gyroZclamped: " + std::to_string(clampedGyroscopeZ);
-    std::string rollTeleplot = ">roll: " + std::to_string(attitudeEulerAnglesDegrees.roll);
-    std::string pitchTeleplot = ">pitch: " + std::to_string(attitudeEulerAnglesDegrees.pitch);
-    std::string yawTeleplot = ">yaw: " + std::to_string(attitudeEulerAnglesDegrees.yaw);
+    std::string rollTeleplot = ">roll: " + std::to_string(math::EulerAngles::radiansToDegrees(attitudeEulerAngles.roll));
+    std::string pitchTeleplot = ">pitch: " + std::to_string(math::EulerAngles::radiansToDegrees(attitudeEulerAngles.pitch));
+    std::string yawTeleplot = ">yaw: " + std::to_string(math::EulerAngles::radiansToDegrees(attitudeEulerAngles.yaw));
 
     //Serial.println(luxTeleplot.c_str());
     //Serial.println(gyroXteleplot.c_str());

@@ -15,7 +15,7 @@ void INS::begin(const int SDApin,
                 const bool pauseExecution,
                 const int microcontrollerClockFrequency,
                 const int I2CclockFrequency) {
-    microcontroller.begin(true, microcontrollerClockFrequency);
+    microcontroller.begin(microcontrollerClockFrequency, true);
     imu.begin(SDApin, 
               SCLpin, 
               AdafruitLSM9DS1::AcclerometersRange::G2, 

@@ -13,6 +13,7 @@ class Quaternion {
         double y = 0.0;
         double z = 0.0;
 
+        Quaternion();
         Quaternion(const double wValue, const double xValue, const double yValue, const double zValue);
         
         Quaternion conjugate() const;

@@ -27,7 +27,7 @@ std::string sunSensorToJson(const SunSensor& sunSensor) {
     return json;
 }
 
-std::string vector3dToJson(const Vector3d& vector) {
+std::string vector3dToJson(const math::Vector3d& vector) {
     std::string json = "{";
     json += "\"x\":" + std::to_string(vector.x) + ",";
     json += "\"y\":" + std::to_string(vector.y) + ",";

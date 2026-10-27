@@ -2,10 +2,10 @@
 
 #include <HardwareSerial.h>
 
-void EspressifESP32WROOM32::begin(const bool pauseExecution, const int clockFrequency) {
+void EspressifESP32WROOM32::begin(const int clockFrequency, const bool pauseExecution) {
     if(clockFrequency > 0 && clockFrequency <= 240) {setCpuFrequencyMhz(clockFrequency);}
 	
-    Serial.begin(BAUD_RATE);
+    Serial.begin(baudRate); // remove code from production or put in main?
 	if(pauseExecution) {
 		while(!Serial) {delay(1);} // will pause until serial console opens
 	}
@@ -14,9 +14,9 @@ void EspressifESP32WROOM32::begin(const bool pauseExecution, const int clockFreq
 void EspressifESP32WROOM32::update() {
     const unsigned long int currentTimeMicros = micros();
     const unsigned long int deltaMicros = currentTimeMicros - previousTimeMicros;
-    const float MICROSECONDS_TO_SECONDS = 1000000.0f;
+    const float microsecondsToSecondsConversionRate = 1000000.0;
     
-    deltatime = (float)deltaMicros / MICROSECONDS_TO_SECONDS;
+    deltatime = (float)deltaMicros / microsecondsToSecondsConversionRate;
     previousTimeMicros = currentTimeMicros;
 }
 

@@ -5,21 +5,26 @@
 
 #include "../../lib/math/constants.hpp"
 
-void test_worldMagneticModel_decimalDate() {
-    const int day1 = 1;
-    const int month1 = 1;
-    const int year1 = 2025;
-    const float result1 = 2025.0;
-    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result1, WMM::dateToYears(day1, month1, year1, WMM::StaticMagneticModel::epoch));
+// test decimal date
 
-    const int day2 = 1;
-    const int month2 = 1;
-    const int year2 = 2025;
-    const float result2 = 2025.0;
-    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result2, WMM::dateToYears(day2, month2, year2, WMM::StaticMagneticModel::epoch));
+void test_worldMagneticModel_decimalDate2025() {
+    const int day = 1;
+    const int month = 1;
+    const int year = 2025;
+    const float result = 2025.0;
+    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result, WMM::dateToYears(day, month, year, WMM::StaticMagneticModel::epoch));
 }
 
-/*
+void test_worldMagneticModel_decimalDate2026() {
+    const int day = 1;
+    const int month = 1;
+    const int year = 2026;
+    const float result = 2026.0;
+    TEST_ASSERT_DOUBLE_WITHIN(math::Constants::doubleComparisonThreshold, result, WMM::dateToYears(day, month, year, WMM::StaticMagneticModel::epoch));
+}
+
+// test world magnetic model
+
 void test_worldMagneticModel_calculatePointMagneticField() {
 
     // Field 1: Date
@@ -44,9 +49,9 @@ void test_worldMagneticModel_calculatePointMagneticField() {
 
     WMM::GeomagneticElements geomagneticElements = WMM::calculatePointMagneticField(latitude, longitude, altitude, year, moth, day);
 
-    TEST_ASSERT_FLOAT_WITHIN(EPSILON, 6521.6, geomagneticElements.X); // for the moment I dont know if it is passing but is wrong or passing and correct value
+    TEST_ASSERT_FLOAT_WITHIN(math::Constants::doubleComparisonThreshold, 6521.6, geomagneticElements.X);
 }
-*/
+
 
 void setUp() {}
 void tearDown() {}
@@ -54,8 +59,12 @@ void tearDown() {}
 void setup() {
     UNITY_BEGIN();
 
+    // test decimal date
+    RUN_TEST(test_worldMagneticModel_decimalDate2025);
+    RUN_TEST(test_worldMagneticModel_decimalDate2026);
+
     // test world magnetic model
-    RUN_TEST(test_worldMagneticModel_decimalDate);
+    RUN_TEST(test_worldMagneticModel_calculatePointMagneticField);
 
     UNITY_END();
 }

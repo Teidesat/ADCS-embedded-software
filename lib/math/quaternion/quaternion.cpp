@@ -5,6 +5,8 @@
 
 namespace math {
 
+Quaternion::Quaternion() {}
+
 Quaternion::Quaternion(const double wValue, const double xValue, const double yValue, const double zValue): 
     w(wValue),
     x(xValue),

@@ -7,9 +7,9 @@
 class AdafruitLSM9DS1 {
     private:
         Adafruit_LSM9DS1 LSM9DS1;
-        Vector3d accelerometers; // meters/seconds^2
-        Vector3d gyroscopes; // radians/second
-        Vector3d magnetometers; // micro teslas
+        math::Vector3d accelerometers; // meters/seconds^2
+        math::Vector3d gyroscopes; // radians/second
+        math::Vector3d magnetometers; // micro teslas
         float temperature; // degrees celsius
 
     public:
@@ -25,8 +25,8 @@ class AdafruitLSM9DS1 {
                    const int frequencyClock = 0);
         void update();
 
-        Vector3d getAccelerometers() const;
-        Vector3d getGyroscopes() const;
-        Vector3d getMagnetometers() const;
+        math::Vector3d getAccelerometers() const;
+        math::Vector3d getGyroscopes() const;
+        math::Vector3d getMagnetometers() const;
         float getTemperature() const;
 };

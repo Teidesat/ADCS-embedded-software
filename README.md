@@ -83,6 +83,18 @@ pio test -e desktop -f test_worldMagneticModel
 For Euler angles to quaternion conversion and vice versa the following page was used for validation and verify that the results are correct and precise:
 [https://rotationconverter.app]()
 
+
+
 # Notes
 
 All comments containing the interrogation character `?` mean that some modifications to the code are needed
+
+
+
+# References
+
+- Tutorial on how to set up tests with the Unity framework in platform.io
+[https://piolabs.com/blog/insights/unit-testing-part-1.html]()
+
+- Enlace tutoriales conectar arduino a Unity
+[https://www.youtube.com/watch?v=SD3iUnLNjY0&t=116s&ab_channel=CodetoCreate]()

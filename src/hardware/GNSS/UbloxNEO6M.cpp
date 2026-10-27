@@ -5,7 +5,7 @@ UbloxNEO6M::UbloxNEO6M():
 {}
 
 void UbloxNEO6M::begin(const int RXpin, const int TXpin) {
-    Serial2.begin(BAUD_RATE, SERIAL_8N1, RXpin, TXpin);
+    Serial2.begin(baudRate, SERIAL_8N1, RXpin, TXpin);
 }
 
 void UbloxNEO6M::update() {

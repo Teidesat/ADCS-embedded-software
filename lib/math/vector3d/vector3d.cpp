@@ -2,6 +2,8 @@
 
 namespace math {
 
+Vector3d::Vector3d() {}
+
 Vector3d::Vector3d(const double xValue, const double yValue, const double zValue):
     x(xValue),
     y(yValue),
